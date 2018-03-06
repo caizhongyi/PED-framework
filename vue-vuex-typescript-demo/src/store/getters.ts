@@ -16,7 +16,7 @@ const cartProducts: Getter<State, any> = (state: State) => {
 }
 
 const getterTree: GetterTree<State, any> = {
-//  cartProducts
+     cartProducts
 }
 
 export default getterTree
