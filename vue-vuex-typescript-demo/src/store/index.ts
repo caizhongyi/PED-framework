@@ -22,28 +22,28 @@ export default new Vuex.Store({
 })
 
 export interface ActionContextBasic {
-  commit: Commit,
-  dispatch: Dispatch
+  commit: Commit;
+  dispatch: Dispatch;
 }
 
 export interface State {
-  cart: CardState,
-  products: ProductsState
+  cart: CardState;
+  products: ProductsState;
 }
 
 export type CheckoutStatus = 'successful' | 'failed' | null
 
 export interface Product {
-  id: number,
-  title: string,
-  price: number,
-  inventory: number
+  id: number;
+  title: string;
+  price: number;
+  inventory: number;
 }
 
 export interface CartProduct {
-  title: string,
-  price: number,
-  quantity: number
+  title: string;
+  price: number;
+  quantity: number;
 }
 
 export interface AddToCartPayload {
