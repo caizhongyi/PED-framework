@@ -29,6 +29,8 @@ import { mapGetters } from 'vuex'
 import { Button, Tag } from 'element-ui'
 
 import { CartProduct, CheckoutStatus } from '../store'
+import Component from 'vue-class-component'
+import { Getter, Action } from 'vuex-class'
 
 Vue.use(Button)
 Vue.use(Tag)
@@ -65,8 +67,7 @@ Vue.use(Tag)
 
 // 以下是vue-class-component + vuex-class写法：
 
-import Component from 'vue-class-component'
-import { Getter, Action } from 'vuex-class'
+
 
 @Component
 export default class Cart extends Vue {
