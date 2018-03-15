@@ -41,12 +41,12 @@ module.exports = {
     }
   },
   // 增加一个plugins
-  plugins: [
-    new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery"
-    })
-  ],
+  // plugins: [
+  //   new webpack.ProvidePlugin({
+  //     $: "jquery",
+  //     jQuery: "jquery"
+  //   })
+  // ],
   module: {
     rules: [
       // ...(config.dev.useEslint ? [createLintingRule()] : []),
