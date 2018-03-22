@@ -9,17 +9,17 @@
 <script lang="ts" >
   import Vue from 'vue'
   import Component from 'vue-class-component'
-  import $ from 'jquery'
 
-  @Component({
-    props: {
-      data: Array,
-      options: Object
-    }
-  })
+  interface Options {
+    interval : number,
+    direction : string,
+  }
+
+  @Component({})
 
   export default class Marquee extends Vue {
-    settings = {interval: 100, direction: 'horizontal'}
+    options : any
+    settings = { interval: 100, direction: 'horizontal' }
 
     beforeRouteEnter () {
       // console.log('beforeRouteEnter')
@@ -34,12 +34,14 @@
     } */
     mounted () {
       this.settings = { ...this.options }
-      return $(this).css('overflow', 'hidden').each(function () {
-        let list = $(this).find('.marquee-list')
-        let timer
-        let isvertical = $(this).hasClass('marquee-vertical') || $(this).hasClass('vertical')
+      let me: any = this
+      return $(this).css('overflow', 'hidden').each(function (i,n) {
+        let $this: any = $(n)
+        let list = $this.find('.marquee-list')
+        let timer: any
+        let isvertical = $this.hasClass('marquee-vertical') || $this.hasClass('vertical')
         let offset = isvertical ? list.children().outerHeight() : list.children().outerWidth()
-        let self = this
+        let interval = $this.data('interval') || me.settings.interval
 
         $(this).off('mouseenter.marquee mouseleave.marquee start stop')
           .on('mouseenter.marquee', function () {
@@ -49,16 +51,17 @@
             //     $(this).trigger('start')
           })
           .on('start', function () {
-            timer = setInterval(function () {
+            timer = setInterval(() => {
               var items = list.children()
               if (isvertical) {
-                if (items.length * offset <= $(self).height()) return
-                $(list).stop(true).animate({'margin-top': -offset}, 1000, function () {
-                  $(this).children().first().insertAfter($(this).children().last())
-                  $(this).css('margin-top', 0)
+                if (items.length * offset <= $this.height()) return
+                let $list = $(list).stop(true).animate({'margin-top': -offset}, 1000, () => {
+                  let $this: any = $list
+                  $this.children().first().insertAfter($(this).children().last())
+                  $this.css('margin-top', 0)
                 })
               } else {
-                if (items.length * offset <= $(self).width()) return
+                if (items.length * offset <= $this.width()) return
                 var $list = $(list).css({'margin-left': -(offset += 10)})
                 if (offset >= list.children().outerWidth() * 2) {
                   $list.children().first().insertAfter($list.children().last())
@@ -66,7 +69,7 @@
                   offset = list.children().outerWidth()
                 }
               }
-            }, $(this).data('interval') || this.settings.interval)
+            }, interval)
           })
           .on('stop', () => clearInterval(timer))
           .trigger('start')

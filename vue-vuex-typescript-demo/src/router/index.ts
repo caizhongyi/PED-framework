@@ -2,13 +2,14 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/view/HelloWorld.vue'
 import ShoppingCart from '@/view/ShoppingCart.vue'
-//import NotFoundComponent from '@/view/NotFoundComponent.vue'
+import Index from '@/view/index.vue'
+// import NotFoundComponent from '@/view/NotFoundComponent.vue'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
-      //{ path: '*', component: NotFoundComponent },
+      // { path: '*', component: NotFoundComponent },
     {
       path: '/',
       name: 'Hello',
@@ -17,6 +18,10 @@ export default new Router({
     {
       path: '/vuex',
       component: ShoppingCart
+    },
+    {
+      path: '/index',
+      component: Index
     }
   ]
 })
