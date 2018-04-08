@@ -22,7 +22,7 @@
   </section>
 </template>
 
-<script>
+<script type="ts">
 import AppLogo from '~/components/AppLogo.vue'
 
 export default {
@@ -32,7 +32,24 @@ export default {
 }
 </script>
 
-<style>
+<script lang="ts" >
+  import AppLogo from '~/components/AppLogo.vue'
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
+  @Component
+  export default class App extends Vue {
+    components: {
+      AppLogo
+    },
+   /* mounted () {
+      this.hello()
+      const a = '11'
+    },*/
+  }
+</script>
+
+
+<style lang="stylus" scoped>
 .container {
   min-height: 100vh;
   display: flex;
