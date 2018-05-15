@@ -22,7 +22,7 @@
   </section>
 </template>
 
-<script type="ts">
+<!--<script type="ts">
 import AppLogo from '~/components/AppLogo.vue'
 
 export default {
@@ -30,7 +30,7 @@ export default {
     AppLogo
   }
 }
-</script>
+</script>-->
 
 <script lang="ts" >
   import AppLogo from '~/components/AppLogo.vue'
@@ -38,13 +38,13 @@ export default {
   import Component from 'vue-class-component'
   @Component
   export default class App extends Vue {
-    components: {
+    components = {
       AppLogo
-    },
-   /* mounted () {
-      this.hello()
-      const a = '11'
-    },*/
+    }
+
+    mounted () {
+     console.log('11')
+    }
   }
 </script>
 
