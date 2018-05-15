@@ -13,19 +13,27 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "nuxt": "^1.0.0",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2",
-    "ts-loader": "^4.3.0",
-    "typescript": "^2.8.3",
+    "nuxt": "latest",
     "vue-class-component": "^6.2.0",
-    "vue-style-loader": "^4.1.0"
+    "axios": "latest",
+    "mini-toastr": "^0.6.5",
+    "vue-notifications": "^0.8.0",
+    "nuxt-edge": "latest"
   },
   "devDependencies": {
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "ts-loader": "^3.1.1",
+    "tslint": "^5.8.0",
+    "tslint-config-standard": "^7.0.0",
+    "tslint-loader": "^3.5.3",
+    "typescript": "^2.6.1",
     "babel-eslint": "^8.2.1",
     "eslint": "^4.15.0",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.7.1",
     "eslint-plugin-vue": "^4.0.0"
-  }
+  },
+  "main": ".eslintrc.js",
+  "license": "ISC"
 }

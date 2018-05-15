@@ -1,7 +1,7 @@
 <template>
   <section class="container">
     <div>
-      <app-logo/>
+     <!-- <app-logo/>-->
       <h1 class="title">
         nuxt
       </h1>
@@ -22,7 +22,7 @@
   </section>
 </template>
 
-<!--<script type="ts">
+<script type="ts">
 import AppLogo from '~/components/AppLogo.vue'
 
 export default {
@@ -30,23 +30,26 @@ export default {
     AppLogo
   }
 }
-</script>-->
+</script>
 
-<script lang="ts" >
+<!--<script lang="ts" >
   import AppLogo from '~/components/AppLogo.vue'
   import Vue from 'vue'
   import Component from 'vue-class-component'
-  @Component
-  export default class App extends Vue {
-    components = {
-      AppLogo
-    }
 
+  @Component({
+      props : {},
+      components : {
+        AppLogo
+      },
+    })
+
+  export default class App extends Vue {
     mounted () {
      console.log('11')
     }
   }
-</script>
+</script>-->
 
 
 <style lang="stylus" scoped>
