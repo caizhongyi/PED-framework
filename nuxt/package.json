@@ -13,12 +13,14 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "nuxt": "latest",
-    "vue-class-component": "^6.2.0",
     "axios": "latest",
+    "countup.js": "^1.9.3",
     "mini-toastr": "^0.6.5",
-    "vue-notifications": "^0.8.0",
-    "nuxt-edge": "latest"
+    "nuxt": "latest",
+    "nuxt-edge": "latest",
+    "vue-class-component": "^6.2.0",
+    "vue-countup-v2": "^1.0.3",
+    "vue-notifications": "^0.8.0"
   },
   "devDependencies": {
     "stylus": "^0.54.5",
