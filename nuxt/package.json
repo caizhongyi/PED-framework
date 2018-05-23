@@ -20,7 +20,8 @@
     "nuxt-edge": "latest",
     "vue-class-component": "^6.2.0",
     "vue-countup-v2": "^1.0.3",
-    "vue-notifications": "^0.8.0"
+    "vue-notifications": "^0.8.0",
+    "vue2-countdown": "^1.0.8"
   },
   "devDependencies": {
     "stylus": "^0.54.5",
