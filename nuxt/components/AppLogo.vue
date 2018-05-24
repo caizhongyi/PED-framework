@@ -6,7 +6,21 @@
     <div class="Triangle Triangle--four"/>
   </div>
 </template>
+<script lang="ts" >
+  import Vue from 'vue'
+  import Component from 'vue-class-component'
 
+  @Component({
+    props : {},
+    components : {
+    },
+  })
+
+  export default class AppLogo extends Vue {
+    mounted () {
+    }
+  }
+</script>
 <style>
 .VueToNuxtLogo {
   display: inline-block;

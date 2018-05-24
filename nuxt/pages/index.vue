@@ -22,7 +22,7 @@
   </section>
 </template>
 
-<script type="ts">
+<!--<script type="ts">
 import AppLogo from '~/components/AppLogo.vue'
 //import test from '~/store/index'
 
@@ -31,10 +31,10 @@ export default {
     AppLogo
   }
 }
-</script>
+</script>-->
 
-<!--<script lang="ts" >
-  import AppLogo from '~/components/AppLogo.vue'
+<script lang="ts" >
+  import AppLogo from '../components/AppLogo.vue'
   import Vue from 'vue'
   import Component from 'vue-class-component'
 
@@ -50,7 +50,7 @@ export default {
      console.log('11')
     }
   }
-</script>-->
+</script>
 
 
 <style lang="stylus" scoped>
