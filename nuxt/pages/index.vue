@@ -24,6 +24,7 @@
 
 <script type="ts">
 import AppLogo from '~/components/AppLogo.vue'
+//import test from '~/store/index'
 
 export default {
   components: {
