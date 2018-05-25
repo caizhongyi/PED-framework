@@ -22,7 +22,7 @@
   </section>
 </template>
 
-<script>
+<script lang="ts">
 import AppLogo from '~/components/AppLogo.vue'
 
 export default {
@@ -32,7 +32,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="stylus">
 .container {
   min-height: 100vh;
   display: flex;

@@ -25,13 +25,20 @@ module.exports = {
     ** Run ESLint on save
     */
     extend (config, { isDev, isClient }) {
-      if (isDev && isClient) {
-        config.module.rules.push({
-          enforce: 'pre',
-          test: /\.(js|vue)$/,
-          loader: 'eslint-loader',
-          exclude: /(node_modules)/
-        })
+      if (isDev && isClient){
+
+        let rules = [
+            {
+                enforce: 'pre',
+                test: /\.(js|vue)$/,
+                loader: 'eslint-loader',
+                exclude: /(node_modules)/
+            },
+            { test: /\.ts?$/, loader: 'ts-loader', options: { appendTsSuffixTo: [/\.vue$/] } }
+        ]
+
+        config.module.rules.push(...rules)
+        config.resolve.extensions.push(...[ '.tsx', '.ts'])
       }
     }
   }
