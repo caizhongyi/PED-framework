@@ -3,7 +3,7 @@
     <div>
       <app-logo/>
       <h1 class="title">
-        nuxt
+        nuxt-app
       </h1>
       <h2 class="subtitle">
         Nuxt.js project
@@ -22,9 +22,8 @@
   </section>
 </template>
 
-<script >
+<script>
 import AppLogo from '~/components/AppLogo.vue'
-//import test from '~/store/index'
 
 export default {
   components: {
@@ -33,50 +32,33 @@ export default {
 }
 </script>
 
-<!--<script lang="ts" >
-  import AppLogo from '../components/AppLogo.vue'
-  import Vue from 'vue'
-  import Component from 'vue-class-component'
-
-  @Component({
-      props : {},
-      components : {
-        AppLogo
-      },
-    })
-
-  export default class App extends Vue {
-    mounted () {
-     console.log('11')
-    }
-  }
-</script>-->
-
-
-<!--<style lang="stylus" scoped>
-.container
+<style>
+.container {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+}
 
-.title
+.title {
   font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
   display: block;
   font-weight: 300;
   font-size: 100px;
   color: #35495e;
   letter-spacing: 1px;
+}
 
-.subtitle
+.subtitle {
   font-weight: 300;
   font-size: 42px;
   color: #526488;
   word-spacing: 5px;
   padding-bottom: 15px;
+}
 
-
-.links
+.links {
   padding-top: 15px;
-</style>-->
+}
+</style>
