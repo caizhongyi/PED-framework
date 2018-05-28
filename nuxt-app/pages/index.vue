@@ -1,7 +1,7 @@
 <template>
   <section class="container">
     <div>
-      <app-logo/>
+      <!--<app-logo/>-->
       <h1 class="title">
         nuxt-app
       </h1>
@@ -22,15 +22,17 @@
   </section>
 </template>
 
-<script lang="ts">
+<script >
 import AppLogo from '~/components/AppLogo.vue'
 
 export default {
+  //layout :'default',
   components: {
     AppLogo
   }
 }
 </script>
+
 
 <style scoped lang="stylus">
 .container {
