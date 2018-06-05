@@ -21,6 +21,7 @@ import Card from "~/components/Card.vue"
   }
 })
 export default class extends Vue {
+  scrollToTop = true
   @State people
   //layout = 'default'
 }
