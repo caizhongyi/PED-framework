@@ -56,7 +56,36 @@ module.exports = {
   */
   css: ["~/assets/css/main.css"],
   build: {
-     // vendor : ['axios']
+      vendor : ['axios'],
+      extend(config) {
+          for( let o of config.module.rules ){
+              if( o.loader =='vue-loader'){
+                  delete o.loader;
+                  o.use = [
+                      {
+                          loader: 'vue-loader',
+                          options: o.options
+                      }
+                      ,
+                      {
+                          loader: 'iview-loader',
+                          options: {
+                              prefix: false
+                          }
+                      }
+                  ]
+                  delete  o.options;
+                /* o.options.loaders.iview = [{
+                     loader: 'iview-loader',
+                     options: {
+                         prefix: true
+                     }
+                 }]*/
+               // console.log(o)
+              }
+          }
+        // console.log( config.module.rules )
+      },
   },
   modules: [
     "@nuxtjs/axios",

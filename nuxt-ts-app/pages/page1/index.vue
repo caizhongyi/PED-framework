@@ -1,29 +1,53 @@
 <template>
-   <!-- {{data}}-->
-  <!--  <label v-for="o in data">
-        <input type="radio" v-model="o.active">
-    </label>-->
-
+    <div>
+        <label v-for="value of data" :class="{ active: value.id == selected.id}">
+            <input type="radio" name="a" @change="change(value)" >
+        </label>
+        <button type="button" @click="click()">click</button>
+      <!--  <i-button>click</i-button>-->
+    </div>
 </template>
 
 <script lang="ts">
-  import Vue from 'vue'
-  import Component from 'vue-class-component'
+  import {
+    Component,
+    Prop,
+    Vue,
+    Watch,
+    Model
+  } from "nuxt-property-decorator"
 
   @Component
   export default class Page1 extends Vue {
-     data = [
-       { active : true , value : '1'},
-       { active : false , value : '1'},
-       { active : true , value : '1'},
-       { active : false , value : '1'},
-       { active : true , value : '1'},
-       { active : true , value : '1'}
-     ]
-    mounted(){
-        console.log(this.data)
-        console.log( this.$route )
-        console.log( this.$router )
+    data = [
+      {active: true, id: '1'},
+      {active: false, id: '2'},
+      {active: true, id: '3'},
+      {active: false, id: '4'},
+      {active: true, id: '5'},
+      {active: true, id: '6'}
+    ]
+    selected = {
+      id : 0,
+      active : true,
+    }
+
+    @Watch('selected', {deep: true})
+    onChangeData(val) {
+      console.log(val)
+    }
+
+    change(o) {
+      this.selected = o;
+    }
+
+    mounted() {
+      console.log(this.$route)
+      console.log(this.$router)
+    }
+
+    click() {
+      console.log(this.data)
     }
   }
 </script>
