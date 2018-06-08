@@ -1,71 +1,71 @@
 <template>
   <div class="layout">
-    <layout>
-      <header>
-        <menu mode="horizontal" theme="dark" active-name="1">
+    <i-layout>
+      <i-header>
+        <i-menu mode="horizontal" theme="dark" active-name="1">
           <div class="layout-logo"></div>
           <div class="layout-nav">
-            <menu-item name="1">
-              <icon type="ios-navigate"></icon>
+            <i-menu-item name="1">
+              <i-icon type="ios-navigate"></i-icon>
               Item 1
-            </menu-item>
-            <menu-item name="2">
-              <icon type="ios-keypad"></icon>
+            </i-menu-item>
+            <i-menu-item name="2">
+              <i-icon type="ios-keypad"></i-icon>
               Item 2
-            </menu-item>
-            <menu-item name="3">
-              <icon type="ios-analytics"></icon>
+            </i-menu-item>
+            <i-menu-item name="3">
+              <i-icon type="ios-analytics"></i-icon>
               Item 3
-            </menu-item>
-            <menu-item name="4">
-              <icon type="ios-paper"></icon>
+            </i-menu-item>
+            <i-menu-item name="4">
+              <i-icon type="ios-paper"></i-icon>
               Item 4
-            </menu-item>
+            </i-menu-item>
           </div>
-        </menu>
-      </header>
-      <layout>
-        <slider hide-trigger :style="{background: '#fff'}">
-          <Menu active-name="1-2" theme="light" width="auto" :open-names="['1']">
-            <Submenu name="1">
+        </i-menu>
+      </i-header>
+      <i-layout>
+        <div hide-trigger :style="{background: '#fff'}">
+          <i-menu active-name="1-2" theme="light" width="auto" :open-names="['1']">
+            <i-submenu name="1">
               <template slot="title">
-                <Icon type="ios-navigate"></Icon>
+                <i-icon type="ios-navigate"></i-icon>
                 Item 1
               </template>
-              <MenuItem name="1-1">Option 1</MenuItem>
-              <MenuItem name="1-2">Option 2</MenuItem>
-              <MenuItem name="1-3">Option 3</MenuItem>
-            </Submenu>
-            <Submenu name="2">
+              <i-menu-item name="1-1">Option 1</i-menu-item>
+              <i-menu-item name="1-2">Option 2</i-menu-item>
+              <i-menu-item name="1-3">Option 3</i-menu-item>
+            </i-submenu>
+            <i-submenu name="2">
               <template slot="title">
-                <Icon type="ios-keypad"></Icon>
+                <i-icon type="ios-keypad"></i-icon>
                 Item 2
               </template>
-              <MenuItem name="2-1">Option 1</MenuItem>
-              <MenuItem name="2-2">Option 2</MenuItem>
-            </Submenu>
-            <Submenu name="3">
+              <i-menu-item name="2-1">Option 1</i-menu-item>
+              <i-menu-item name="2-2">Option 2</i-menu-item>
+            </i-submenu>
+            <i-submenu name="3">
               <template slot="title">
-                <Icon type="ios-analytics"></Icon>
+                <i-icon type="ios-analytics"></i-icon>
                 Item 3
               </template>
-              <MenuItem name="3-1">Option 1</MenuItem>
-              <MenuItem name="3-2">Option 2</MenuItem>
-            </Submenu>
-          </Menu>
-        </slider>
-        <layout :style="{padding: '0 24px 24px'}">
-          <breadcrumb :style="{margin: '24px 0'}">
-            <breadcrumb-item>Home</breadcrumb-item>
-            <breadcrumb-item>Components</breadcrumb-item>
-            <breadcrumb-item>Layout</breadcrumb-item>
-          </breadcrumb>
-          <content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
+              <i-menu-item name="3-1">Option 1</i-menu-item>
+              <i-menu-item name="3-2">Option 2</i-menu-item>
+            </i-submenu>
+          </i-menu>
+        </div>
+        <i-layout :style="{padding: '0 24px 24px'}">
+          <i-breadcrumb :style="{margin: '24px 0'}">
+            <i-breadcrumb-item>Home</i-breadcrumb-item>
+            <i-breadcrumb-item>Components</i-breadcrumb-item>
+            <i-breadcrumb-item>Layout</i-breadcrumb-item>
+          </i-breadcrumb>
+          <i-content :style="{padding: '24px', minHeight: '280px', background: '#fff'}">
             <nuxt/>
-          </content>
-        </layout>
-      </layout>
-    </layout>
+          </i-content>
+        </i-layout>
+      </i-layout>
+    </i-layout>
   </div>
 
 </template>
@@ -75,16 +75,11 @@
     Component,
     Vue
   } from "nuxt-property-decorator"
-  // import iView from '~/node_modules/iview/dist/iview';
-  // import locale from '../src/locale/lang/en-US';
   //import locale from '~/node_modules/iview/dist/locale/zh-CN';
-  import iView from 'iview';
-  import 'iview/dist/styles/iview.css'
 
-  Vue.use(iView);
 
   @Component({
-    components : { }
+    components : {}
   })
   export default class Default extends Vue {}
 </script>
