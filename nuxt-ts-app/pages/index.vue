@@ -16,7 +16,7 @@ import {
   Vue
 } from "nuxt-property-decorator"
 import { State } from "vuex-class"
-import Card from "~/components/Card.vue"
+import Card from "~/components/card.vue"
 
 @Component({
   components: {
