@@ -21,6 +21,16 @@ ie-support ?= false
 responsive ?= false
 is-mobile ?= false
 
+
+
+$base-font-size = 75px; //design iphone6: 375px * 2 / 10 = 75px; --design
+// $base-font-size: 32px; //design iphone3gs: 320px / 10 = 32px
+// $base-font-size: 64px; //design iphone4/5: 320px * 2 / 10 = 64px
+// $base-font-size: 124.2px; //design iphone6: 414px * 3 / 10 = 124.2px;
+
+px-to-rem($px) {
+ $px / $base-font-size * 1rem
+}
 /**
  * UTILITY HELPERS
  */
