@@ -59,10 +59,14 @@ module.exports = {
         "iview/dist/styles/iview.css"
     ],
     plugins: [
-        { src: '~plugins/iview', ssr: true }
+        { src: '~plugins/iview', ssr: true },
     ],
     build: {
-        vendor: ['axios', 'iview'],
+        vendor: [
+            'axios',
+            'iview',
+            '~/assets/js/viewport.js'
+        ],
         extend(config) {
             for (let o of config.module.rules) {
                 if (o.loader == 'vue-loader') {
@@ -106,4 +110,11 @@ module.exports = {
         "~/modules/typescript.js"
     ],
     axios: {}
+}
+
+if (process.BROWSER_BUILD) {
+    // 引入第三方插件
+   // require('~/assets/js/viewport.js' )
+    // 或者修改window对象下某一属性
+    //  window.mbk = {}
 }

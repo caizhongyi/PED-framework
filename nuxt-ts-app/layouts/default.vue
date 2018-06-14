@@ -71,12 +71,12 @@
 </template>
 
 <script lang="ts">
+
   import {
     Component,
     Vue
   } from "nuxt-property-decorator"
   //import locale from '~/node_modules/iview/dist/locale/zh-CN';
-
 
   @Component({
     components : {}
