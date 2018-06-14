@@ -65,7 +65,7 @@ module.exports = {
         vendor: [
             'axios',
             'iview',
-            '~/assets/js/viewport.js'
+           // '~/assets/js/viewport.js'
         ],
         extend(config) {
             for (let o of config.module.rules) {

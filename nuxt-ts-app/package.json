@@ -12,6 +12,12 @@
     "vue-class-component": "^6.2.0",
     "vuex-class": "^0.3.1"
   },
+  "config": {
+    "nuxt": {
+      "host": "localhost",
+      "port": "3000"
+    }
+  },
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
