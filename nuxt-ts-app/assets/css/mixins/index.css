@@ -76,6 +76,10 @@ linear-gradient(start, stops...)
 * http://pixelhunter.me/post/25782670606/css3-grayscale
 */
 /*
+ * Custom animation timing functions
+ * http://www.ui-transitions.com/
+ */
+/*
  * Global font-face mixin
  * Make sure that the font name matches the name of the font files
  * e.g. font-face(DIN, '/fonts')
@@ -116,7 +120,7 @@ linear-gradient(start, stops...)
  */
 /*
  * Background mixin
- * e.g. bg: 'logo.png' (with specified img-path in 'settings')
+ * e.g. bg: 'logo.png' (with specified base-url in 'settings')
  * e.g. bg: '../img/logo.png' 100px 50px
  */
 /*
@@ -162,10 +166,6 @@ linear-gradient(start, stops...)
 /*
  * Full rounded corners mixins
  * e.g. round()
- */
-/*
- * Custom animation timing functions
- * http://www.ui-transitions.com/
  */
 /*
  * Heading mixin

@@ -13,13 +13,17 @@ default-color ?= #333
 vendors ?= moz webkit ms o official
 
 // e.g. '../images/'
-img-path ?= '../img/'
+base-url ?= '../img/'
 page-width ?= 1024px
-space ?= 15px;
+is-mobile ?= false
+space ?= is-mobile  ? 1rem : 15px;
+space-sm ?= is-mobile  ? 0.5rem : 10px;
+space-xs ?= is-mobile  ? 0.25rem : 5px;
+space-lg ?= is-mobile  ? 1.5rem : 30px;
+space-xxlg ?= is-mobile  ? 2rem : 60px;
 // ie support is disabled by default
 ie-support ?= false
 responsive ?= false
-is-mobile ?= false
 
 $base-font-size = 75px; //design iphone6: 375px * 2 / 10 = 75px; --design
 // $base-font-size: 32px; //design iphone3gs: 320px / 10 = 32px
@@ -301,6 +305,15 @@ transform-style() {
   -prefix(transform-style, arguments)
 }
 
+gradients();
+
+filters() {
+  -prefix(filter, arguments)
+}
+
+backface-visibility() {
+  -prefix(backface-visibility, arguments)
+}
 //--------------------------------- prefix --------------------------------------//
 
 /*
@@ -309,6 +322,39 @@ transform-style() {
 * http://pixelhunter.me/post/25782670606/css3-grayscale
 */
 //--------------------------------- Functions --------------------------------------//
+/*
+ * Custom animation timing functions
+ * http://www.ui-transitions.com/
+ */
+// ease-in
+ease-in-quad = cubic-bezier(0.550, 0.085, 0.680, 0.530)
+ease-in-cubic = cubic-bezier(0.550, 0.055, 0.675, 0.190)
+ease-in-quart = cubic-bezier(0.895, 0.030, 0.685, 0.220)
+ease-in-quint = cubic-bezier(0.755, 0.050, 0.855, 0.060)
+ease-in-sine = cubic-bezier(0.470, 0.000, 0.745, 0.715)
+ease-in-expo = cubic-bezier(0.950, 0.050, 0.795, 0.035)
+ease-in-circ = cubic-bezier(0.600, 0.040, 0.980, 0.335)
+ease-in-back = cubic-bezier(0.600, -0.280, 0.735, 0.045)
+
+// ease-out
+ease-out-quad = cubic-bezier(0.250, 0.460, 0.450, 0.940)
+ease-out-cubic = cubic-bezier(0.215, 0.610, 0.355, 1.000)
+ease-out-quart = cubic-bezier(0.165, 0.840, 0.440, 1.000)
+ease-out-quint = cubic-bezier(0.230, 1.000, 0.320, 1.000)
+ease-out-sine = cubic-bezier(0.390, 0.575, 0.565, 1.000)
+ease-out-expo = cubic-bezier(0.190, 1.000, 0.220, 1.000)
+ease-out-circ = cubic-bezier(0.075, 0.820, 0.165, 1.000)
+ease-out-back = cubic-bezier(0.175, 0.885, 0.320, 1.275)
+
+// ease-in-out
+ease-in-out-quad = cubic-bezier(0.455, 0.030, 0.515, 0.955)
+ease-in-out-cubic = cubic-bezier(0.645, 0.045, 0.355, 1.000)
+ease-in-out-quart = cubic-bezier(0.770, 0.000, 0.175, 1.000)
+ease-in-out-quint = cubic-bezier(0.860, 0.000, 0.070, 1.000)
+ease-in-out-sine = cubic-bezier(0.445, 0.050, 0.550, 0.950)
+ease-in-out-expo = cubic-bezier(1.000, 0.000, 0.000, 1.000)
+ease-in-out-circ = cubic-bezier(0.785, 0.135, 0.150, 0.860)
+ease-in-out-back = cubic-bezier(0.680, -0.550, 0.265, 1.550)
 /*
  * Global font-face mixin
  * Make sure that the font name matches the name of the font files
@@ -340,15 +386,10 @@ text-selection(highlight, textColor = null) {
   }
 }
 
-block() {
-  display: block
-}
-
 inline-block() {
   display: inline-block
   display: -moz-inline-stack
   vertical-align: baseline
-
   if ie-support {
     zoom: 1
     \*display: inline
@@ -388,45 +429,47 @@ underline() {
  * e.g. fw: 800
  * e.g. fs: 2em
  */
-fw(value)
+fw(value){
   font-weight: value
+}
 
-fs(value)
+fs(value){
   font-size: value
+}
 
-bold()
-  font-weight: bold
-
-italic()
-  font-style: italic
-
-normal()
+normal(){
   font-weight: normal
   font-style: normal
+}
 
-reset-case()
+reset-case(){
   text-transform: none
+}
 
-center(block = inner)
-  if block == inner
+center(block = inner){
+  if block == inner{
     text-align: center
-  else
+  }
+  else{
     margin-left: auto
     margin-right: auto
+  }
+}
 
-justify()
+justify(){
   text-align: justify
+}
 
 /*
  * Basic clearfix mixin
  * e.g. clearfix()
  */
 clearfix()
-  block()
+  display block
   zoom: 1
   &:after
     content: "."
-    block()
+    display block
     height: 0
     clear: both
     visibility: hidden
@@ -507,12 +550,12 @@ literal-join(string, literals)
 
 /*
  * Background mixin
- * e.g. bg: 'logo.png' (with specified img-path in 'settings')
+ * e.g. bg: 'logo.png' (with specified base-url in 'settings')
  * e.g. bg: '../img/logo.png' 100px 50px
  */
 -bg(path, args...) {
   args = unquote('no-repeat') unless args
-  background: url(img-path path) args
+  background: url(base-url path) args
 }
 
 /*
@@ -532,14 +575,30 @@ background-cover(path, args...) {
   background-size: cover
 }
 
-image(path, width = 64px, height = 64px, round = 0%) {
-  background-image: url(img-path path)
+image(path, width = 128px , height = 128px , radius = 0%) {
+  background-image: url(base-url path)
   background-position center center
   background-repeat no-repeat
-  border-radius round
+  border-radius radius
   vertical-align middle
   width width
   height height
+}
+icon( path, width = 64px , height = 64px , pos = left ) {
+  image(  path, width , height ,0% )
+  if pos == up {
+    margin-bottom space-xs
+  }
+  else if pos == down {
+    margin-top space-xs
+  }
+  else if pos == left {
+    margin-right space-xs
+  }
+  else if pos == right {
+    margin-left space-xs
+  }
+
 }
 
 /*
@@ -550,7 +609,7 @@ image(path, width = 64px, height = 64px, round = 0%) {
  * e.g. image-block: 'test.jpg' 300 200
  */
 image-block(path, dimensions...) {
-  url = img-path + path
+  url = base-url + path
 
   bg(path) if path
   font: 0 / 0 a
@@ -583,10 +642,10 @@ image-block(path, dimensions...) {
 }
 
 // e.g. sprite-grid: '.sprite' 1 5 16px 24px
-sprite-extend(extend, x = 0, y = 0, grid...)
+sprite-extend(extend, x = 0, y = 0, grid...){
   @extend {extend}
   -sprite: x y grid
-
+}
 // basic sprite mixin
 // e.g. sprite-grid: 'test.png' 1 5 16px 24px
 sprite-grid(path, x = 0, y = 0, grid...) {
@@ -627,30 +686,36 @@ sprite-inline-extend(extend, x = 0, y = 0, grid...) {
 
 // mixin for padded icons
 // e.g. sprite-padded: 'test.png' 1 5 18px 18px 10px 5px 32px
-sprite-padded(path, x = 0, y = 0, width, height, top, left, grid...)
-  &:before
+sprite-padded(path, x = 0, y = 0, width, height, top, left, grid...){
+  &:before{
     absolute: top left
     bg: path
     -sprite: x y grid
     content: ''
     size: width height
+  }
+}
+
 
 /*
  * Make single text line overflow
  * e.g. text-overflow: ellipsis 200
  */
-text-overflow(type = ellipsis, width = auto)
-  if width != auto
+text-overflow( width = auto , type = ellipsis){
+  if width != auto{
     parsed = unit(width)
     units = match('^[^%]*%[^%]*$', parsed) ? '%':'px'
+  }
 
   text-overflow: type
   white-space: nowrap;
   word-break: normal;
   word-wrap: normal;
   overflow: hidden
-  if width != auto
+  if width != auto{
     width: unit(width, units)
+  }
+}
 
 /*
  * Hiding text mixin
@@ -720,39 +785,6 @@ round() {
   -prefix(border-radius, 100%)
 }
 
-/*
- * Custom animation timing functions
- * http://www.ui-transitions.com/
- */
-// ease-in
-ease-in-quad = cubic-bezier(0.550, 0.085, 0.680, 0.530)
-ease-in-cubic = cubic-bezier(0.550, 0.055, 0.675, 0.190)
-ease-in-quart = cubic-bezier(0.895, 0.030, 0.685, 0.220)
-ease-in-quint = cubic-bezier(0.755, 0.050, 0.855, 0.060)
-ease-in-sine = cubic-bezier(0.470, 0.000, 0.745, 0.715)
-ease-in-expo = cubic-bezier(0.950, 0.050, 0.795, 0.035)
-ease-in-circ = cubic-bezier(0.600, 0.040, 0.980, 0.335)
-ease-in-back = cubic-bezier(0.600, -0.280, 0.735, 0.045)
-
-// ease-out
-ease-out-quad = cubic-bezier(0.250, 0.460, 0.450, 0.940)
-ease-out-cubic = cubic-bezier(0.215, 0.610, 0.355, 1.000)
-ease-out-quart = cubic-bezier(0.165, 0.840, 0.440, 1.000)
-ease-out-quint = cubic-bezier(0.230, 1.000, 0.320, 1.000)
-ease-out-sine = cubic-bezier(0.390, 0.575, 0.565, 1.000)
-ease-out-expo = cubic-bezier(0.190, 1.000, 0.220, 1.000)
-ease-out-circ = cubic-bezier(0.075, 0.820, 0.165, 1.000)
-ease-out-back = cubic-bezier(0.175, 0.885, 0.320, 1.275)
-
-// ease-in-out
-ease-in-out-quad = cubic-bezier(0.455, 0.030, 0.515, 0.955)
-ease-in-out-cubic = cubic-bezier(0.645, 0.045, 0.355, 1.000)
-ease-in-out-quart = cubic-bezier(0.770, 0.000, 0.175, 1.000)
-ease-in-out-quint = cubic-bezier(0.860, 0.000, 0.070, 1.000)
-ease-in-out-sine = cubic-bezier(0.445, 0.050, 0.550, 0.950)
-ease-in-out-expo = cubic-bezier(1.000, 0.000, 0.000, 1.000)
-ease-in-out-circ = cubic-bezier(0.785, 0.135, 0.150, 0.860)
-ease-in-out-back = cubic-bezier(0.680, -0.550, 0.265, 1.550)
 
 scroll(pos, max = 200px) {
   position: relative;
@@ -782,15 +814,7 @@ scroll(pos, max = 200px) {
 
 }
 
-gradients();
 
-filters() {
-  -prefix(filter, arguments)
-}
-
-backface-visibility() {
-  -prefix(backface-visibility, arguments)
-}
 
 grayscale() {
   -webkit-filter: unquote("grayscale(100%)");
@@ -1048,12 +1072,6 @@ normalize() {
     -webkit-appearance: none
   }
 
-  input:
-  :-moz-focus-inner {
-    border: 0;
-    padding: 0
-  }
-
   textarea {
     overflow: auto
     vertical-align: top
@@ -1181,6 +1199,20 @@ base-classes() {
     }
   }
 
+  .relative{
+    relative
+  }
+  .middle{
+    span,i{
+      display inline-block
+      vertical-align middle
+    }
+  }
+  .badge{
+    display inline-block
+    padding 3px 5px
+    text-align center
+  }
 }
 
 /**

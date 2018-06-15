@@ -10,10 +10,27 @@
   background-image: url("../img/img.png");
   background-position: center center;
   background-repeat: no-repeat;
+  border-radius: 100%;
+  vertical-align: middle;
+  width: 10px;
+  height: 10px;
+}
+.foo {
+  background: url("../img/img") center center;
+  background-size: cover;
+  position: absolute;
+  top: 40px;
+  left: 20px;
+}
+.icon {
+  background-image: url("../img/x");
+  background-position: center center;
+  background-repeat: no-repeat;
   border-radius: 0%;
   vertical-align: middle;
   width: 10px;
   height: 10px;
+  margin-left: 15px;
 }
 /*
 unquote("") 特殊字符
