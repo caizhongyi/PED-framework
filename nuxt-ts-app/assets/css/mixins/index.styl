@@ -20,7 +20,7 @@ space ?= is-mobile  ? 1rem : 15px;
 space-sm ?= is-mobile  ? 0.5rem : 10px;
 space-xs ?= is-mobile  ? 0.25rem : 5px;
 space-lg ?= is-mobile  ? 1.5rem : 30px;
-space-xxlg ?= is-mobile  ? 2rem : 60px;
+space-xlg ?= is-mobile  ? 2rem : 60px;
 // ie support is disabled by default
 ie-support ?= false
 responsive ?= false
@@ -314,6 +314,13 @@ filters() {
 backface-visibility() {
   -prefix(backface-visibility, arguments)
 }
+
+blur( val ) {
+  -webkit-filter: blur( val ); /* Chrome, Opera */
+  -moz-filter: blur( val );
+  -ms-filter: blur( val );
+  filter: blur( val );
+}
 //--------------------------------- prefix --------------------------------------//
 
 /*
@@ -446,11 +453,11 @@ reset-case(){
   text-transform: none
 }
 
-center(block = inner){
-  if block == inner{
+center( type = inner ){
+  if type == inner{
     text-align: center
   }
-  else{
+  else if type == outer {
     margin-left: auto
     margin-right: auto
   }
@@ -785,7 +792,6 @@ round() {
   -prefix(border-radius, 100%)
 }
 
-
 scroll(pos, max = 200px) {
   position: relative;
   if pos == 'y' {
@@ -813,8 +819,6 @@ scroll(pos, max = 200px) {
   }
 
 }
-
-
 
 grayscale() {
   -webkit-filter: unquote("grayscale(100%)");
@@ -876,6 +880,9 @@ placeholder(color) {
   }
 }
 
+scale( val ){
+  transform scale( val );
+}
 //--------------------------------- Functions --------------------------------------//
 
 //--------------------------------  Classes ---------------------------------//
@@ -1141,6 +1148,38 @@ base-classes() {
     }
   }
 
+  .btn {
+    button space-xs space
+    &:hover {
+      text-decoration none;
+    }
+  }
+
+  .relative{
+    relative
+  }
+  .middle{
+    span,i{
+      display inline-block
+      vertical-align middle
+    }
+  }
+  .badge{
+    display inline-block
+    padding 3px 5px
+    text-align center
+  }
+
+  .section{
+    margin-bottom space
+  }
+  for i in xs sm lg xlg {
+    .section-{i}{
+      margin-bottom unquote('space-' + i);
+    }
+  }
+
+
   if is-mobile {
     .flex {
       display: flex !important;
@@ -1162,8 +1201,13 @@ base-classes() {
       -webkit-align-content: center;
       align-content: center;
     }
+    .flex-col {
+      -webkit-flex-flow: column;
+      flex-flow: column;
+    }
     .flex-vertical {
       @extend .flex
+      @extend .flex-col
     }
     .flex-content {
       padding: 0.5rem 1rem;
@@ -1174,12 +1218,6 @@ base-classes() {
       display: inline-flex !important;
       display: -webkit-inline-flex !important;
     }
-
-    .flex-col, .flex-middle {
-      -webkit-flex-flow: column;
-      flex-flow: column;
-    }
-
     .flex-item {
       flex: 1;
       -webkit-flex: 1;
@@ -1190,28 +1228,6 @@ base-classes() {
         -webkit-flex: i;
       }
     }
-  }
-
-  .btn {
-    button 7px 14px
-    &:hover {
-      text-decoration none;
-    }
-  }
-
-  .relative{
-    relative
-  }
-  .middle{
-    span,i{
-      display inline-block
-      vertical-align middle
-    }
-  }
-  .badge{
-    display inline-block
-    padding 3px 5px
-    text-align center
   }
 }
 
