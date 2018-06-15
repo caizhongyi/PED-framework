@@ -21,377 +21,367 @@ ie-support ?= false
 responsive ?= false
 is-mobile ?= false
 
-
-
 $base-font-size = 75px; //design iphone6: 375px * 2 / 10 = 75px; --design
 // $base-font-size: 32px; //design iphone3gs: 320px / 10 = 32px
 // $base-font-size: 64px; //design iphone4/5: 320px * 2 / 10 = 64px
 // $base-font-size: 124.2px; //design iphone6: 414px * 3 / 10 = 124.2px;
 
 px-to-rem($px) {
- $px / $base-font-size * 1rem
+  $px / $base-font-size * 1rem
 }
+
 /**
- * UTILITY HELPERS
+ * GRADIENTS
  */
 
 /*
- * Heading mixin
- * e.g. heading: 24px, #F80
+ * Specific helpers ported from Nib
+ * https://github.com/visionmedia/nib
  */
-heading(size = font-size, color = default-color)
-  color: color
-  text-rendering: optimizelegibility
-  fs: unit(size, px)
-  fw: bold
-  margin: unit(size/ 3.2, px) 0
+// --------------------------------- prefix --------------------------------------//
+// Replace the given str with val in the expr.
+replace(expr, str, val) {
+  expr = clone(expr)
+  for e, i in expr {
+    if length(e) > 1 {
+      expr[i] = replace(e, str, val)
+    }
+    else {
+      if str == e {
+        expr[i] = val
+      }
+    }
+  }
+  expr // Normalize gradient points.
+}
 
 /*
- * TO DO: button(), link(), p(), field()
+ * Box-shadow mixin
+ * e.g. box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, .5)
  */
+grad-point(pos) {
+  if length(pos) == 1 {
+    return left pos if pos in (top bottom)
+    return pos top if pos in (left right)
+  }
+  else if pos[0] in (top bottom) {
+    pos[1] pos[0]
+  }
+  else {
+    pos
+  }
+}
 
-/**
- * ^RESET
- * Base reset (recommended)
- */
-reset()
-  if is-mobile
-    *
-      box-sizing border-box
-      -webkit-box-sizing border-box
+// Implicit color stop position.
+pos-in-stops(i, stops) {
+  len = length(stops)
+  if len - 1 == i {
+    100%
+  }
+  else if i {
+    unit(i / len * 100, '%')
+  }
+  else {
+    0%
+  }
+}
 
-  html, body, div, span, applet, object, iframe,
-  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-  a, abbr, acronym, address, big, cite, code,
-  del, dfn, em, font, img, ins, kbd, q, s, samp,
-  small, strike, strong, sub, sup, tt, var,
-  dl, dt, dd, ol, ul, li, input, textarea,
-  fieldset, form, label, legend, button,
-  table, caption, tbody, tfoot, thead, tr, th, td,
-  article, aside, details, figcaption, figure,
-  footer, header, hgroup, menu, nav, section, summary
-    margin: 0
-    padding: 0
-    border: 0
-    outline: 0
-    font-weight: inherit
-    font-style: inherit
-    font-size: 100%
-    font-family: inherit
-    vertical-align: baseline
+// Normalize color stops:
+// - (color pos) -> (pos color)
+// - (color) -> (implied-pos color)
+normalize-stops(stops) {
+  stops = clone(stops)
+  for stop, i in stops {
+    if length(stop) == 1 {
+      color = stop[0]
+      stop[0] = pos-in-stops(i, stops)
+      stop[1] = color
+    }
+    else if typeof(stop[1]) == 'unit' {
+      pos = stop[1]
+      stop[1] = stop[0]
+      stop[0] = pos
+    }
+    stops // Join color stops with the given translation function.
+  }
 
-  article, aside, details, figcaption, figure,
-  footer, header, hgroup, menu, nav, section, summary
-    display: block
+}
 
-  ol, ul
-    list-style: none
+join-stops(stops, translate) {
+  str = ''
+  len = length(stops)
+  for stop, i in stops {
+    str += ', ' if i
+    pos = stop[0]
+    color = stop[1]
+    str += translate(color, pos)
+  }
 
-  table
-    border-spacing: 0
-    vertical-align: middle
+  unquote(str) // Legacy Webkit color stop.
+  webkit-stop(color, pos) {
+    'color-stop(%d, %s)' % (pos / 100 color) // Standard color stop.
+  }
 
-  caption, th, td
-    text-align: left
-    font-weight: normal
-    vertical-align: middle
+  std-stop(color, pos) {
+    '%s %s' % (color pos)
+  }
 
-  blockquote, q
-    quotes: "&#8220;" "&#8221;"
+}
 
-  a img
-    border: none
-
-  a
-    text-decoration none;
-
-  img
-    max-width 100%
-    display inline-block
-
-
-  normalize()
-  fields-reset()
-  base-classes()
-
-/**
- * Popular normalize.css
- * https://github.com/necolas/normalize.css/
- * normalize.css v2.1.0 | MIT License
- */
-normalize()
-  article,
-  aside,
-  details,
-  figcaption,
-  figure,
-  footer,
-  header,
-  hgroup,
-  main,
-  nav,
-  section,
-  summary
-    display: block
-
-  audio,
-  canvas,
-  video
-    display: inline-block
-    \*display: inline
-    \*zoom: 1
-
-  audio:not([controls])
-    display: none
-    height: 0
-
-  [hidden]
-    display: none
-
-  html
-    font-family: sans-serif
-    -webkit-text-size-adjust: 100%
-    -ms-text-size-adjust: 100%
-
-  body
-    margin: 0;
-
-  a:focus
-    outline: thin dotted
-
-  a:active,
-  a:hover
-    outline: 0
-
-  h1
-    font-size: 2em
-    margin: 0.67em 0
-
-  abbr[title]
-    border-bottom: 1px dotted
-
-  b,
-  strong
-    font-weight: bold
-
-  dfn
-    font-style: italic
-
-  hr
-    -moz-box-sizing: content-box
-    box-sizing: content-box
-    height: 0
-
-  mark
-    background: #ff0
-    color: #000
-
-  code,
-  kbd,
-  pre,
-  samp
-    font-family: monospace, serif
-    font-size: 1em
-
-  pre
-    white-space: pre-wrap
-
-  q
-    quotes: "\201C" "\201D" "\2018" "\2019"
-
-  small
-    font-size: 80%
-
-  sub,
-  sup
-    font-size: 75%;
-    line-height: 0;
-    position: relative
-    vertical-align: baseline
-
-  sup
-    top: -0.5em
-
-  sub
-    bottom: -0.25em
-
-  img
-    border: 0
-
-  svg:not(:root)
-    overflow: hidden
-
-  figure
-    margin: 0
-
-  fieldset
-    border: 1px solid #c0c0c0
-    margin: 0 2px
-    padding: 0.35em 0.625em 0.75em
-
-  legend
-    border: 0
-    padding: 0
-
-  button,
-  input,
-  select,
-  textarea
-    font-family: inherit
-    font-size: 100%
-    margin: 0
-
-  button,
-  input
-    line-height: normal
-
-  button,
-  select
-    text-transform: none
-
-  button,
-  html input[type="button"],
-  input[type="reset"],
-  input[type="submit"]
-    -webkit-appearance: button
-    cursor: pointer
-
-  button[disabled],
-  html input[disabled]
-    cursor: default
-
-  input[type="checkbox"],
-  input[type="radio"]
-    box-sizing: border-box
-    padding: 0
-
-  input[type="search"]
-    -webkit-appearance: textfield
-    -moz-box-sizing: content-box
-    -webkit-box-sizing: content-box
-    box-sizing: content-box
-
-  input[type="search"]::-webkit-search-cancel-button,
-  input[type="search"]::-webkit-search-decoration
-    -webkit-appearance: none
-
-  button::-moz-focus-inner,
-  input::-moz-focus-inner
-    border: 0;
-    padding: 0
-
-  textarea
-    overflow: auto
-    vertical-align: top
-
-  table
-    border-collapse: collapse
-    border-spacing: 0
-
-/**
-* Reset browsers new fields features
-* (borders on required etc.)
+/*
+* Linear gradient mixin
+* e.g. background-image: linear-gradient(bottom, red, green 50%, blue)
 */
-fields-reset()
-  ::valid
-  ::invalid,
-  ::required,
-  ::optional,
-  ::in-range,
-  ::out-of-range
-    background: none
-    border: 0
-    box-shadow: none
+/*
+linear-gradient(start, stops...)
+  error('color stops required') unless length(stops)
+  prop = current-property[0]
+  val = current-property[1]
 
-  ::-moz-focus-inner
-    border:0
+  if start is a 'color'
+    unshift(stops, start)
+    start = top
 
-  ::-ms-clear,
-  ::-ms-reveal
-    display: none
+  stops = normalize-stops(stops)
 
-/**
- * GLOBAL MIXINS
+  if start[0] is a 'unit'
+    start = start[1]
+
+  end = grad-point(opposite-position(start))
+  webkit-legacy = '-webkit-gradient(linear, %s, %s, %s)' % (grad-point(start) end join-stops(stops, webkit-stop))
+  add-property(prop, replace(val, '__CALL__', webkit-legacy))
+
+  stops = join-stops(stops, std-stop)
+  for prefix in vendors
+    unless prefix == official
+      gradient = '-%s-linear-gradient(%s, %s)' % (prefix start stops)
+      add-property(prop, replace(val, '__CALL__', gradient))
+
+  'linear-gradient(%s, %s)' % (start stops)
+*/
+/*
+ * Radial gradient mixin
+ * e.g. background-image: radial-gradient(red, blue)
  */
+radial-gradient(stops...) {
+  error('color stops required') unless length(stops)
+  prop = current-property[0]
+  val = current-property[1]
 
+  stops = normalize-stops(stops)
+
+  webkit-legacy = '-webkit-gradient(radial, center center 0px, center center 100%, %s, %s)' % join-stops(stops, webkit-stop)
+  add-property(prop, replace(val, '__CALL__', webkit-legacy))
+
+  stops = join-stops(stops, std-stop)
+  for prefix in vendors {
+    unless prefix == official {
+      gradient = '-%s-radial-gradient(center, ellipse cover, %s)' % (prefix stops)
+      add-property(prop, replace(val, '__CALL__', gradient))
+    }
+  }
+  'radial-gradient(ellipse at center, %s)' % stops
+}
+
+/*
+* Simplified version of linear-gradient with 2 colors only
+* e.g. gradient: #F9F9F9, #EAEAEA
+*/
+gradient(angle = top, colors...) {
+  background: colors[1]
+  background-image: linear-gradient(angle, colors[0], colors[1]) /*
+  * Another linear-gradient that automticly detects colors
+  * e.g. simple-gradient: #F80, 30%
+  */
+  simple-gradient(color, strength = 10%)
+  start = lighten(color, strength)
+  end = darken(color, strength)
+  gradient(start, end)
+}
+
+box-shadow() {
+  -prefix(box-shadow, arguments)
+}
+
+/*
+* Border-radius mixin
+* e.g. border-radius: 5px
+*/
+border-radius()
+-prefix(border-radius, arguments)
+/*
+* Box-sizing mixin
+*/
+box-sizing() {
+  -prefix(box-sizing, arguments)
+}
+
+/*
+* Animation mixins
+*/
+animation() {
+  -prefix(animation, arguments)
+}
+
+animation-name() {
+  -prefix(animation-name, arguments)
+}
+
+animation-delay() {
+  -prefix(animation-delay, arguments)
+}
+
+animation-duration() {
+  -prefix(animation-duration, arguments)
+}
+
+animation-timing-function() {
+  -prefix(animation-timing-function, arguments)
+}
+
+animation-iteration-count() {
+  -prefix(animation-iteration-count, arguments)
+}
+
+animation-direction() {
+  -prefix(animation-direction, arguments)
+}
+
+animation-play-state() {
+  -prefix(animation-play-state, arguments)
+}
+
+animation-fill-mode()
+-prefix(animation-fill-mode, arguments)
+/*
+* Transition mixins
+* e.g. transition: all 300ms ease-in-quad
+*/
+transition() {
+  -prefix(transition, arguments)
+}
+
+transition-property() {
+  -prefix(transition-property, arguments)
+}
+
+transition-duration() {
+  -prefix(transition-duration, arguments)
+}
+
+transition-timing-function() {
+  -prefix(transition-timing-function, arguments)
+}
+
+transition-delay() {
+  -prefix(transition-delay, arguments)
+}
+
+/*
+* Transform mixins
+* transform: rotate(20deg)
+*/
+transform() {
+  -prefix(transform, arguments)
+}
+
+transform-origin() {
+  -prefix(transform-origin, arguments)
+}
+
+perspective() {
+  -prefix(perspective, arguments)
+}
+
+perspective-origin() {
+  -prefix(perspective-origin, arguments)
+}
+
+transform-style() {
+  -prefix(transform-style, arguments)
+}
+
+//--------------------------------- prefix --------------------------------------//
+
+/*
+* Filter mixin
+* currently supported by -webkit (in order to boot FF you'll need SVG)
+* http://pixelhunter.me/post/25782670606/css3-grayscale
+*/
+//--------------------------------- Functions --------------------------------------//
 /*
  * Global font-face mixin
  * Make sure that the font name matches the name of the font files
  * e.g. font-face(DIN, '/fonts')
  */
-font-face(name, folder, weight = normal, style = normal)
-  @font-face
+font-face(name, folder, weight = normal, style = normal) {
+  @font-face {
     font-family: name
     src: url(folder unquote('/') name unquote('.eot') '?#iefix') format('embedded-opentype'), url(folder unquote('/') name unquote('.woff')) format('woff'), url(folder unquote('/') name unquote('.ttf')) format('truetype'), url(folder unquote('/') name unquote('.svg') '#' name) format('svg');
     font-weight: weight
     font-style: style
+  }
+}
 
 /*
  * Text selection mixin
  * e.g. text-selection(#F80, #EEE)
  */
-text-selection(highlight, textColor = null)
+text-selection(highlight, textColor = null) {
   textColor = white unless textColor
-
-  ::-moz-selection
+  ::-moz-selection {
     background: highlight
     color: textColor
-  ::selection
+  }
+
+  ::selection {
     background: highlight
     color: textColor
+  }
+}
 
-/*
- * Global border-box mixin best-practice
- * http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice
- * e.g. border-box()
- */
-border-box()
-  html
-    box-sizing border-box
-  *, *:before, *:after
-    box-sizing inherit
-
-/*
- * Base classes
- * e.g. base-classes()
- */
-
-/**
- * COMMON HELPERS
- */
-
-block()
+block() {
   display: block
+}
 
-inline-block()
+inline-block() {
   display: inline-block
   display: -moz-inline-stack
   vertical-align: baseline
 
-  if ie-support
+  if ie-support {
     zoom: 1
     \*display: inline
     \*vertical-align: auto;
+  }
+}
 
-hide()
+hide() {
   display: none
-show()
+}
+
+show() {
   display block
+}
 
 /*
  * Text decoration mixins
  */
-upcase()
+upcase() {
   text-transform: uppercase
+}
 
-lowcase()
+lowcase() {
   text-transform: lowercase
+}
 
-nodecorate()
+no-decorate() {
   text-decoration: none
+}
 
-underline()
+underline() {
   text-decoration: underline
+}
 
 /*
  * Font style mixins and simplifiers
@@ -410,7 +400,6 @@ bold()
 italic()
   font-style: italic
 
-
 normal()
   font-weight: normal
   font-style: normal
@@ -418,13 +407,12 @@ normal()
 reset-case()
   text-transform: none
 
-
-center( block = inner )
+center(block = inner)
   if block == inner
     text-align: center
   else
-    margin-left:auto
-    margin-right:auto
+    margin-left: auto
+    margin-right: auto
 
 justify()
   text-align: justify
@@ -435,7 +423,7 @@ justify()
  */
 clearfix()
   block()
-  zoom:1
+  zoom: 1
   &:after
     content: "."
     block()
@@ -451,11 +439,11 @@ clearfix()
 size(numbers...)
   regex = '^[^%]*%[^%]*$'
   parsed = unit(numbers[0])
-  type = match(regex, parsed) ? '%' : 'px'
+  type = match(regex, parsed) ? '%':'px'
 
   if length(numbers) > 1
     parsedH = unit(numbers[1])
-    typeH = match(regex, parsedH) ? '%' : 'px'
+    typeH = match(regex, parsedH) ? '%':'px'
 
     width: unit(numbers[0], type)
     height: unit(numbers[1], typeH)
@@ -470,8 +458,8 @@ size(numbers...)
   i = 0
   position: unquote(type)
   if args
-    {args[i]}: args[i + 1] is a 'unit' ? args[i += 1] : 0
-    {args[i += 1]}: args[i + 1] is a 'unit' ? args[i += 1] : 0
+    {args [ i ]}: args[i + 1] is a 'unit' ? args[i += 1]:0
+    {args [ i += 1 ]}: args[i + 1] is a 'unit' ? args[i += 1]:0
 
 /*
  * Position mixins
@@ -522,28 +510,38 @@ literal-join(string, literals)
  * e.g. bg: 'logo.png' (with specified img-path in 'settings')
  * e.g. bg: '../img/logo.png' 100px 50px
  */
-bg(path, args...)
+-bg(path, args...) {
   args = unquote('no-repeat') unless args
   background: url(img-path path) args
+}
 
 /*
  * Background mixin for retina displays
  *
  * use it together with '@media all and (-webkit-min-device-pixel-ratio: 1.5)'
  */
-bg-contain(path, args...)
+background-contain(path, args...) {
   args = unquote('center center') unless args
-  bg: path, args
+  -bg: path, args
   background-size: contain
+}
 
-bg-cover(path, args...)
+background-cover(path, args...) {
   args = unquote('center center') unless args
-  bg: path, args
+  -bg: path, args
   background-size: cover
+}
 
-image( path , position = center center )
+image(path, width = 64px, height = 64px, round = 0%) {
   background-image: url(img-path path)
-  background-position position
+  background-position center center
+  background-repeat no-repeat
+  border-radius round
+  vertical-align middle
+  width width
+  height height
+}
+
 /*
  * Image replacing mixin
  * uses stylus' built-in image-size() does not support JPEG yet
@@ -551,17 +549,21 @@ image( path , position = center center )
  * e.g. image-block: 'test.png'
  * e.g. image-block: 'test.jpg' 300 200
  */
-image-block(path, dimensions...)
+image-block(path, dimensions...) {
   url = img-path + path
 
   bg(path) if path
-  font: 0/0 a
+  font: 0 / 0 a
   text-shadow: none
   color: transparent
-  if length(dimensions) > 0
+  if length(dimensions) > 0 {
     size: dimensions
-  else
-    size: image-size(url)[0] image-size(url)[1]
+  }
+  else {
+    size: image-size(url)[0]image-size(url)[1]
+  }
+
+}
 
 /*
  * Sprite mixins
@@ -571,48 +573,58 @@ image-block(path, dimensions...)
  * e.g. sprite: 1, 5, 32px
  */
 
--sprite(x = 0, y = 0, grid...)
-  if length(grid) > 1
-    background-position: unit(x*grid[0]*-1, px) unit(y*grid[1]*-1, px)
-  else
-    background-position: unit(x*grid*-1, px) unit(y*grid*-1, px)
+-sprite(x = 0, y = 0, grid...) {
+  if length(grid) > 1 {
+    background-position: unit(x* grid[0] * -1, px) unit(y* grid[1] * -1, px)
+  }
+  else {
+    background-position: unit(x* grid * -1, px) unit(y* grid * -1, px)
+  }
+}
 
 // e.g. sprite-grid: '.sprite' 1 5 16px 24px
-sprite-extend(extend , x = 0, y = 0, grid...)
+sprite-extend(extend, x = 0, y = 0, grid...)
   @extend {extend}
   -sprite: x y grid
 
 // basic sprite mixin
 // e.g. sprite-grid: 'test.png' 1 5 16px 24px
-sprite-grid(path, x = 0, y = 0, grid...)
-  bg: path
+sprite-grid(path, x = 0, y = 0, grid...) {
+  -bg: path
   -sprite: x y grid
+}
 
 // mixin that replaces text with an icon
 // e.g. sprite-replace: 'test.png' 1 5 16px 24px
-sprite-replace(path, x = 0, y = 0, grid...)
-  bg: path
+sprite-replace(path, x = 0, y = 0, grid...) {
+  -bg: path
   -sprite: x y grid
   text-indent: -999em
   letter-spacing: -999em
   overflow: hidden
+}
 
 // mixin for inline icons
 // e.g. sprite-inline: 'test.png' 1 5 18px 18px 16px 24px
-sprite-inline(path, x = 0, y = 0, width, height, grid...)
-  &:before
+sprite-inline(path, x = 0, y = 0, width, height, grid...) {
+  &:before {
     inline-block()
-    bg: path
+    -bg: path
     -sprite: x y grid
     content: ''
     size: width height
+  }
+}
 
 // mixin for inline icons
 // e.g. sprite-inline-extend: '.sprite' 1 5 18px  24px
-sprite-inline-extend(extend , x = 0, y = 0,  grid...)
-  &:before
+sprite-inline-extend(extend, x = 0, y = 0, grid...) {
+  &:before {
     @extend {extend}
     -sprite: x y grid
+  }
+}
+
 // mixin for padded icons
 // e.g. sprite-padded: 'test.png' 1 5 18px 18px 10px 5px 32px
 sprite-padded(path, x = 0, y = 0, width, height, top, left, grid...)
@@ -627,10 +639,10 @@ sprite-padded(path, x = 0, y = 0, width, height, top, left, grid...)
  * Make single text line overflow
  * e.g. text-overflow: ellipsis 200
  */
-text-overflow( type = ellipsis ,width = auto)
+text-overflow(type = ellipsis, width = auto)
   if width != auto
     parsed = unit(width)
-    units = match('^[^%]*%[^%]*$', parsed) ? '%' : 'px'
+    units = match('^[^%]*%[^%]*$', parsed) ? '%':'px'
 
   text-overflow: type
   white-space: nowrap;
@@ -644,495 +656,143 @@ text-overflow( type = ellipsis ,width = auto)
  * Hiding text mixin
  * e.g. text-hide()
  */
-text-hide()
+text-hide() {
   text-indent: -9999px
   white-space: nowrap
   overflow: hidden
+}
 
 /*
  * Disallow user to select element
  * e.g. no-select()
  */
-no-select()
+no-select() {
   -webkit-touch-callout: none
   -prefix(user-select, none)
+}
 
 /*
  * Creates triangle
  * possible directions 'up', 'down', 'left', 'right'
  * e.g. triangle: down 15px #F80
  */
-triangle(direction = up, size = 10px, color = #000)
+triangle(direction = up, size = 10px, color = #000) {
   width: 0
   height: 0
 
-  if direction == up
+  if direction == up {
     border-left: size solid transparent
     border-right: size solid transparent
     border-bottom: size solid color
-  else if direction == down
+  }
+  else if direction == down {
     border-left: size solid transparent
     border-right: size solid transparent
     border-top: size solid color
-  else if direction == left
+  }
+  else if direction == left {
     border-top: size solid transparent
     border-bottom: size solid transparent
     border-right: size solid color
-  else if direction == right
+  }
+
+  else if direction == right {
     border-top: size solid transparent
     border-bottom: size solid transparent
     border-left: size solid color
+  }
+}
 
 /*
  * Opacity mixin
  * e.g. opacity: .5
  */
-opacity(opacity)
+opacity(opacity) {
   filter: s("alpha(opacity = %s)", opacity * 100) if ie-support
   opacity: opacity
+}
 
 /*
  * Full rounded corners mixins
  * e.g. round()
  */
-round()
+round() {
   -prefix(border-radius, 100%)
+}
 
 /*
  * Custom animation timing functions
  * http://www.ui-transitions.com/
  */
 // ease-in
-ease-in-quad = cubic-bezier(0.550,  0.085, 0.680, 0.530)
-ease-in-cubic = cubic-bezier(0.550,  0.055, 0.675, 0.190)
-ease-in-quart = cubic-bezier(0.895,  0.030, 0.685, 0.220)
-ease-in-quint = cubic-bezier(0.755,  0.050, 0.855, 0.060)
-ease-in-sine = cubic-bezier(0.470,  0.000, 0.745, 0.715)
-ease-in-expo = cubic-bezier(0.950,  0.050, 0.795, 0.035)
-ease-in-circ = cubic-bezier(0.600,  0.040, 0.980, 0.335)
+ease-in-quad = cubic-bezier(0.550, 0.085, 0.680, 0.530)
+ease-in-cubic = cubic-bezier(0.550, 0.055, 0.675, 0.190)
+ease-in-quart = cubic-bezier(0.895, 0.030, 0.685, 0.220)
+ease-in-quint = cubic-bezier(0.755, 0.050, 0.855, 0.060)
+ease-in-sine = cubic-bezier(0.470, 0.000, 0.745, 0.715)
+ease-in-expo = cubic-bezier(0.950, 0.050, 0.795, 0.035)
+ease-in-circ = cubic-bezier(0.600, 0.040, 0.980, 0.335)
 ease-in-back = cubic-bezier(0.600, -0.280, 0.735, 0.045)
 
 // ease-out
-ease-out-quad = cubic-bezier(0.250,  0.460, 0.450, 0.940)
-ease-out-cubic = cubic-bezier(0.215,  0.610, 0.355, 1.000)
-ease-out-quart = cubic-bezier(0.165,  0.840, 0.440, 1.000)
-ease-out-quint = cubic-bezier(0.230,  1.000, 0.320, 1.000)
-ease-out-sine = cubic-bezier(0.390,  0.575, 0.565, 1.000)
-ease-out-expo = cubic-bezier(0.190,  1.000, 0.220, 1.000)
-ease-out-circ = cubic-bezier(0.075,  0.820, 0.165, 1.000)
-ease-out-back = cubic-bezier(0.175,  0.885, 0.320, 1.275)
+ease-out-quad = cubic-bezier(0.250, 0.460, 0.450, 0.940)
+ease-out-cubic = cubic-bezier(0.215, 0.610, 0.355, 1.000)
+ease-out-quart = cubic-bezier(0.165, 0.840, 0.440, 1.000)
+ease-out-quint = cubic-bezier(0.230, 1.000, 0.320, 1.000)
+ease-out-sine = cubic-bezier(0.390, 0.575, 0.565, 1.000)
+ease-out-expo = cubic-bezier(0.190, 1.000, 0.220, 1.000)
+ease-out-circ = cubic-bezier(0.075, 0.820, 0.165, 1.000)
+ease-out-back = cubic-bezier(0.175, 0.885, 0.320, 1.275)
 
 // ease-in-out
-ease-in-out-quad = cubic-bezier(0.455,  0.030, 0.515, 0.955)
-ease-in-out-cubic = cubic-bezier(0.645,  0.045, 0.355, 1.000)
-ease-in-out-quart = cubic-bezier(0.770,  0.000, 0.175, 1.000)
-ease-in-out-quint = cubic-bezier(0.860,  0.000, 0.070, 1.000)
-ease-in-out-sine = cubic-bezier(0.445,  0.050, 0.550, 0.950)
-ease-in-out-expo = cubic-bezier(1.000,  0.000, 0.000, 1.000)
-ease-in-out-circ = cubic-bezier(0.785,  0.135, 0.150, 0.860)
+ease-in-out-quad = cubic-bezier(0.455, 0.030, 0.515, 0.955)
+ease-in-out-cubic = cubic-bezier(0.645, 0.045, 0.355, 1.000)
+ease-in-out-quart = cubic-bezier(0.770, 0.000, 0.175, 1.000)
+ease-in-out-quint = cubic-bezier(0.860, 0.000, 0.070, 1.000)
+ease-in-out-sine = cubic-bezier(0.445, 0.050, 0.550, 0.950)
+ease-in-out-expo = cubic-bezier(1.000, 0.000, 0.000, 1.000)
+ease-in-out-circ = cubic-bezier(0.785, 0.135, 0.150, 0.860)
 ease-in-out-back = cubic-bezier(0.680, -0.550, 0.265, 1.550)
 
-
-scroll(pos, max = 200px)
+scroll(pos, max = 200px) {
   position: relative;
-  if pos == 'y'
+  if pos == 'y' {
     max-height: max;
-    if ie-support
+    if ie-support {
       \*height: max;
+    }
     overflow-{pos}: auto;
-  else if pos == 'x'
+  }
+  else if pos == 'x' {
     max-width: max;
-    if ie-support
+    if ie-support {
       \*width: max;
+    }
     overflow-{pos}: auto;
-  else
+  }
+  else {
     max-width: max;
     max-height: max;
-    if ie-support
+    if ie-support {
       \*width: max;
       \*height: max;
+    }
     overflow: auto;
+  }
+
+}
 
 gradients();
 
-unstyled()
-  &, li
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-placeholder(color)
-  ::-webkit-input-placeholder
-    color: color
-  :-moz-placeholder
-    color: color
-  ::-moz-placeholder
-    color: color
-  :-ms-input-placeholder
-    color: color
-
-
-
-//input-icon('icon.png', 10px 10px )
-center-box()
-  text-align: center;
-  display: box;
-  box-orient: horizontal;
-  box-pack: center;
-  box-align: center;
-
-
-base-classes()
-  .clear
-    clear: both
-
-  .pull-left
-    float: left
-
-  .pull-right
-    float: right
-
-  .text-center
-    center()
-
-  .bold
-    bold()
-
-  .italic
-    italic()
-
-  .bullet
-    list-style: circle
-
-  .clearfix
-    clearfix()
-
-  .banner
-    img
-      display block;
-
-  .rounded
-    round()
-
-  .container
-    padding 15px;
-    if !is-mobile
-      width page-width
-
-
-  if is-mobile
-    .flex,.flex-middle
-      display: flex !important;
-      display: -webkit-flex  !important;
-      display: -webkit-box  !important;
-      display: flex !important;
-      -webkit-flex-flow: row;
-      flex-flow: row;
-      box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-
-      /* ˮƽ���� */
-      /*  -webkit-box-align: center;
-        -webkit-align-items: center;
-        align-items: center;
-    */
-      /* ��ֱ���� */
-      -webkit-justify-content: center;
-      justify-content: center;
-      -webkit-box-pack: center;
-
-      -webkit-align-content: center;
-      align-content: center;
-    .flex-content
-      padding:5px 10px;
-      box-sizing: border-box;
-      -webkit-box-sizing: border-box;
-
-
-    .flex-inline
-      display: inline-flex !important;
-      display: -webkit-inline-flex  !important;
-
-    .flex-col,.flex-middle
-      -webkit-flex-flow: column;
-      flex-flow: column;
-
-    .flex-item
-      flex :1 ;
-      -webkit-flex: 1;
-     for i in 1...10
-      .flex-item-{i}{ flex : i ; -webkit-flex: i;  }
-
-  .btn
-    position: relative;
-    font-size: font-size;
-    padding: 7px 12px;
-    display: inline-block;
-    vertical-align: middle;
-    transition: all 0.4s ease-in-out;
-    background: none;
-    line-height: 1.4 !important;
-    text-decoration: none;
-    white-space: nowrap;
-    text-align: center;
-    border: 1px solid transparent;
-    /*box-shadow: 0 0 5px #ddd;*/
-    text-shadow: 0 0 1px #b1b1b1;
-    cursor: pointer;
-    &:hover
-      text-decoration none;
-
-/**
- * GRADIENTS
- */
-
-/*
- * Specific helpers ported from Nib
- * https://github.com/visionmedia/nib
- */
-
-
-// Replace the given str with val in the expr.
-replace(expr, str, val)
-  expr = clone(expr)
-  for e, i in expr
-    if length(e) > 1
-      expr[i] = replace(e, str, val)
-    else
-      if str == e
-        expr[i] = val
-  expr
-
-// Normalize gradient points.
-grad-point(pos)
-  if length(pos) == 1
-    return left pos if pos in (top bottom)
-    return pos top if pos in (left right)
-  else if pos[0] in (top bottom)
-    pos[1] pos[0]
-  else
-    pos
-
-// Implicit color stop position.
-pos-in-stops(i, stops)
-  len = length(stops)
-  if len - 1 == i
-    100%
-  else if i
-    unit(i / len * 100, '%')
-  else
-    0%
-
-// Normalize color stops:
-// - (color pos) -> (pos color)
-// - (color) -> (implied-pos color)
-normalize-stops(stops)
-  stops = clone(stops)
-  for stop, i in stops
-    if length(stop) == 1
-      color = stop[0]
-      stop[0] = pos-in-stops(i, stops)
-      stop[1] = color
-    else if typeof(stop[1]) == 'unit'
-      pos = stop[1]
-      stop[1] = stop[0]
-      stop[0] = pos
-  stops
-
-// Join color stops with the given translation function.
-join-stops(stops, translate)
-  str = ''
-  len = length(stops)
-  for stop, i in stops
-    str += ', ' if i
-    pos = stop[0]
-    color = stop[1]
-    str += translate(color, pos)
-  unquote(str)
-
-// Legacy Webkit color stop.
-webkit-stop(color, pos)
-  'color-stop(%d, %s)' % (pos / 100 color)
-
-// Standard color stop.
-std-stop(color, pos)
-  '%s %s' % (color pos)
-
-/*
- * Linear gradient mixin
- * e.g. background-image: linear-gradient(bottom, red, green 50%, blue)
- */
-/*
-linear-gradient(start, stops...)
-  error('color stops required') unless length(stops)
-  prop = current-property[0]
-  val = current-property[1]
-
-  if start is a 'color'
-    unshift(stops, start)
-    start = top
-
-  stops = normalize-stops(stops)
-
-  if start[0] is a 'unit'
-    start = start[1]
-
-  end = grad-point(opposite-position(start))
-  webkit-legacy = '-webkit-gradient(linear, %s, %s, %s)' % (grad-point(start) end join-stops(stops, webkit-stop))
-  add-property(prop, replace(val, '__CALL__', webkit-legacy))
-
-  stops = join-stops(stops, std-stop)
-  for prefix in vendors
-    unless prefix == official
-      gradient = '-%s-linear-gradient(%s, %s)' % (prefix start stops)
-      add-property(prop, replace(val, '__CALL__', gradient))
-
-  'linear-gradient(%s, %s)' % (start stops)
-*/
-
-/*
- * Radial gradient mixin
- * e.g. background-image: radial-gradient(red, blue)
- */
-radial-gradient(stops...)
-  error('color stops required') unless length(stops)
-  prop = current-property[0]
-  val = current-property[1]
-
-  stops = normalize-stops(stops)
-
-  webkit-legacy = '-webkit-gradient(radial, center center 0px, center center 100%, %s, %s)' % join-stops(stops, webkit-stop)
-  add-property(prop, replace(val, '__CALL__', webkit-legacy))
-
-  stops = join-stops(stops, std-stop)
-  for prefix in vendors
-    unless prefix == official
-      gradient = '-%s-radial-gradient(center, ellipse cover, %s)' % (prefix stops)
-      add-property(prop, replace(val, '__CALL__', gradient))
-
-  'radial-gradient(ellipse at center, %s)' % stops
-
-/*
- * Simplified version of linear-gradient with 2 colors only
- * e.g. gradient: #F9F9F9, #EAEAEA
- */
-gradient( angle = top , colors...)
-  background: colors[1]
-  background-image: linear-gradient( angle , colors[0], colors[1])
-
-/*
- * Another linear-gradient that automticly detects colors
- * e.g. simple-gradient: #F80, 30%
- */
-simple-gradient(color, strength = 10%)
-  start = lighten(color, strength)
-  end = darken(color, strength)
-  gradient(start, end)
-
-/**
-* PREFIX
-*/
-
-/*
- * Box-shadow mixin
- * e.g. box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, .5)
- */
-box-shadow()
-  -prefix(box-shadow, arguments)
-
-/*
- * Border-radius mixin
- * e.g. border-radius: 5px
- */
-border-radius()
-  -prefix(border-radius, arguments)
-
-/*
- * Box-sizing mixin
- */
-box-sizing()
-  -prefix(box-sizing, arguments)
-
-/*
- * Animation mixins
- */
-animation()
-  -prefix(animation, arguments)
-
-animation-name()
-  -prefix(animation-name, arguments)
-
-animation-delay()
-  -prefix(animation-delay, arguments)
-
-animation-duration()
-  -prefix(animation-duration, arguments)
-
-animation-timing-function()
-  -prefix(animation-timing-function, arguments)
-
-animation-iteration-count()
-  -prefix(animation-iteration-count, arguments)
-
-animation-direction()
-  -prefix(animation-direction, arguments)
-
-animation-play-state()
-  -prefix(animation-play-state, arguments)
-
-animation-fill-mode()
-  -prefix(animation-fill-mode, arguments)
-
-/*
- * Transition mixins
- * e.g. transition: all 300ms ease-in-quad
- */
-transition()
-  -prefix(transition, arguments)
-
-transition-property()
-  -prefix(transition-property, arguments)
-
-transition-duration()
-  -prefix(transition-duration, arguments)
-
-transition-timing-function()
-  -prefix(transition-timing-function, arguments)
-
-transition-delay()
-  -prefix(transition-delay, arguments)
-
-/*
- * Transform mixins
- * transform: rotate(20deg)
- */
-transform()
-  -prefix(transform, arguments)
-
-transform-origin()
-  -prefix(transform-origin, arguments)
-
-perspective()
-  -prefix(perspective, arguments)
-
-perspective-origin()
-  -prefix(perspective-origin, arguments)
-
-transform-style()
-  -prefix(transform-style, arguments)
-
-backface-visibility()
-  -prefix(backface-visibility, arguments)
-
-/*
- * Filter mixin
- * currently supported by -webkit (in order to boot FF you'll need SVG)
- * http://pixelhunter.me/post/25782670606/css3-grayscale
- */
-filters()
+filters() {
   -prefix(filter, arguments)
+}
 
-grayscale()
+backface-visibility() {
+  -prefix(backface-visibility, arguments)
+}
+
+grayscale() {
   -webkit-filter: unquote("grayscale(100%)");
   -moz-filter: unquote('grayscale(100%)');
   -ms-filter: unquote('grayscale(100%)');
@@ -1141,12 +801,458 @@ grayscale()
   filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
   filter: "progid:DXImageTransform.Microsoft.BasicImage(grayscale=1)";
   filter: gray;
+}
 
+button(padding = 7px 12px) {
+  position: relative;
+  font-size: font-size;
+  padding: padding;
+  display: inline-block;
+  vertical-align: middle;
+  transition: all 0.4s ease-in-out;
+  background: none;
+  line-height: 1.4;
+  text-decoration: none;
+  white-space: nowrap;
+  text-align: center;
+  border: 1px solid transparent;
+  /*box-shadow: 0 0 5px #ddd;*/
+  text-shadow: 0 0 1px #b1b1b1;
+  cursor: pointer;
+}
 
+center-box() {
+  text-align: center;
+  display: box;
+  box-orient: horizontal;
+  box-pack: center;
+  box-align: center;
+}
 
+unstyled() {
+  &, li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
 
+placeholder(color) {
+  ::-webkit-input-placeholder {
+    color: color
+  }
+  :-moz-placeholder {
+    color: color
+  }
+  ::-moz-placeholder {
+    color: color
+  }
+  :-ms-input-placeholder {
+    color: color
+  }
+}
 
+//--------------------------------- Functions --------------------------------------//
 
+//--------------------------------  Classes ---------------------------------//
+/*
+ * Heading mixin
+ * e.g. heading: 24px, #F80
+ */
+heading(size = font-size, color = default-color) {
+  color: color
+  text-rendering: optimizelegibility
+  fs: unit(size, px)
+  fw: bold
+  margin: unit(size/ 3.2, px) 0
+}
 
+/**
+ * Popular normalize.css
+ * https://github.com/necolas/normalize.css/
+ * normalize.css v2.1.0 | MIT License
+ */
+normalize() {
+  article,
+  aside,
+  details,
+  figcaption,
+  figure,
+  footer,
+  header,
+  hgroup,
+  main,
+  nav,
+  section,
+  summary {
+    display: block
+  }
 
+  audio,
+  canvas,
+  video {
+    display: inline-block
+    \*display: inline
+    \*zoom: 1
+  }
 
+  audio:not([controls]) {
+    display: none
+    height: 0
+  }
+
+  [hidden] {
+    display: none
+  }
+  html {
+    font-family: sans-serif
+    -webkit-text-size-adjust: 100%
+    -ms-text-size-adjust: 100%
+  }
+  body {
+    margin: 0;
+  }
+
+  a:focus {
+    outline: thin dotted
+  }
+  a:active,
+  a:hover {
+    outline: 0
+  }
+  h1 {
+    font-size: 2em
+    margin: 0.67em 0
+  }
+  abbr[title] {
+    border-bottom: 1px dotted
+  }
+
+  b,
+  strong {
+    font-weight: bold
+  }
+  dfn {
+    font-style: italic
+  }
+
+  hr {
+    -moz-box-sizing: content-box
+    box-sizing: content-box
+    height: 0
+  }
+  mark {
+    background: #ff0
+    color: #000
+  }
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: monospace, serif
+    font-size: 1em
+  }
+  pre {
+    white-space: pre-wrap
+  }
+  q {
+    quotes: "\201C" "\201D" "\2018" "\2019"
+  }
+  small {
+    font-size: 80%
+    color #999
+  }
+  sub,
+  sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative
+    vertical-align: baseline
+  }
+  sup {
+    top: -0.5em
+  }
+  sub {
+    bottom: -0.25em
+  }
+
+  img {
+    border: 0
+  }
+
+  svg:not(:root) {
+    overflow: hidden
+  }
+
+  figure {
+    margin: 0
+  }
+
+  fieldset {
+    border: 1px solid #c0c0c0
+    margin: 0 2px
+    padding: 0.35em 0.625em 0.75em
+  }
+  legend {
+    border: 0
+    padding: 0
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit
+    font-size: 100%
+    margin: 0
+  }
+
+  button,
+  input {
+    line-height: normal
+  }
+
+  button,
+  select {
+    text-transform: none
+  }
+
+  button,
+  html input[type="button"],
+  input[type="reset"],
+  input[type="submit"] {
+    -webkit-appearance: button
+    cursor: pointer
+  }
+
+  button[disabled],
+  html input[disabled] {
+    cursor: default
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    box-sizing: border-box
+    padding: 0
+  }
+
+  input[type="search"] {
+    -webkit-appearance: textfield
+    -moz-box-sizing: content-box
+    -webkit-box-sizing: content-box
+    box-sizing: content-box
+  }
+
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none
+  }
+
+  input:
+  :-moz-focus-inner {
+    border: 0;
+    padding: 0
+  }
+
+  textarea {
+    overflow: auto
+    vertical-align: top
+  }
+
+  table {
+    border-collapse: collapse
+    border-spacing: 0
+  }
+}
+
+/**
+* Reset browsers new fields features
+* (borders on required etc.)
+*/
+fields-reset() {
+  ::valid
+  ::invalid,
+  ::required,
+  ::optional,
+  ::in-range,
+  ::out-of-range {
+    background: none
+    border: 0
+    box-shadow: none
+  }
+  ::-moz-focus-inner {
+    border: 0
+  }
+  ::-ms-clear,
+  ::-ms-reveal {
+    display: none
+  }
+}
+
+base-classes() {
+  .clear {
+    clear: both
+  }
+  .pull-left {
+    float: left
+  }
+  .pull-right {
+    float: right
+  }
+  .text-center{center()}
+  .bold{bold()}
+  .italic{italic()}
+  .bullet {
+    list-style: circle
+  }
+  .clearfix{clearfix()}
+  .rounded{round()}
+  .block{display block !important }
+  .banner {
+    img {
+      display block;
+    }
+  }
+
+  .container {
+    if !is-mobile {
+      width page-width
+    }
+    else {
+      padding 1rem;
+    }
+  }
+
+  if is-mobile {
+    .flex {
+      display: flex !important;
+      display: -webkit-flex !important;
+      display: -webkit-box !important;
+      display: flex !important;
+      -webkit-flex-flow: row;
+      flex-flow: row;
+      box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      /*  -webkit-box-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    */
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-box-pack: center;
+
+      -webkit-align-content: center;
+      align-content: center;
+    }
+    .flex-vertical {
+      @extend .flex
+    }
+    .flex-content {
+      padding: 0.5rem 1rem;
+      box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+    }
+    .flex-inline {
+      display: inline-flex !important;
+      display: -webkit-inline-flex !important;
+    }
+
+    .flex-col, .flex-middle {
+      -webkit-flex-flow: column;
+      flex-flow: column;
+    }
+
+    .flex-item {
+      flex: 1;
+      -webkit-flex: 1;
+    }
+    for i in 1...10 {
+      .flex-item-{i} {
+        flex: i;
+        -webkit-flex: i;
+      }
+    }
+  }
+
+  .btn {
+    button 7px 14px
+    &:hover {
+      text-decoration none;
+    }
+  }
+
+}
+
+/**
+ * ^RESET
+ * Base reset (recommended)
+ */
+reset() {
+  if is-mobile {
+    * {
+      box-sizing border-box
+      -webkit-box-sizing border-box
+    }
+  }
+
+  html, body, div, span, applet, object, iframe,
+  h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+  a, abbr, acronym, address, big, cite, code,
+  del, dfn, em, font, img, ins, kbd, q, s, samp,
+  small, strike, strong, sub, sup, tt, var,
+  dl, dt, dd, ol, ul, li, input, textarea,
+  fieldset, form, label, legend, button,
+  table, caption, tbody, tfoot, thead, tr, th, td,
+  article, aside, details, figcaption, figure,
+  footer, header, hgroup, menu, nav, section, summary {
+    margin: 0
+    padding: 0
+    border: 0
+    outline: 0
+    font-weight: inherit
+    font-style: inherit
+    font-size: 100%
+    font-family: inherit
+    vertical-align: baseline
+  }
+
+  article, aside, details, figcaption, figure,
+  footer, header, hgroup, menu, nav, section, summary {
+    display: block
+  }
+
+  ol, ul {
+    list-style: none
+  }
+  table {
+    border-spacing: 0
+    vertical-align: middle
+  }
+
+  caption, th, td {
+    text-align: left
+    font-weight: normal
+    vertical-align: middle
+  }
+  blockquote, q {
+    quotes: "&#8220;" "&#8221;"
+  }
+  a, img {
+    border: none
+  }
+  a {
+    text-decoration none;
+  }
+
+  img {
+    max-width 100%
+    display inline-block
+  }
+
+  normalize()
+  fields-reset()
+  base-classes()
+
+}
+
+//--------------------------------  Classes ---------------------------------//
