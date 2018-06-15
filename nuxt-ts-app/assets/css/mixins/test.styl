@@ -37,7 +37,28 @@
 .icon{
   icon 'x' 10px 10px right
 }
+$arr0 = 200px 82px 20px 350px 307px
+$arr1 = 293px 215px 118px 118px 187px
 
+for i in 1..8
+  @keyframes animate-egg-{i}{
+    33% {
+      $r = random(0,4)
+      transform: rotate( random(0,100) deg );
+      left: $arr0[ $r  ]
+      bottom: $arr1[ $r  ]
+    }
+    66% {
+      $r = random(0,4)
+      transform: rotate( random(0,100) deg );
+      left: $arr0[ $r ]
+      bottom: $arr1[ $r  ]
+    }
+  }
+for i in 1..8
+  .eggs.active .egg:nth-child({i}){
+    animation: 'animate-egg-%s' % i .6s ease infinite '.%ss' % i;
+  }
 //input-icon('icon.png', 10px 10px )
 
 

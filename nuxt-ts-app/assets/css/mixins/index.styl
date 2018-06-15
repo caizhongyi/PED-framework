@@ -883,6 +883,10 @@ placeholder(color) {
 scale( val ){
   transform scale( val );
 }
+/* random in range from min to max */
+/* via https://gist.github.com/legomushroom/11381886 */
+random(min,max)
+  return floor(math(0, 'random')*(max - min + 1) + min)
 //--------------------------------- Functions --------------------------------------//
 
 //--------------------------------  Classes ---------------------------------//
