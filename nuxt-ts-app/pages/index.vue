@@ -27,6 +27,7 @@ export default class extends Vue {
   scrollToTop = true
   @State people
   //layout = 'default'
+
   goto(){
     this.$router.push({
       name:'page1',

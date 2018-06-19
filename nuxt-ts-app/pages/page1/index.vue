@@ -3,7 +3,7 @@
         <label v-for="value of data" :class="{ active: value.id == selected.id}">
             <input type="radio" name="a" @change="change(value)" >
         </label>
-        <button type="button" @click="click()">click</button>
+        <button type="button" @click="click()">{{ name }}</button>
       <!--  <i-button>click</i-button>-->
     </div>
 </template>
@@ -31,7 +31,24 @@
       id : 0,
       active : true,
     }
-
+    name = 'aa';
+    head (){
+      return {
+        title : "page" ,
+        meta : [
+          {
+            hid: "description",
+            name: "description",
+            content: "Nuxt.js project"
+          },
+          {
+            hid: "keyword",
+            name: "keyword",
+            content: "Nuxt.js project"
+          }
+        ]
+        }
+    }
     @Watch('selected', {deep: true})
     onChangeData(val) {
       console.log(val)
