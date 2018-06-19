@@ -167,6 +167,8 @@ linear-gradient(start, stops...)
  * Full rounded corners mixins
  * e.g. round()
  */
+/* random in range from min to max */
+/* via https://gist.github.com/legomushroom/11381886 */
 /*
  * Heading mixin
  * e.g. heading: 24px, #F80
