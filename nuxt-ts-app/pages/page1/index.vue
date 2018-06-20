@@ -5,6 +5,12 @@
         </label>
         <button type="button" @click="click()">{{ name }}</button>
       <!--  <i-button>click</i-button>-->
+        <marquee behavior="" direction="">
+            <span>aaaaaaaaaaaaaaaaaaaaa</span>
+            <span>bbbbbbbbbbbbbbbbbbbbb</span>
+            <span>aaaaaaaaaaaaaaaaaaaaa</span>
+            <span>bbbbbbbbbbbbbbbbbbbbb</span>
+        </marquee>
     </div>
 </template>
 
@@ -16,9 +22,11 @@
     Watch,
     Model
   } from "nuxt-property-decorator"
+  import { State } from "vuex-class"
 
   @Component
   export default class Page1 extends Vue {
+    @Prop()
     data = [
       {active: true, id: '1'},
       {active: false, id: '2'},
@@ -27,6 +35,7 @@
       {active: true, id: '5'},
       {active: true, id: '6'}
     ]
+
     selected = {
       id : 0,
       active : true,

@@ -12,7 +12,7 @@ import {
   Watch,
   Model
 } from "nuxt-property-decorator"
-import { Getter, Action } from 'vuex-class'
+import { Getter, Action , State } from 'vuex-class'
 
 @Component({})
 export default class Modal extends Vue {
