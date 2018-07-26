@@ -2,6 +2,7 @@
   "name": "nuxt-ts-app",
   "version": "1.0.0",
   "private": true,
+  "description": "nodejs v8.11.3",
   "dependencies": {
     "@nuxtjs/axios": "^5.0.0",
     "axios": "^0.18.0",
