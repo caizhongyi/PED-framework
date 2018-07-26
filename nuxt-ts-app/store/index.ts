@@ -3,7 +3,7 @@ export const state = () => ({
 })
 
 export const mutations = {
-  setPeople(state, people) {
+  setPeople(state:any, people:any) {
     state.people = people
   }
 }
