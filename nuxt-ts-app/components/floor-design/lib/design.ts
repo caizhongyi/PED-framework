@@ -305,13 +305,16 @@ export default class Design {
     return this;
   }
 
-  save() {
+  getData(){
     let layers: any = [];
     this.$design.find(".drag-layer").each((i, n) => {
       let $el = $(n);
       layers.push(this.getLayer($el));
     });
-    localStorage.setItem("designData", JSON.stringify(layers));
+    return layers;
+  }
+  save() {
+    localStorage.setItem("designData", JSON.stringify(this.getData()));
     return this;
   }
 }
@@ -320,7 +323,7 @@ export class DesignElement {
   $ = $();
 
   constructor($design, dragOptions) {
-    this.$ = $("<div class=\"drag-layer\" ><span></span><i class=\"fa fa-bitbucket\"></i><em class=\"drop-size\"></em></div>").appendTo($design);
+    this.$ = $("<div class=\"drag-layer\" ><span></span><i class=\"ivu-icon ivu-icon-ios-trash\"></i><em class=\"drop-size\"></em></div>").appendTo($design);
 
     new Draggable(this.$,dragOptions);
     this.$.find(".drop-size").on("mousedown", function(e) {

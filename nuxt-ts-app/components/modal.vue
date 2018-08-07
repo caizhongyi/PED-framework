@@ -32,7 +32,9 @@ export default class Modal extends Vue {
  @Watch('text')
  onChangeText () { }*/
 
-  /*@Prop()
+  /*
+  // v-model 默认值
+  @Prop()
   value: boolean = false;
 
   @Watch('value')

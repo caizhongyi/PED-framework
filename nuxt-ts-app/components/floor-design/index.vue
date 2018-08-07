@@ -18,22 +18,22 @@
             <div class="pull-left">
                 <ul class="clearfix drag-elements list-unstyled">
                     <li>
-                        <input type="text" id="row" style="width: 50px;" maxlength="2" value="1"> x <input type="text" id="col"  style="width: 50px;" maxlength="2" value="1">
+                        <input type="text" id="row" v-model="row" style="width: 50px;" maxlength="2" value="1"> x <input v-model="col" type="text" id="col"  style="width: 50px;" maxlength="2" value="1">
                     </li>
                 </ul>
                 <ul class="clearfix drag-elements list-unstyled">
-                    <li><input type="checkbox" name="type" value="1" checked> 方形 </li>
-                    <li><input type="checkbox" name="type" value="2" > U形 </li>
-                    <li><input type="checkbox" name="type" value="3" > L形 </li>
-                    <li><input type="checkbox" name="type" value="4" > L1形 </li>
-                    <li><input type="checkbox" name="type" value="5" > L2形 </li>
-                    <li><input type="checkbox" name="type" value="6" > L3形 </li>
-                    <li><button type="button" class="btn btn-primary btn-batch">批量创建</button></li>
+                    <li><input type="radio" v-model="type" name="type" value="1" checked> 方形 </li>
+                    <li><input type="radio" v-model="type" name="type" value="2" > U形 </li>
+                    <li><input type="radio" v-model="type" name="type" value="3" > L形 </li>
+                    <li><input type="radio" v-model="type" name="type" value="4" > L1形 </li>
+                    <li><input type="radio" v-model="type" name="type" value="5" > L2形 </li>
+                    <li><input type="radio" v-model="type" name="type" value="6" > L3形 </li>
+                    <li><button type="button" class="btn btn-primary btn-batch" @click="batch()">批量创建</button></li>
                 </ul>
             </div>
             <div class="pull-right">
-                <button type="button" class="btn btn-primary btn-clear">清除</button>
-                <button type="button" class="btn btn-primary btn-save">保存</button>
+                <button type="button" class="btn btn-primary btn-clear" @click="clear()">清除</button>
+                <button type="button" class="btn btn-primary btn-save"  @click="save()">保存</button>
             </div>
         </div>
 
@@ -56,6 +56,9 @@
     @Prop({ default: 'all' })
     direction;
     design: any;
+    row : number = 1;
+    col : number = 1;
+    type : number = 1;
     /*@Model()
     visible:boolean = false;
 
@@ -64,25 +67,22 @@
       this.$emit('input', val);
     }*/
 
-
+    clear(){
+      this.design.empty();
+    }
+    save(){
+      this.design.save();
+    }
+    batch(){
+      switch ( this.type ) {
+        case 1:
+          this.design.createR( this.row  , this.col  );
+          break;
+      }
+    }
     mounted() {
       let that = this;
       this.design = new Design() ;
-
-      $('.btn-save').click(() => {
-        that.design.save();
-      })
-
-      $('.btn-batch').click(() => {
-          switch ($('[name=type]').val()) {
-              case "1":
-                that.design.createR(parseInt($('#row').val()), parseInt($('#col').val()));
-                  break;
-          }
-      })
-      $('.btn-clear').click(() => {
-        that.design.empty();
-      })
 
       function floor(number) {
           switch (number) {
@@ -331,9 +331,10 @@
         }
         i{
             position: absolute
-            bottom : 5px;
+            top : 5px;
             right 5px;
             display block
+            cursor default
         }
         &.on{
             opacity .5
@@ -376,4 +377,5 @@
             top 10px
         }
     }
+
 </style>
