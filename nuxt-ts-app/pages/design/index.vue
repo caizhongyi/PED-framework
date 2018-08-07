@@ -82,7 +82,8 @@
 
     change(e) {
       let p : any =  this.$refs.design;
-      p.design.empty().createR(  e.nodeKey *  10 )
+      console.log(  e  )
+      p.design.empty().createR(   e[0].nodeKey  ,10 )
     }
 
     mounted() {

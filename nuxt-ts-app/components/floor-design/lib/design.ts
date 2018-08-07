@@ -179,8 +179,8 @@ export default class Design {
     for (let i = 0; i < row; i++) {/**/
       for (let j = 0; j < col; j++) {
         let item = {
-          x: 50 + i * this.layerSize.width,
-          y: 50 + j * this.layerSize.height,
+          x: 50 + j * this.layerSize.width,
+          y: 50 + i * this.layerSize.height,
           name: "房间"
         };
         layers.push(item);
