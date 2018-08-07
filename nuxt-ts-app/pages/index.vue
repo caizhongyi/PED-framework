@@ -1,12 +1,20 @@
 <template>
 
-  <section>
+  <div>
+
+    <drag-block>
+      <div class="box">drag</div>
+    </drag-block>
+
     <button type="button" @click="goto()">link</button>
+
     <h1 class="header">Nuxt TypeScript Starter</h1>
     <div class="cards">
       <Card v-for="person in people" :key="person.id" :person="person"></Card>
     </div>
-  </section>
+
+
+  </div>
 
 </template>
 
@@ -17,10 +25,13 @@ import {
 } from "nuxt-property-decorator"
 import { State } from "vuex-class"
 import Card from "~/components/card.vue"
+import DragBlock from "~/components/drag-block/index.vue"
+
 
 @Component({
   components: {
-    Card
+    Card ,
+    DragBlock ,
   }
 })
 export default class extends Vue {
@@ -45,5 +56,10 @@ export default class extends Vue {
 .cards {
   display: flex;
   flex-wrap: wrap;
+}
+.box{
+  width: 100px;
+  height: 100px;
+  background: red;
 }
 </style>

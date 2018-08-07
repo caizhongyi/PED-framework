@@ -26,7 +26,6 @@
 
   @Component
   export default class Page1 extends Vue {
-    @Prop()
     data = [
       {active: true, id: '1'},
       {active: false, id: '2'},
