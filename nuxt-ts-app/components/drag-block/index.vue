@@ -25,7 +25,7 @@
     }
   }
 </script>
-<style scoped>
+<style scoped lang="stylus">
     .drag {
         position: absolute;
         z-index: 9999;

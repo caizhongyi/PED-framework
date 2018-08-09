@@ -11,11 +11,9 @@ export  default  class Draggable {
     let _this = this;
     this.options = { ...this.options , ...options};
     // 阻止冒泡
-    $($el).find('*').not('img').mousedown(function (e) {
-      e.stopPropagation();
-    });
+    let $element = $( $el );
 
-    $($el).css({ cursor: "move" }).mousedown(function(e) {
+    $element.css({ cursor: "move" }).mousedown(function(e) {
       let element = $(this).addClass("dragging on");
       element.data("page", {
         x: e.pageX,

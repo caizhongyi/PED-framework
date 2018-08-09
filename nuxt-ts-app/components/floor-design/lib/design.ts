@@ -4,6 +4,9 @@ import  Draggable  from "../../drag-block/lib/draggable";
 declare var window;
 declare var document;
 
+/**
+ * 楼层设计器
+ */
 export default class Design {
   $design = $();
   $activeLayers = $();
@@ -46,7 +49,9 @@ export default class Design {
     this.selectArea();
     this.timeSave();
   }
-
+  /**
+   * 拖动元素选择
+   * */
   selectArea() {
     let that = this;
 
@@ -154,7 +159,9 @@ export default class Design {
     });
     return this;
   }
-
+  /**
+   * 创建元素
+   * */
   createL(row, col) {
     let layers = [{ "x": 154, "y": 50, "name": "房间 " }, { "x": 372, "y": 54, "name": "房间 " }, {
       "x": 262,
@@ -204,19 +211,27 @@ export default class Design {
     this.create(layers);
     return this;
   }
-
+  /**
+   * 清空
+   * */
   empty() {
     this.$design.empty();
     return this;
   }
-
+  /**
+   * 创建元素
+   * @layer array []
+   *
+   * */
   create(layers) {
     for (let o of layers) {
       this.add(o);
     }
     return this;
   }
-
+  /**
+   * 定时保存
+   * */
   timeSave() {
     let that = this;
     setInterval(() => {
@@ -224,7 +239,10 @@ export default class Design {
     }, 10 * 1000 * 60);
     return this;
   }
-
+  /**
+   * 增加元素
+   * @prop { name , x , y , direction , width , height , rotate  }
+   * */
   add(prop) {
     let that = this;
     let $el = new DesignElement(this.$design, {
@@ -256,15 +274,23 @@ export default class Design {
     return this;
   }
 
+  /**
+   * 清除选择
+   */
   clearAllActive() {
     this.$design.find(".drag-layer").removeData("activePosition").removeClass("active");
     return this;
   }
 
+  /**
+   * 删除元素
+   * @param elem
+   */
   remove(elem) {
     elem.remove();
     return this;
   }
+
 
   getDirection(rotate) {
     if (rotate % 360 == 0) {
@@ -305,6 +331,9 @@ export default class Design {
     return this;
   }
 
+  /**
+   * 获取当前数据
+   */
   getData(){
     let layers: any = [];
     this.$design.find(".drag-layer").each((i, n) => {
@@ -313,12 +342,18 @@ export default class Design {
     });
     return layers;
   }
+
+  /**
+   * 保存
+   */
   save() {
     localStorage.setItem("designData", JSON.stringify(this.getData()));
     return this;
   }
 }
-
+/**
+ * 拖动元素
+ * */
 export class DesignElement {
   $ = $();
 
@@ -326,6 +361,7 @@ export class DesignElement {
     this.$ = $("<div class=\"drag-layer\" ><span></span><i class=\"ivu-icon ivu-icon-ios-trash\"></i><em class=\"drop-size\"></em></div>").appendTo($design);
 
     new Draggable(this.$,dragOptions);
+
     this.$.find(".drop-size").on("mousedown", function(e) {
       let $dragLayer = $(this).closest(".drag-layer");
       $dragLayer.addClass("resizing").data("resizePosition", {
@@ -353,6 +389,17 @@ export class DesignElement {
     });
     this.$.find("i").click(() => {
       this.$.remove();
+    });
+
+    this.forbidInideDrag();
+  }
+
+  /**
+   * 禁止内部元素拖动
+   */
+  forbidInideDrag(){
+    this.$.find('*').not('img').mousedown(function (e) {
+      e.stopPropagation();
     });
   }
 }
