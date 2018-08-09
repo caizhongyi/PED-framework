@@ -27,7 +27,6 @@ import { State } from "vuex-class"
 import Card from "~/components/card.vue"
 import DragBlock from "~/components/drag-block/index.vue"
 
-
 @Component({
   components: {
     Card ,

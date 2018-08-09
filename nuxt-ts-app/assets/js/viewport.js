@@ -1,3 +1,4 @@
+
 (function(doc, win) {
   var dpr, rem, scale;
   var docEl = document.documentElement;
@@ -20,7 +21,6 @@
   var recalc = function() {
 // if (docEl.style.fontSize) return;
     clientWidth = docEl.clientWidth;
-// console.log(clientWidth);
     if (!clientWidth) return;
     docEl.style.fontSize = clientWidth / 10 + 'px';
     if (document.body) {

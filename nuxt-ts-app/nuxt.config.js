@@ -45,7 +45,12 @@ module.exports = {
         type: "image/x-icon",
         href: "/favicon.ico"
       }
-    ]
+    ],
+    script: [
+     // { innerHTML: require('lib-flexible'), type: 'text/javascript', charset: 'utf-8'}
+    ],
+    // 不对<script>标签中内容做转义处理
+    __dangerouslyDisableSanitizers: ['script']
   },
   /*
   ** Customize the progress-bar color
@@ -55,20 +60,28 @@ module.exports = {
   ** Build configuration
   */
   css: [
-    "~/assets/css/main.css",
+    "~/assets/css/main.styl",
     "iview/dist/styles/iview.css"
   ],
+  env: {
+    __ENV: process.env.__ENV
+  },
   plugins: [
-    { src: "~plugins/iview", ssr: true }
+    { src: "~plugins/iview", ssr: true },
+    { src: "~plugins/flexible", ssr: false }
   ],
   build: {
     vendor: [
       "axios",
       "iview",
-     //  "external_library"
-      // '~/assets/js/viewport.js'
     ],
-    extend(config) {
+    postcss: [
+      //rem自适应
+      require('postcss-px2rem')({
+        remUnit: 75
+      })
+    ],
+    extend(config, ctx) {
       for (let o of config.module.rules) {
         if (o.loader == "vue-loader") {
           delete o.loader;
@@ -92,10 +105,14 @@ module.exports = {
                    prefix: true
                }
            }]*/
-          // console.log(o)
         }
       }
-      // console.log( config.module.rules )
+      if (ctx.isClient) {
+       /* config.entry['polyfill'] = ['babel-polyfill']
+        Object.assign(config.resolve.alias, {
+          'utils': path.resolve(__dirname, 'utils')
+        })*/
+      }
     }
   },
   /* babel:{
@@ -113,9 +130,6 @@ module.exports = {
   axios: {}
 };
 
-if (process.BROWSER_BUILD) {
-  // 引入第三方插件
-  // require('~/assets/js/viewport.js' )
-  // 或者修改window对象下某一属性
-  //  window.mbk = {}
+if(process.browser){
+  //require('lib-flexible')
 }
