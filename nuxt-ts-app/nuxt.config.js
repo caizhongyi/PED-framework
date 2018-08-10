@@ -47,7 +47,9 @@ module.exports = {
       }
     ],
     script: [
-     // { innerHTML: require('lib-flexible'), type: 'text/javascript', charset: 'utf-8'}
+      //{ innerHTML: require('./static/flexible.js') + ';console.log(11)' , type: 'text/javascript', charset: 'utf-8'},
+      //{ src:'https://res.wx.qq.com/open/js/jweixin-1.2.0.js' },
+      { src: './js/flexible.js' }
     ],
     // 不对<script>标签中内容做转义处理
     __dangerouslyDisableSanitizers: ['script']
@@ -68,12 +70,12 @@ module.exports = {
   },
   plugins: [
     { src: "~plugins/iview", ssr: true },
-    { src: "~plugins/flexible", ssr: false }
+   // { src: "~plugins/flexible", ssr: false }
   ],
   build: {
     vendor: [
       "axios",
-      "iview",
+      "iview"
     ],
     postcss: [
       //rem自适应
