@@ -49,7 +49,7 @@ module.exports = {
     script: [
       //{ innerHTML: require('./static/flexible.js') + ';console.log(11)' , type: 'text/javascript', charset: 'utf-8'},
       //{ src:'https://res.wx.qq.com/open/js/jweixin-1.2.0.js' },
-      { src: './js/flexible.js' }
+      //{ src: './js/flexible.js' }
     ],
     // 不对<script>标签中内容做转义处理
     __dangerouslyDisableSanitizers: ['script']
@@ -79,9 +79,9 @@ module.exports = {
     ],
     postcss: [
       //rem自适应
-      require('postcss-px2rem')({
+     /* require('postcss-px2rem')({
         remUnit: 75
-      })
+      })*/
     ],
     extend(config, ctx) {
       for (let o of config.module.rules) {
