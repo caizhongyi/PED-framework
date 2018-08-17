@@ -11,8 +11,7 @@
     components: {
     }
   })
-  export default class Design extends Vue {
-
+  export default class  extends Vue {
     head() {
       return {
         title: "page",
@@ -30,8 +29,6 @@
         ]
       };
     }
-
-
     mounted() {
 
     }

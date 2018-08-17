@@ -20,7 +20,7 @@
       FloorDesign
     }
   })
-  export default class Design extends Vue {
+  export default class  extends Vue {
     data = [
       { active: true, id: "1" },
       { active: false, id: "2" },

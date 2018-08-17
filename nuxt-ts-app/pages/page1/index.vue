@@ -25,7 +25,7 @@
   import { State } from "vuex-class"
 
   @Component
-  export default class Page1 extends Vue {
+  export default class  extends Vue {
     data = [
       {active: true, id: '1'},
       {active: false, id: '2'},

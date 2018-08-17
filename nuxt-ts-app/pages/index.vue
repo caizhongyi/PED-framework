@@ -13,8 +13,7 @@
       <Card v-for="person in people" :key="person.id" :person="person"></Card>
     </div>
 
-
-  </div>
+</div>
 
 </template>
 
@@ -36,10 +35,14 @@ import DragBlock from "~/components/drag-block/index.vue"
 export default class extends Vue {
   scrollToTop = true
   @State people
-  //layout = 'default'
  /* get name (): boolean {
     return this.title + this.text
   }*/
+  mounted() {
+    this.$router.push({
+      name:'login'
+    })
+  }
   goto(){
     this.$router.push({
       name:'page1',
