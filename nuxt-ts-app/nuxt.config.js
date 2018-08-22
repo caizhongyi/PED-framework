@@ -63,6 +63,7 @@ module.exports = {
   */
   css: [
     "~/assets/css/main.styl",
+    "font-awesome/css/font-awesome.css",
     "iview/dist/styles/iview.css"
   ],
   env: {

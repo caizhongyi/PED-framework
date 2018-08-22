@@ -2,27 +2,48 @@
     <div class="layout">
         <i-layout>
             <i-header>
-                <i-menu mode="horizontal" theme="dark" active-name="1">
-                    <div class="layout-logo"></div>
-                    <div class="layout-nav">
-                        <i-menu-item name="1">
-                            <i-icon type="ios-navigate"></i-icon>
-                            Item 1
-                        </i-menu-item>
-                        <i-menu-item name="2">
-                            <i-icon type="ios-keypad"></i-icon>
-                            Item 2
-                        </i-menu-item>
-                        <i-menu-item name="3">
-                            <i-icon type="ios-analytics"></i-icon>
-                            Item 3
-                        </i-menu-item>
-                        <i-menu-item name="4">
-                            <i-icon type="ios-paper"></i-icon>
-                            Item 4
-                        </i-menu-item>
-                    </div>
-                </i-menu>
+                <i-row>
+                    <i-col span="16">
+                        <i-menu mode="horizontal" theme="dark" active-name="1">
+                            <div class="layout-logo"></div>
+                            <div class="layout-nav">
+                                <i-menu-item name="1">
+                                    <i-icon type="ios-navigate"></i-icon>
+                                    Item 1
+                                </i-menu-item>
+                                <i-menu-item name="2">
+                                    <i-icon type="ios-keypad"></i-icon>
+                                    Item 2
+                                </i-menu-item>
+                                <i-menu-item name="3">
+                                    <i-icon type="ios-analytics"></i-icon>
+                                    Item 3
+                                </i-menu-item>
+                                <i-menu-item name="4">
+                                    <i-icon type="ios-paper"></i-icon>
+                                    Item 4
+                                </i-menu-item>
+                            </div>
+
+                        </i-menu>
+                    </i-col>
+                    <i-col span="8">
+                        <Icon type="ios-contact-outline" />用户名
+                        <Dropdown style="margin-left: 20px">
+                            <Button type="primary">
+                                下拉菜单
+                                <Icon type="ios-arrow-down"></Icon>
+                            </Button>
+                            <DropdownMenu slot="list">
+                                <DropdownItem>驴打滚</DropdownItem>
+                                <DropdownItem>炸酱面</DropdownItem>
+                                <DropdownItem disabled>豆汁儿</DropdownItem>
+                                <DropdownItem>冰糖葫芦</DropdownItem>
+                                <DropdownItem divided>北京烤鸭</DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                    </i-col>
+                </i-row>
             </i-header>
             <i-layout class="ivu-layout-has-sider">
                 <i-sider class="nt-sider" collapsible :collapsed-width="78" v-model="isCollapsed" hide-trigger>

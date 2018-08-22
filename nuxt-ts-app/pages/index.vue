@@ -39,9 +39,9 @@ export default class extends Vue {
     return this.title + this.text
   }*/
   mounted() {
-    this.$router.push({
+    /*this.$router.push({
       name:'login'
-    })
+    })*/
   }
   goto(){
     this.$router.push({
