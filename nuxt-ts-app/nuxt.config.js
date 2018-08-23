@@ -70,7 +70,8 @@ module.exports = {
     __ENV: process.env.__ENV
   },
   plugins: [
-    { src: "~plugins/iview", ssr: true },
+    { src: "~/plugins/iview", ssr: true },
+    { src: '~/plugins/directives', ssr: false }
    // { src: "~plugins/flexible", ssr: false }
   ],
   build: {

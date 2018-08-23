@@ -6,7 +6,7 @@
                     <i-col span="16">
                         <i-menu mode="horizontal" theme="dark" active-name="1">
                             <div class="layout-logo"></div>
-                            <div class="layout-nav">
+                            <div class="layout-nav">/
                                 <i-menu-item name="1">
                                     <i-icon type="ios-navigate"></i-icon>
                                     Item 1

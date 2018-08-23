@@ -2,9 +2,7 @@
 
   <div>
 
-    <drag-block>
-      <div class="box">drag</div>
-    </drag-block>
+    <div class="box" v-draggable="{ trigger : '.box' ,  body: '.box'}">drag</div>
 
     <button type="button" @click="goto()">link</button>
 
