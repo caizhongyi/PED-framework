@@ -1,6 +1,6 @@
 <template>
     <div class="layout">
-        <i-layout>
+        <i-layout class="layout">
             <i-header>
                 <i-row>
                     <i-col span="16">
@@ -45,9 +45,9 @@
                     </i-col>
                 </i-row>
             </i-header>
-            <i-layout class="ivu-layout-has-sider">
-                <i-sider class="nt-sider" collapsible :collapsed-width="78" v-model="isCollapsed" hide-trigger>
-                    <i-menu active-name="1-2" theme="light" width="auto" :open-names="['1']" :class="menuitemClasses"
+            <i-layout class="ivu-layout-has-sider nt-main">
+                <i-sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="nt-sider layout" >
+                    <i-menu active-name="1-2"   width="auto" :open-names="['1']" :class="menuitemClasses"
                             @on-select="route">
                         <i-submenu name="1">
                             <template slot="title">
@@ -76,7 +76,7 @@
                         </i-submenu>
                     </i-menu>
                 </i-sider>
-                <i-layout class="nt-wrapper">
+                <i-layout class="nt-wrapper layout">
                     <i-breadcrumb class="nt-breadcrumb">
                         <i-breadcrumb-item>Home</i-breadcrumb-item>
                         <i-breadcrumb-item>Components</i-breadcrumb-item>
@@ -120,68 +120,5 @@
   }
 </script>
 <style scoped lang="stylus">
-    .nt-content {
-        background #ffffff
-        padding 20px;
-    }
 
-    .nt-sider {
-        background #fff
-    }
-
-    .nt-wrapper{
-        padding 20px
-    }
-    .nt-breadcrumb{
-        padding-bottom 20px
-    }
-
-    .layout-con {
-        height: 100%;
-        width: 100%;
-    }
-
-    .menu-item span {
-        display: inline-block;
-        overflow: hidden;
-        width: 69px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        vertical-align: bottom;
-        transition: width .2s ease .2s;
-    }
-
-    .menu-item i {
-        transform: translateX(0px);
-        transition: font-size .2s ease, transform .2s ease;
-        vertical-align: middle;
-        font-size: 16px;
-    }
-
-    .collapsed-menu span {
-        width: 0px;
-        transition: width .2s ease;
-    }
-
-    .collapsed-menu i {
-        transform: translateX(5px);
-        transition: font-size .2s ease .2s, transform .2s ease .2s;
-        vertical-align: middle;
-        font-size: 22px;
-    }
-
-    .ivu-menu {
-        a {
-            display block
-            color #666
-        }
-    }
-
-    .page-enter-active, .page-leave-active {
-        transition: opacity .5s;
-    }
-
-    .page-enter, .page-leave-to {
-        opacity: 0;
-    }
 </style>
