@@ -62,7 +62,7 @@ module.exports = {
   ** Build configuration
   */
   css: [
-    "~/assets/css/main.styl",
+    "~/assets/css/main.scss",
     "font-awesome/css/font-awesome.css",
     "iview/dist/styles/iview.css"
   ],
