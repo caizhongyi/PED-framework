@@ -285,96 +285,90 @@
     }
   }
 </script>
-<style  lang="stylus">
-    .pull-left{
-        float left
-    }
-    .pull-right{
-        float right
-    }
+<style  lang="scss">
     .floor-design{
         .panel{
-            padding-bottom 20px;
-            border 1px solid #ddd
-            border-radius 10px;
-            overflow hidden
+            padding-bottom :20px;
+            border: 1px solid #ddd;
+            border-radius :10px;
+            overflow :hidden;
         }
     }
 
     .drag-elements{
         li{
-            margin 0
-            padding 10px
-            float left
-            list-style none
+            margin : 0;
+            padding: 10px;
+            float: left;
+            list-style: none;
         }
-        overflow hidden
+        overflow: hidden;
     }
 
     .drag-layer{
-        background #eeeeee;
-        text-align center
-        width 100px;
-        height 100px;
-        border-radius 2px;
-        line-height 100px;
-        color #666
-        box-sizing border-box
-        position relative
+        background :#eeeeee;
+        text-align :center
+        width :100px;
+        height: 100px;
+        border-radius :2px;
+        line-height :100px;
+        color :#666;
+        box-sizing: border-box;
+        position :relative;
         &.active{
-            border 1px solid #dddddd
-            background #cbcbcb
+            border :1px solid #dddddd;
+            background: #cbcbcb;
         }
         span,div{
-            pointer-events none
-            display block
+            pointer-events: none;
+            display: block;
         }
         i{
-            position: absolute
+            position: absolute;
             top : 5px;
-            right 5px;
-            display block
-            cursor default
+            right: 5px;
+            display :block;
+            cursor: default;
         }
         &.on{
-            opacity .5
+            opacity :.5;
         }
         .drop-size{
-            width 5px
-            height:5px
-            border 1px solid #dddddd
-            cursor nwse-resize
-            position absolute
-            right 0
-            bottom 0
+            width :5px;
+            height:5px;
+            border :1px solid #dddddd;
+            cursor :nwse-resize;
+            position :absolute;
+            right :0;
+            bottom :0;
         }
     }
 
     .area-box{
-        border 1px solid #ddd;
-        position absolute
-        left 0
-        top 0
+        border: 1px solid #ddd;
+        position:absolute;
+        left :0;
+        top :0;
     }
 
     .drag-elements{
         li{
-            float left
-            padding 10px;
+            float :left;
+            padding :10px;
         }
     }
 
     .drag-design{
-        position relative
-        width 100%;
-        height 600px
-        overflow hidden
-        user-select none
-        -webkit-user-select none
+        position: relative;
+        width :100%;
+        height :600px;
+        overflow :hidden;
+        user-select: none;
+        -webkit-user-select: none;
         .drag-layer{
             position: absolute;
-            left 10px
-            top 10px
+            left: 10px;
+            top: 10px;
         }
     }
 

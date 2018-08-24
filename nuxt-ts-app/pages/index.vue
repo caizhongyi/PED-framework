@@ -48,7 +48,7 @@ export default class extends Vue {
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .header {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana,
     sans-serif;

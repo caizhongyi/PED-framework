@@ -1,5 +1,5 @@
-<style lang="stylus">
-  @import './login.styl';
+<style lang="scss">
+  @import './login.scss';
 </style>
 
 <template>

@@ -35,8 +35,8 @@
   }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="scss" scoped>
     .viewport{
-        font-size 1rem;
+        font-size:1rem;
     }
 </style>
