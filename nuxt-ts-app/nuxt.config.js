@@ -76,7 +76,7 @@ module.exports = {
   build: {
     vendor: [
       "axios",
-      "iview"
+      "iview",
     ],
     postcss: [
       //px转换rem自适应
@@ -118,19 +118,11 @@ module.exports = {
       }
     }
   },
-  /* babel:{
-       "plugins": [["component", [
-           {
-               "libraryName": "iview"
-           }
-       ]]],
-       comments: true
-   },*/
   modules: [
     "@nuxtjs/axios",
     "~/modules/typescript.js"
   ],
-  axios: {}
+  axios: {},
 };
 
 if(process.browser){
