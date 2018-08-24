@@ -48,8 +48,8 @@ module.exports = {
     ],
     script: [
       //{ innerHTML: require('./static/flexible.js') + ';console.log(11)' , type: 'text/javascript', charset: 'utf-8'},
-      //{ src:'https://res.wx.qq.com/open/js/jweixin-1.2.0.js' },
-      //{ src: './js/flexible.js' }
+      //{ src:'https://res.wx.qq.com/open/js/jweixin-1.2.0.js' },  //微信开发
+      //{ src: './js/flexible.js' }, // rem自适应
     ],
     // 不对<script>标签中内容做转义处理
     __dangerouslyDisableSanitizers: ['script']
@@ -71,8 +71,7 @@ module.exports = {
   },
   plugins: [
     { src: "~/plugins/iview", ssr: true },
-    { src: '~/plugins/directives', ssr: false }
-   // { src: "~plugins/flexible", ssr: false }
+    { src: '~/plugins/directives', ssr: false },  //指令
   ],
   build: {
     vendor: [
@@ -80,7 +79,7 @@ module.exports = {
       "iview"
     ],
     postcss: [
-      //rem自适应
+      //px转换rem自适应
      /* require('postcss-px2rem')({
         remUnit: 75
       })*/
@@ -135,5 +134,5 @@ module.exports = {
 };
 
 if(process.browser){
-  //require('lib-flexible')
+  //require('lib-flexible') // rem自适应
 }
