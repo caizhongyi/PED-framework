@@ -1,5 +1,22 @@
-@import "base/base.scss";
 @import "mixins/index.scss";
+@import "base/base.scss";
+@import "flex.scss";
+
+$font-size : 13px !default;//变量的值可以根据自己需求定义著作权归作者所有。
+$default-color : #444 !default;
+$is-mobile : true !default;
+$line-height : 1.7 !default;
+$family : "microsoft yahei" !default;
+$placeholder : #999 !default;
+$screen-width : 1280px !default;
+$btn-padding: 14px 7px !default;
+$space-xs: 5px !default;
+$space-md: 10px !default;
+$space-lg: 20px !default;
+$line-weight: 1px !default;
+$path : '../images/' !default;
+$types : (default:#fff , link:transparent , primary:#428BCA , info:#5BC0DE ,  muted:#999, success:#5CB85C, warning: #F0AD4E , danger: #D9534F , dark:  #000, light: #c4caa5) !default;
+$sizes : ( xs: 12px, sm: 14px , md: 16px, lg: 20px, xlg:  24px, xxlg: 36px , xxxlg: 42px) !default;
 
 .container {
   background-color: #2a272e;
