@@ -9,7 +9,7 @@
     <h1 class="header">Nuxt TypeScript Starter</h1>
     <div class="cards">
     </div>
-
+    <loading v-model="loadingVisible"></loading>
 </div>
 
 </template>
@@ -21,17 +21,20 @@ import {
 } from "nuxt-property-decorator"
 import { State } from "vuex-class"
 import Card from "~/components/card.vue"
+import Loading from "~/components/loading.vue"
 import DragBlock from "~/components/drag-block/index.vue"
 
 @Component({
   components: {
     Card ,
     DragBlock ,
+    Loading ,
   }
 })
 export default class extends Vue {
-  scrollToTop = true
-  @State people
+  scrollToTop = true;
+  loadingVisible = false;
+  @State people;
  /* get name (): boolean {
     return this.title + this.text
   }*/

@@ -307,7 +307,7 @@
 
     .drag-layer{
         background :#eeeeee;
-        text-align :center
+        text-align :center;
         width :100px;
         height: 100px;
         border-radius :2px;

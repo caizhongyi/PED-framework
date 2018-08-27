@@ -15,7 +15,7 @@ import {
 import { Getter, Action , State } from 'vuex-class'
 
 @Component({})
-export default class Modal extends Vue {
+export default class  extends Vue {
   /* @Prop({ default: '' })
  @Getter('checkoutStatus') checkoutStatus: CheckoutStatus
  text: string

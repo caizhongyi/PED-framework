@@ -12,7 +12,7 @@ import {
 } from "nuxt-property-decorator"
 
 @Component({})
-export default class Card extends Vue {
+export default class  extends Vue {
   @Prop() person
 }
 </script>

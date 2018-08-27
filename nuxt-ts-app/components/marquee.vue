@@ -16,7 +16,7 @@
   import {Getter, Action, State} from 'vuex-class'
 
   @Component
-  export default class Marquee extends Vue {
+  export default class  extends Vue {
     @Prop()
     data = [];
     @Prop()

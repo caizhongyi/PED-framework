@@ -32,12 +32,6 @@ html, body {
   padding: 20px;
 }
 
-.nt-sider {
-  transition: all 0.2s ease-in-out;
-  position: relative;
-  background: #fff;
-}
-
 .nt-main {
   height: calc(100% - 80px);
 }
@@ -46,10 +40,6 @@ html, body {
   padding: 20px;
 }
 
-.ivu-layout-sider, .ivu-layout-header, .layout-nav {
-  background: #001529 !important;
-  color: #e0e0e0 !important;
-}
 
 .ivu-layout-sider .ivu-menu {
   background: none !important;
@@ -85,6 +75,16 @@ html, body {
   vertical-align: middle;
   font-size: 16px;
 }
+/* reset iview style */
+.ivu-layout-header{
+  background: #fff !important;
+}
+.ivu-layout-sider{
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  min-height: 100%;
+}
+/* reset iview style */
 
 .collapsed-menu span {
   width: 0px;

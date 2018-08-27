@@ -4,7 +4,7 @@
             <i-header>
                 <i-row>
                     <i-col span="16">
-                        <i-menu mode="horizontal" theme="dark" active-name="1">
+                            <i-menu mode="horizontal"  active-name="1">
                             <div class="layout-logo"></div>
                             <div class="layout-nav">
                                 <i-menu-item name="1">
