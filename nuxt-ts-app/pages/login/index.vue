@@ -1,51 +1,54 @@
 <style lang="scss">
-  @import './login.scss';
+    @import './login.scss';
 </style>
 
 <template>
-  <div class="login">
-    <div class="login-con">
-      <Card icon="log-in" title="欢迎登录" :bordered="false">
-        <div class="form-con">
-          <login-form @on-success-valid="handleSubmit"></login-form>
-          <p class="login-tip">输入任意用户名和密码即可</p>
+    <div class="login">
+        <div class="login-con">
+            <Card icon="log-in" title="欢迎登录" :bordered="false">
+                <div class="form-con">
+                    <login-form @on-success-valid="handleSubmit"></login-form>
+                    <p class="login-tip">输入任意用户名和密码即可</p>
+                </div>
+            </Card>
         </div>
-      </Card>
     </div>
-  </div>
 </template>
 
 <script lang="ts">
-import LoginForm from '~/components/login-form'
-import { mapActions } from 'vuex'
-import {
-  Component,
-  Vue
-} from "nuxt-property-decorator"
-import { State } from "vuex-class"
+  import LoginForm from "~/components/login-form";
+  import { Component, Vue } from "nuxt-property-decorator";
+  import { State } from "vuex-class";
 
-@Component({
-  components: {
-    LoginForm
-  }
-})
-export default class extends Vue {
-  scrollToTop = true;
-  layout(){
-    return  'empty';
-  }
-  @State people;
+  @Component({
+    components: {
+      LoginForm
+    }
+  })
+  export default class extends Vue {
+    scrollToTop = true;
 
-  /* get name (): boolean {
-     return this.title + this.text
-   }*/
-  mounted() {
+    layout() {
+      return "empty";
+    }
 
-  }
-  handleSubmit(e){
+    @State people;
 
+    /* get name (): boolean {
+       return this.title + this.text
+     }*/
+    mounted() {
+    }
+
+    handleSubmit(e) {
+      if( this.$route.params.ref ){
+        this.$router.push(this.$route.params.ref);
+      }
+      else{
+        this.$router.push("/");
+      }
+    }
   }
-}
 
 </script>
 

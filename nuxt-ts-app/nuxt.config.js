@@ -47,12 +47,15 @@ module.exports = {
       }
     ],
     script: [
-      //{ innerHTML: require('./static/flexible.js') + ';console.log(11)' , type: 'text/javascript', charset: 'utf-8'},
+      //{ innerHTML: require('./flexible.js') + ';console.log(11)' , type: 'text/javascript', charset: 'utf-8'},
       //{ src:'https://res.wx.qq.com/open/js/jweixin-1.2.0.js' },  //微信开发
-      //{ src: './js/flexible.js' }, // rem自适应
+      { src: './js/flexible-pc.js' }, // rem自适应
     ],
     // 不对<script>标签中内容做转义处理
     __dangerouslyDisableSanitizers: ['script']
+  },
+  router: {
+    middleware: 'auth'
   },
   /*
   ** Customize the progress-bar color
@@ -72,11 +75,16 @@ module.exports = {
   plugins: [
     { src: "~/plugins/iview", ssr: true },
     { src: '~/plugins/directives', ssr: false },  //指令
+    { src: '~/plugins/v-charts', ssr: false },
+    { src: '~/plugins/filters', ssr: false },
+    { src: '~/plugins/vue-seamless-scroll', ssr: false },
   ],
   build: {
     vendor: [
       "axios",
       "iview",
+      "v-charts",
+      "qs",
     ],
     postcss: [
       //px转换rem自适应
@@ -126,5 +134,5 @@ module.exports = {
 };
 
 if(process.browser){
-  //require('lib-flexible') // rem自适应
+  //require('~/assets/js/flexible-pc.js') // rem自适应
 }

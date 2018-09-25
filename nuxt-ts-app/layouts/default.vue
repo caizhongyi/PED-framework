@@ -104,15 +104,14 @@
     components: {}
   })
   export default class  extends Vue {
-    isCollapsed = false;
-
+    middleware = 'auth';
+    collapsed = false;
     get menuitemClasses() {
       return [
         "menu-item",
-        this.isCollapsed ? "collapsed-menu" : ""
+        this.collapsed ? "collapsed-menu" : ""
       ];
     }
-
     route(name) {
       this.$router.push(name);
     }

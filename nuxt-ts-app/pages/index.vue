@@ -19,7 +19,7 @@ import {
   Component,
   Vue
 } from "nuxt-property-decorator"
-import { State } from "vuex-class"
+import { State ,Mutation ,Action ,Getter } from "vuex-class"
 import Card from "~/components/card.vue"
 import Loading from "~/components/loading.vue"
 import DragBlock from "~/components/drag-block/index.vue"
@@ -35,10 +35,13 @@ export default class extends Vue {
   scrollToTop = true;
   loadingVisible = false;
   @State people;
+  @Mutation setPeople;
  /* get name (): boolean {
     return this.title + this.text
   }*/
   mounted() {
+    this.setPeople([1,2]);
+    console.log(this.people);
     /*this.$router.push({
       name:'login'
     })*/
