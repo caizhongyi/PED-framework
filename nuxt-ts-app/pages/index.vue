@@ -20,13 +20,11 @@ import {
   Vue
 } from "nuxt-property-decorator"
 import { State ,Mutation ,Action ,Getter } from "vuex-class"
-import Card from "~/components/card.vue"
 import Loading from "~/components/loading.vue"
 import DragBlock from "~/components/drag-block/index.vue"
 
 @Component({
   components: {
-    Card ,
     DragBlock ,
     Loading ,
   }

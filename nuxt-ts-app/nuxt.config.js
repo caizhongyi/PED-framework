@@ -1,77 +1,30 @@
-const parseArgs = require("minimist");
-const argv = parseArgs(process.argv.slice(2), {
-  alias: {
-    H: "hostname",
-    p: "port"
-  },
-  string: ["H"],
-  unknown: parameter => false
-});
-
-const port =
-  argv.port ||
-  process.env.PORT ||
-  process.env.npm_package_config_nuxt_port ||
-  "3000";
-const host =
-  argv.hostname ||
-  process.env.HOST ||
-  process.env.npm_package_config_nuxt_host ||
-  "localhost";
 module.exports = {
-  env: {
-    baseUrl:
-      process.env.BASE_URL ||
-      `http://${host}:${port}`
-  },
+  debug: true,
+  /*
+  ** Headers of the page
+  */
   head: {
-    title: "admin",
+    title: 'nuxt-vue',
     meta: [
-      { charset: "utf-8" },
-      {
-        name: "viewport",
-        content:
-          "width=device-width, initial-scale=1"
-      },
-      {
-        hid: "description",
-        name: "description",
-        content: "Nuxt.js project"
-      }
+      { charset: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { hid: 'description', name: 'description', content: 'Nuxt.js project' }
     ],
     link: [
-      {
-        rel: "icon",
-        type: "image/x-icon",
-        href: "/favicon.ico"
-      }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [
-      //{ innerHTML: require('./flexible.js') + ';console.log(11)' , type: 'text/javascript', charset: 'utf-8'},
-      //{ src:'https://res.wx.qq.com/open/js/jweixin-1.2.0.js' },  //微信开发
+      //{ src: 'https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js' },
       { src: './js/flexible-pc.js' }, // rem自适应
     ],
     // 不对<script>标签中内容做转义处理
     __dangerouslyDisableSanitizers: ['script']
   },
-  router: {
-    middleware: 'auth'
-  },
-  /*
-  ** Customize the progress-bar color
-  */
-  loading: { color: "#4d5080" },
-  /*
-  ** Build configuration
-  */
   css: [
     "~/assets/css/main.scss",
     "font-awesome/css/font-awesome.css",
     "iview/dist/styles/iview.css"
   ],
-  env: {
-    __ENV: process.env.__ENV
-  },
   plugins: [
     { src: "~/plugins/iview", ssr: true },
     { src: '~/plugins/directives', ssr: false },  //指令
@@ -79,60 +32,164 @@ module.exports = {
     { src: '~/plugins/filters', ssr: false },
     { src: '~/plugins/vue-seamless-scroll', ssr: false },
   ],
+  icon: {
+    // iconSrc: '/static/icon.png',
+    sizes: [16, 120, 144, 152, 192, 384, 512]
+  },
+  /*
+  ** Customize the progress bar color
+  */
+  loading: { color: '#3B8070' },
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    lang: process.env.lang || 'en'
+  },
+  /*
+  ** Build configuration
+  */
   build: {
-    vendor: [
-      "axios",
-      "iview",
-      "v-charts",
-      "qs",
-    ],
-    postcss: [
-      //px转换rem自适应
-     /* require('postcss-px2rem')({
-        remUnit: 75
-      })*/
-    ],
-    extend(config, ctx) {
-      for (let o of config.module.rules) {
-        if (o.loader == "vue-loader") {
-          delete o.loader;
-          o.use = [
-            {
-              loader: "vue-loader",
-              options: o.options
-            }
-            ,
-            {
-              loader: "iview-loader",
-              options: {
-                prefix: true
+    extend (config, { isDev }) {
+      if (isDev && process.client) {
+        config.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules)/
+        })
+        config.module.rules.push({
+          test: /\.less$/,
+          use: [
+            'vue-style-loader',
+            'css-loader',
+            'less-loader'
+          ]
+        })
+        config.module.rules.push({
+          test: /\.scss/,
+          use: [
+            'vue-style-loader',
+            'css-loader',
+            'scss-loader'
+          ]
+        })
+        config.module.rules.push({
+          loader: 'iview-loader',
+          options: {
+            prefix: true
+          }
+        })
+      }
+      /* if (isClient) {
+        config.entry['polyfill'] = ['babel-polyfill']
+      } */
+      // 添加 alias 配置
+      /*Object.assign(config.resolve.alias, {
+        'utils': path.resolve(__dirname, 'utils')
+      })
+      const vueLoader = config.module.rules.find((rule) => rule.loader === 'vue-loader')
+      vueLoader.options.transformAssetUrls['img'] = ['data-src', 'src']*/
+      // inject `compilerModules` to vue-loader options
+      /*  config.module.rules.forEach(rule => {
+         if (rule.loader === 'vue-loader') {
+           rule.options.compilerModules = [i18nExtensions.module(i18n)]
+         }
+       }) */
+    },
+
+    /*    optimization: {
+          splitChunks: {
+            chunks: 'all',//split both async chunks and initial chunks(entrypoints)
+            cacheGroups: {
+              default: false,//disable default 'commons' chunk behavior
+              vendors: false, //disable vendor splitting(not sure if you want it)
+              styles: {
+                name: 'styles',
+                test: /\.s?css$/,
+                minChunks: 1
               }
             }
-          ];
-          delete  o.options;
-          /* o.options.loaders.iview = [{
-               loader: 'iview-loader',
-               options: {
-                   prefix: true
-               }
-           }]*/
+          },*/
+
+    extractCSS: true,
+    /*
+    ** Run ESLint on save
+    */
+    loaders: [
+      {
+        test: /\.(png|jpe?g|gif|svg)$/,
+        loader: 'url-loader',
+        query: {
+          limit: 10000, // 10KO
+          name: 'img/[name].[hash:7].[ext]'
+        }
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'url-loader',
+        query: {
+          limit: 10000, // 10 KO
+          name: 'fonts/[name].[hash:7].[ext]'
         }
       }
-      if (ctx.isClient) {
-       /* config.entry['polyfill'] = ['babel-polyfill']
-        Object.assign(config.resolve.alias, {
-          'utils': path.resolve(__dirname, 'utils')
-        })*/
+    ],
+    postcss: {
+      plugins: {
+
+        // Customize `postcss-cssnext` default options
+        'postcss-cssnext': {
+          features: {
+            customProperties: false
+          }
+        },
+        'postcss-simple-vars': {},
+        // Add some plugins
+        'postcss-nested': {},
+        'postcss-responsive-type': {},
+        'postcss-hexrgba': {}
       }
-    }
+    },
+    /*postcss: [ */
+      /* require('postcss-nested')(),
+      require('postcss-responsive-type')(),
+      require('postcss-hexrgba')(),
+      require('autoprefixer')({
+        browsers: ['iOS >= 7','Android >= 4.1']
+      }),
+      require('postcss-import')(),
+      require('postcss-url')(),*/
+      /* require('postcss-aspect-ratio-mini')(),
+      require('postcss-write-svg')({
+        utf8: false
+      }),
+      require('postcss-cssnext')(),
+      require('postcss-viewport-units')(),
+      require('cssnano')({
+        preset: "advanced",
+        autoprefixer: false,
+        "postcss-zindex": false
+      })*/
+      /* require('postcss-px-to-viewport')({
+        viewportWidth: 750, // (Number) The width of the viewport.
+        viewportHeight: 1334, // (Number) The height of the viewport.
+        unitPrecision: 3, // (Number) The decimal numbers to allow the REM units to grow to.
+        viewportUnit: 'vw', // (String) Expected units.
+        selectorBlackList: ['.ignore', '.hairlines'], // (Array) The selectors to ignore and leave as px.
+        minPixelValue: 1, // (Number) Set the minimum pixel value to replace.
+        mediaQuery: false // (Boolean) Allow px to be converted in media queries.
+      }), */
+      //px转换rem自适应
+      /*require('postcss-px2rem')({
+        remUnit: 75
+      })*/
+    /*],*/
+
+  },
+  router: {
+    middleware: 'auth'
   },
   modules: [
     "@nuxtjs/axios",
-    "~/modules/typescript.js"
+    'nuxt-ts',
   ],
-  axios: {},
-};
-
-if(process.browser){
-  //require('~/assets/js/flexible-pc.js') // rem自适应
 }
+
