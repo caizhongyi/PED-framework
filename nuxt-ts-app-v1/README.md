@@ -37,3 +37,5 @@ script 用于加载static目录文件
 plugins 用于加载plugins目录文件
 
 # package.json npm插件管理文件 install xxx --save
+
+# vue init nuxt-community/typescript-template nuxt-ts
