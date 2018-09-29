@@ -1,0 +1,81 @@
+
+.ivu-layout-sider .ivu-menu {
+  background: none !important;
+  color: #e0e0e0 !important;
+}
+
+.nt-breadcrumb {
+  padding-bottom: 20px
+}
+
+.layout, #__layout, #__nuxt {
+  height: 100%
+}
+
+.layout-con {
+  height: 100%;
+  width: 100%;
+}
+
+.menu-item span {
+  display: inline-block;
+  overflow: hidden;
+  width: 69px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  transition: width .2s ease .2s;
+}
+
+.menu-item i {
+  transform: translateX(0px);
+  transition: font-size .2s ease, transform .2s ease;
+  vertical-align: middle;
+  font-size: 16px;
+}
+/* reset iview style */
+.ivu-layout-header{
+  background: #232F49 ;
+  a,&{
+    color: #ebebeb;
+  }
+}
+.ivu-layout,.ivu-menu-light{
+  background: transparent ;
+}
+.ivu-menu-horizontal.ivu-menu-light:after{
+  background: transparent;
+}
+.ivu-menu-light.ivu-menu-horizontal .ivu-menu-item,
+.ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu{
+  color: #d7d7d7;
+}
+
+.ivu-menu-light.ivu-menu-horizontal .ivu-menu-item-active,
+.ivu-menu-light.ivu-menu-horizontal .ivu-menu-item:hover,
+.ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu-active,
+.ivu-menu-light.ivu-menu-horizontal .ivu-menu-submenu:hover{
+  color: #ebebeb;
+  border: none;
+  background: #18233C;
+}
+.ivu-layout-sider{
+  background: #232F49;
+}
+.ivu-layout-sider{
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  min-height: 100%;
+}
+
+.ivu-menu {
+  a {
+    display: block;
+    color: #666;
+  }
+}
+
+.ivu-menu-light.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu){
+  color: #ebebeb;
+  background: #18233C;
+}

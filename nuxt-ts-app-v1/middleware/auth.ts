@@ -1,6 +1,6 @@
 import axios from 'axios';
 //  middleware/auth.js
-import utils from '~/assets/js/utils'
+import utils from '~/utils'
 
 export default function ({ store , route, req, res, redirect}) {
   //let isClient = process.browser;

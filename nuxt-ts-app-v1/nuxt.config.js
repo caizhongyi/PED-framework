@@ -65,9 +65,9 @@ module.exports = {
   ** Build configuration
   */
   css: [
-    "~/assets/css/main.scss",
     "font-awesome/css/font-awesome.css",
-    "iview/dist/styles/iview.css"
+    "iview/dist/styles/iview.css",
+    "~/assets/css/main.scss",
   ],
   env: {
     __ENV: process.env.__ENV
@@ -88,9 +88,11 @@ module.exports = {
     ],
     postcss: [
       //px转换rem自适应
-     /* require('postcss-px2rem')({
-        remUnit: 75
-      })*/
+      require('postcss-px2rem')({
+        remUnit: 12.8
+        // 12.8  flexible-pc.js pc端1280的设计图
+        // 75    flexible.js  移动端750的设计图
+      })
     ],
     extend(config, ctx) {
       for (let o of config.module.rules) {

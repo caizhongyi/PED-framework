@@ -9,6 +9,7 @@
     <h1 class="header">Nuxt TypeScript Starter</h1>
     <div class="cards">
     </div>
+    <router-link to="/">跳转</router-link>
     <loading v-model="loadingVisible"></loading>
 </div>
 

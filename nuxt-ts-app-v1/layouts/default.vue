@@ -52,30 +52,46 @@
                 <i-sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="nt-sider layout" >
                     <i-menu active-name="1-2"   width="auto" :open-names="['1']" :class="menuitemClasses"
                             @on-select="route">
-                        <i-submenu name="1">
-                            <template slot="title">
-                                <i-icon type="ios-navigate"></i-icon>
-                                Item 1
-                            </template>
-                            <i-menu-item name="/">home</i-menu-item>
-                        </i-submenu>
-                        <i-submenu name="2">
-                            <template slot="title">
-                                <i-icon type="ios-keypad"></i-icon>
-                                Item 2
-                            </template>
-                            <i-menu-item name="2-1">Option 1</i-menu-item>
-                            <i-menu-item name="2-2">Option 2</i-menu-item>
-                        </i-submenu>
-                        <i-submenu name="3">
+                        <i-menu-item name="/"><i-icon type="ios-navigate"></i-icon>home</i-menu-item>
+
+                        <i-submenu name="demo">
                             <template slot="title">
                                 <i-icon type="ios-analytics"></i-icon>
-                                Item 3
+                                demo
                             </template>
                             <i-menu-item name="/design">design</i-menu-item>
                             <i-menu-item name="/charts">charts</i-menu-item>
                             <i-menu-item name="/marquee">marquee</i-menu-item>
                         </i-submenu>
+
+                        <i-submenu name="menu">
+                            <template slot="title">
+                                <i-icon type="ios-navigate"></i-icon>
+                                MenuGroup
+                            </template>
+                            <MenuGroup title="Item 1">
+                                <MenuItem name="1-1">Option 1</MenuItem>
+                                <MenuItem name="1-2">Option 2</MenuItem>
+                            </MenuGroup>
+                            <MenuGroup title="Item 2">
+                                <MenuItem name="1-3">Option 3</MenuItem>
+                                <MenuItem name="1-4">Option 4</MenuItem>
+                            </MenuGroup>
+                        </i-submenu>
+
+                        <Submenu name="2">
+                            <template slot="title">
+                                <Icon type="ios-filing" />
+                                Navigation Two
+                            </template>
+                            <MenuItem name="2-1">Option 5</MenuItem>
+                            <MenuItem name="2-2">Option 6</MenuItem>
+                            <Submenu name="3">
+                                <template slot="title">Submenu</template>
+                                <MenuItem name="3-1">Option 7</MenuItem>
+                                <MenuItem name="3-2">Option 8</MenuItem>
+                            </Submenu>
+                        </Submenu>
                     </i-menu>
                 </i-sider>
                 <i-layout class="nt-wrapper layout">

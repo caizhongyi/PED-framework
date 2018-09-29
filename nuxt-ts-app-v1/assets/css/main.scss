@@ -1,6 +1,7 @@
 @import "mixins/index.scss";
 @import "base/base.scss";
 @import "flex.scss";
+@import "iview-style.scss";
 
 $font-size : 13px !default;//变量的值可以根据自己需求定义著作权归作者所有。
 $default-color : #444 !default;
@@ -41,51 +42,6 @@ html, body {
 }
 
 
-.ivu-layout-sider .ivu-menu {
-  background: none !important;
-  color: #e0e0e0 !important;
-}
-
-.nt-breadcrumb {
-  padding-bottom: 20px
-}
-
-.layout, #__layout, #__nuxt {
-  height: 100%
-}
-
-.layout-con {
-  height: 100%;
-  width: 100%;
-}
-
-.menu-item span {
-  display: inline-block;
-  overflow: hidden;
-  width: 69px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: bottom;
-  transition: width .2s ease .2s;
-}
-
-.menu-item i {
-  transform: translateX(0px);
-  transition: font-size .2s ease, transform .2s ease;
-  vertical-align: middle;
-  font-size: 16px;
-}
-/* reset iview style */
-.ivu-layout-header{
-  background: #fff !important;
-}
-.ivu-layout-sider{
-  transition: all 0.2s ease-in-out;
-  position: relative;
-  min-height: 100%;
-}
-/* reset iview style */
-
 .collapsed-menu span {
   width: 0px;
   transition: width .2s ease;
@@ -98,12 +54,7 @@ html, body {
   font-size: 22px;
 }
 
-.ivu-menu {
-  a {
-    display: block;
-    color: #666;
-  }
-}
+
 
 .page-enter-active, .page-leave-active {
   transition: opacity .5s;
