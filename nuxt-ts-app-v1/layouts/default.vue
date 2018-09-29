@@ -58,8 +58,6 @@
                                 Item 1
                             </template>
                             <i-menu-item name="/">home</i-menu-item>
-                            <i-menu-item name="/page1">page1</i-menu-item>
-                            <i-menu-item name="/design">design</i-menu-item>
                         </i-submenu>
                         <i-submenu name="2">
                             <template slot="title">
@@ -74,8 +72,9 @@
                                 <i-icon type="ios-analytics"></i-icon>
                                 Item 3
                             </template>
-                            <i-menu-item name="3-1">Option 1</i-menu-item>
-                            <i-menu-item name="3-2">Option 2</i-menu-item>
+                            <i-menu-item name="/design">design</i-menu-item>
+                            <i-menu-item name="/charts">charts</i-menu-item>
+                            <i-menu-item name="/marquee">marquee</i-menu-item>
                         </i-submenu>
                     </i-menu>
                 </i-sider>
