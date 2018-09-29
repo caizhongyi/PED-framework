@@ -29,18 +29,16 @@
                     </i-col>
                     <i-col span="8">
                         <div class="pull-right">
-                            <Icon type="md-person"></Icon>用户名
                             <Dropdown style="margin-left: 20px">
                                 <Button type="primary">
-                                    下拉菜单
+                                    <Icon type="md-person"></Icon>
+                                    用户名
                                     <Icon type="ios-arrow-down"></Icon>
                                 </Button>
                                 <DropdownMenu slot="list">
-                                    <DropdownItem>驴打滚</DropdownItem>
-                                    <DropdownItem>炸酱面</DropdownItem>
-                                    <DropdownItem disabled>豆汁儿</DropdownItem>
-                                    <DropdownItem>冰糖葫芦</DropdownItem>
-                                    <DropdownItem divided>北京烤鸭</DropdownItem>
+                                    <DropdownItem>修改</DropdownItem>
+                                    <DropdownItem disabled>个人信息</DropdownItem>
+                                    <DropdownItem divided>退出</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
                         </div>
@@ -50,7 +48,7 @@
             </i-header>
             <i-layout class="ivu-layout-has-sider nt-main">
                 <i-sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="nt-sider layout" >
-                    <i-menu active-name="1-2"   width="auto" :open-names="['1']" :class="menuitemClasses"
+                    <i-menu active-name="/"   width="auto" :open-names="['1']" :class="menuitemClasses"
                             @on-select="route">
                         <i-menu-item name="/"><i-icon type="ios-navigate"></i-icon>home</i-menu-item>
 

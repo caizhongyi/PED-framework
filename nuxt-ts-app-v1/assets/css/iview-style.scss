@@ -1,4 +1,6 @@
-
+html{
+  background: #232F49 ;
+}
 .ivu-layout-sider .ivu-menu {
   background: none !important;
   color: #e0e0e0 !important;
@@ -11,7 +13,9 @@
 .layout, #__layout, #__nuxt {
   height: 100%
 }
-
+.ivu-icon{
+  font-size: 120%;
+}
 .layout-con {
   height: 100%;
   width: 100%;
@@ -78,4 +82,16 @@
 .ivu-menu-light.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu){
   color: #ebebeb;
   background: #18233C;
+}
+
+.ivu-layout-header .ivu-dropdown{
+  .ivu-btn,.ivu-btn:active{
+    background: transparent;
+    border:none;
+    box-shadow: none;
+  }
+}
+
+.ivu-menu-vertical.ivu-menu-light:after{
+  background: transparent;
 }
