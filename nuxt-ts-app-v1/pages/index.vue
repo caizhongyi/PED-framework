@@ -42,7 +42,6 @@ export default class extends Vue {
   }*/
   mounted() {
     this.setPeople([1,2]);
-    console.log(this.people);
     /*this.$router.push({
       name:'login'
     })*/

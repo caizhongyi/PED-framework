@@ -3,7 +3,7 @@
         <label v-for="value of data" :class="{ active: value.id == selected.id}">
             <input type="radio" name="a" @change="change(value)" >
         </label>
-        <button type="button" @click="click()">{{ name }}</button>
+        <button type="button" @click="click()">click</button>
         <ve-line :data="chartData" :settings="chartSettings"></ve-line>
     </div>
 
@@ -54,10 +54,9 @@
       id : 0,
       active : true,
     }
-    name = 'aa';
     head (){
       return {
-        title : "page" ,
+        title : "图表" ,
         meta : [
           {
             hid: "description",
@@ -82,7 +81,6 @@
     }
 
     mounted() {
-      console.log(VeLine)
     }
 
     click() {

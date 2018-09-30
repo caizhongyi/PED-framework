@@ -48,18 +48,18 @@
             </i-header>
             <i-layout class="ivu-layout-has-sider nt-main">
                 <i-sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="nt-sider layout" >
-                    <i-menu active-name="/"   width="auto" :open-names="['1']" :class="menuitemClasses"
+                    <i-menu ref="menu" :active-name="$route.path"   width="auto" :open-names="openedNames" :class="menuitemClasses"
                             @on-select="route">
-                        <i-menu-item name="/"><i-icon type="ios-navigate"></i-icon>home</i-menu-item>
+                        <i-menu-item name="home" ><i-icon type="ios-navigate"></i-icon>home</i-menu-item>
 
                         <i-submenu name="demo">
                             <template slot="title">
                                 <i-icon type="ios-analytics"></i-icon>
                                 demo
                             </template>
-                            <i-menu-item name="/design">design</i-menu-item>
-                            <i-menu-item name="/charts">charts</i-menu-item>
-                            <i-menu-item name="/marquee">marquee</i-menu-item>
+                            <i-menu-item name="/demo/design">design</i-menu-item>
+                            <i-menu-item name="/demo/charts">图表</i-menu-item>
+                            <i-menu-item name="/demo/marquee">marquee</i-menu-item>
                         </i-submenu>
 
                         <i-submenu name="menu">
@@ -94,9 +94,8 @@
                 </i-sider>
                 <i-layout class="nt-wrapper layout">
                     <i-breadcrumb class="nt-breadcrumb">
-                        <i-breadcrumb-item>Home</i-breadcrumb-item>
-                        <i-breadcrumb-item>Components</i-breadcrumb-item>
-                        <i-breadcrumb-item>Layout</i-breadcrumb-item>
+                        <i-breadcrumb-item > Home </i-breadcrumb-item>
+                        <i-breadcrumb-item v-for="item in breadcrumb" >{{ item }}</i-breadcrumb-item>
                     </i-breadcrumb>
                     <i-content class="nt-content">
                         <nuxt/>
@@ -111,6 +110,7 @@
 <script lang="ts">
 
   import { Component, Vue } from "nuxt-property-decorator";
+  import _ from "underscore";
   //import locale from '~/node_modules/iview/dist/locale/zh-CN';
 
   @Component({
@@ -119,6 +119,8 @@
   export default class  extends Vue {
     middleware = 'auth';
     collapsed = false;
+    openedNames:any = [];
+    breadcrumb:any = [];
     get menuitemClasses() {
       return [
         "menu-item",
@@ -126,11 +128,29 @@
       ];
     }
     route(name) {
-      console.log(this.$route)
       this.$router.push(name);
     }
 
+    created(){
+      this.openedNames = ['demo']
+    }
+
     mounted() {
+      let path = this.$route.path;
+      if( path != '/' ){
+
+        let pathArray = path.split('/');
+        if( pathArray[0] == ''){
+          let p = _(pathArray).filter((n)=>{
+            return n !== "";
+          })
+          this.openedNames = this.breadcrumb = p;
+        }
+
+      }
+      else{
+      //  this.openedNames  = this.breadcrumb = ['Home'];
+      }
 
     }
   }

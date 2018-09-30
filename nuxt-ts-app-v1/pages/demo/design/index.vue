@@ -82,7 +82,6 @@
 
     change(e) {
       let p : any =  this.$refs.design;
-      console.log(  e  )
       p.design.empty().createR(   e[0].nodeKey  ,10 )
     }
 

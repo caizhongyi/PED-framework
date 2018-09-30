@@ -16,7 +16,6 @@
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
     "lib-flexible": "^0.3.2",
-    "lodash": "^4.17.10",
     "moment": "^2.22.2",
     "node-sass": "^4.9.3",
     "npm": "^6.4.1",

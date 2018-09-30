@@ -13,7 +13,8 @@ declare var document: Document;
 declare module 'vue/types/vue' {
   interface Vue {
     $router: VueRouter,
-    $route: Route
+    $route: Route,
+    $refs: any
   }
 }
 
