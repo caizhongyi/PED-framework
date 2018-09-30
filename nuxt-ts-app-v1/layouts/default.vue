@@ -126,6 +126,7 @@
       ];
     }
     route(name) {
+      console.log(this.$route)
       this.$router.push(name);
     }
 

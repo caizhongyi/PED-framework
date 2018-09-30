@@ -19,6 +19,9 @@
   export default class  extends Vue {
     @Prop()
     error ;
+    /*layout() {
+      return "empty";
+    }*/
 
     mounted() {
 
