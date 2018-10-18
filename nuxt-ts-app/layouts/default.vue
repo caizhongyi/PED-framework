@@ -50,6 +50,13 @@
                 <i-sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="nt-sider layout" >
                     <i-menu ref="menu" :active-name="$route.path"   width="auto" :open-names="openedNames" :class="menuitemClasses"
                             @on-select="route">
+                        <i-menu-item  name="/" title="首页"><i-icon type="ios-navigate"></i-icon>首页</i-menu-item>
+                        <i-submenu  name="/demo"  title="示例">
+                            <template slot="title"><i-icon type="ios-analytics"></i-icon> 示例 </template>
+                            <i-menu-item name="/demo/charts"  title="图表">图表</i-menu-item>
+                            <i-menu-item name="/demo/design"  title="设计">设计</i-menu-item>
+                            <i-menu-item name="/demo/marquee"  title="文字滚动">文字滚动</i-menu-item>
+                        </i-submenu>
                  <!--       <div v-for="item in menuData" >
                             <i-menu-item v-if="!item['children']" :name="item.url" :title="item.name"><i-icon type="ios-navigate"></i-icon>首页</i-menu-item>
                             <i-submenu  v-else :name="item.url" :title="item.name">
@@ -108,16 +115,6 @@
     collapsed = false;
     openedNames:any = [];
     breadcrumb:any = [];
-    a = '';
-    menuData:any = [
-      {  name : '首页' , url : '/' , icon : 'ios-navigate'},
-      {  name : '示例' , url : 'demo', children : [ {  name : '图表' , url : '/demo/charts' }, {  name : '设计' , url : '/demo/design' }, {  name : '文字滚动' , url : '/demo/marquee' }] },
-      {  name : '组' , children : [
-        [{ name : '组1' , url : '/'},{ name : '组1' , url : '/'}],
-        [{ name : '组2' , url : '/'},{ name : '组2' , url : '/'}],
-        [],
-        ]}
-    ];
     get menuitemClasses() {
       return [
         "menu-item",

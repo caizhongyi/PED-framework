@@ -1,4 +1,4 @@
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+/*const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 // 判断时候load过这个plugin
 let hasForkTsCheckerPlugin = false
@@ -40,9 +40,9 @@ module.exports = function () {
       }))
     }
   })
-}
+}*/
 
-/*module.exports = function() {
+module.exports = function() {
   // Add .ts extension for store, middleware and more
   this.nuxt.options.extensions.push("ts")
   // Extend build
@@ -76,4 +76,4 @@ module.exports = function () {
       config.resolve.extensions.push(".ts")
     }
   })
-}*/
+}
