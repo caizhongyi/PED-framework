@@ -50,52 +50,39 @@
                 <i-sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed" class="nt-sider layout" >
                     <i-menu ref="menu" :active-name="$route.path"   width="auto" :open-names="openedNames" :class="menuitemClasses"
                             @on-select="route">
-                        <i-menu-item name="home" ><i-icon type="ios-navigate"></i-icon>home</i-menu-item>
+                 <!--       <div v-for="item in menuData" >
+                            <i-menu-item v-if="!item['children']" :name="item.url" :title="item.name"><i-icon type="ios-navigate"></i-icon>首页</i-menu-item>
+                            <i-submenu  v-else :name="item.url" :title="item.name">
+                                <template slot="title"> <i-icon type="ios-analytics"></i-icon> {{ item.name }} </template>
+                                <div v-for="subItem in item.children" >
+                                    <i-menu-item :name="item.url"  :title="item.name">{{ item.name }}</i-menu-item>
+                                    <i-submenu  v-else :name="item.url" :title="item.name">
+                                        <template slot="title"><i-icon type="ios-analytics"></i-icon> {{ item.name }}</template>
+                                        <div v-for="subItem in item" >
+                                            <i-menu-item :name="item.url"  :title="item.name">{{ item.name }}</i-menu-item>
+                                        </div>
+                                    </i-submenu>
+                                        &lt;!&ndash;   <i-menu-group :title="item.name">
+                                               <i-menu-item  :name="item.url" v-for="">Option 1</i-menu-item>
+                                               <i-menu-item  name="1-2">Option 2</i-menu-item>
+                                           </i-menu-group>&ndash;&gt;
+                                </div>
 
-                        <i-submenu name="demo">
-                            <template slot="title">
-                                <i-icon type="ios-analytics"></i-icon>
-                                demo
-                            </template>
-                            <i-menu-item name="/demo/design">design</i-menu-item>
-                            <i-menu-item name="/demo/charts">图表</i-menu-item>
-                            <i-menu-item name="/demo/marquee">marquee</i-menu-item>
-                        </i-submenu>
+                             &lt;!&ndash;   <i-menu-group :title="item.name">
+                                    <i-menu-item  :name="item.url" v-for="">Option 1</i-menu-item>
+                                    <i-menu-item  name="1-2">Option 2</i-menu-item>
+                                </i-menu-group>&ndash;&gt;
 
-                        <i-submenu name="menu">
-                            <template slot="title">
-                                <i-icon type="ios-navigate"></i-icon>
-                                MenuGroup
-                            </template>
-                            <MenuGroup title="Item 1">
-                                <MenuItem name="1-1">Option 1</MenuItem>
-                                <MenuItem name="1-2">Option 2</MenuItem>
-                            </MenuGroup>
-                            <MenuGroup title="Item 2">
-                                <MenuItem name="1-3">Option 3</MenuItem>
-                                <MenuItem name="1-4">Option 4</MenuItem>
-                            </MenuGroup>
-                        </i-submenu>
+                            </i-submenu>
+                        </div>-->
 
-                        <Submenu name="2">
-                            <template slot="title">
-                                <Icon type="ios-filing" />
-                                Navigation Two
-                            </template>
-                            <MenuItem name="2-1">Option 5</MenuItem>
-                            <MenuItem name="2-2">Option 6</MenuItem>
-                            <Submenu name="3">
-                                <template slot="title">Submenu</template>
-                                <MenuItem name="3-1">Option 7</MenuItem>
-                                <MenuItem name="3-2">Option 8</MenuItem>
-                            </Submenu>
-                        </Submenu>
+
                     </i-menu>
                 </i-sider>
                 <i-layout class="nt-wrapper layout">
                     <i-breadcrumb class="nt-breadcrumb">
                         <i-breadcrumb-item > Home </i-breadcrumb-item>
-                        <i-breadcrumb-item v-for="item in breadcrumb" >{{ item }}</i-breadcrumb-item>
+                        <i-breadcrumb-item v-for="(item,key) in breadcrumb"  :key="key">{{ item }}</i-breadcrumb-item>
                     </i-breadcrumb>
                     <i-content class="nt-content">
                         <nuxt/>
@@ -121,37 +108,56 @@
     collapsed = false;
     openedNames:any = [];
     breadcrumb:any = [];
+    a = '';
+    menuData:any = [
+      {  name : '首页' , url : '/' , icon : 'ios-navigate'},
+      {  name : '示例' , url : 'demo', children : [ {  name : '图表' , url : '/demo/charts' }, {  name : '设计' , url : '/demo/design' }, {  name : '文字滚动' , url : '/demo/marquee' }] },
+      {  name : '组' , children : [
+        [{ name : '组1' , url : '/'},{ name : '组1' , url : '/'}],
+        [{ name : '组2' , url : '/'},{ name : '组2' , url : '/'}],
+        [],
+        ]}
+    ];
     get menuitemClasses() {
       return [
         "menu-item",
         this.collapsed ? "collapsed-menu" : ""
       ];
     }
+
+
     route(name) {
+      console.log(this.$refs.menu)
+      console.log(this.$route)
+      this.breadcrumb = this.getRoute(name);
       this.$router.push(name);
     }
 
-    created(){
-      this.openedNames = ['demo']
-    }
-
-    mounted() {
-      let path = this.$route.path;
+    getRoute( path = this.$route.path ){
       if( path != '/' ){
-
         let pathArray = path.split('/');
         if( pathArray[0] == ''){
           let p = _(pathArray).filter((n)=>{
             return n !== "";
           })
-          this.openedNames = this.breadcrumb = p;
+          return p;
         }
-
       }
       else{
-      //  this.openedNames  = this.breadcrumb = ['Home'];
+        return ['Home'];
       }
+    }
 
+    getBreadcrumb(){
+
+    }
+
+    created(){
+      this.openedNames = this.getRoute();
+
+    }
+
+    mounted() {
     }
   }
 </script>

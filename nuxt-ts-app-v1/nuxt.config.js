@@ -1,4 +1,5 @@
 const parseArgs = require("minimist");
+const webpack = require('webpack');
 const argv = parseArgs(process.argv.slice(2), {
   alias: {
     H: "hostname",
@@ -78,6 +79,7 @@ module.exports = {
     { src: '~/plugins/v-charts', ssr: false },
     { src: '~/plugins/filters', ssr: false },
     { src: '~/plugins/vue-seamless-scroll', ssr: false },
+  //  { src: '~/plugins/jquery', ssr: false },
   ],
   build: {
     vendor: [
@@ -134,7 +136,3 @@ module.exports = {
   ],
   axios: {},
 };
-
-if(process.browser){
-  //require('~/assets/js/flexible-pc.js') // rem自适应
-}
