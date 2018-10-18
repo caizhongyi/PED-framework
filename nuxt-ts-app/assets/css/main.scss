@@ -1,0 +1,62 @@
+@import "mixins/index.scss";
+@import "base/base.scss";
+@import "flex.scss";
+@import "iview-style.scss";
+
+$font-size : 14px !default;//变量的值可以根据自己需求定义著作权归作者所有。
+$default-color : #444 !default;
+$is-mobile : true !default;
+$line-height : 1.7 !default;
+$family : "microsoft yahei" !default;
+$placeholder : #999 !default;
+$screen-width : 1280px !default;
+$btn-padding: 14px 7px !default;
+$space-xs: 5px !default;
+$space-md: 10px !default;
+$space-lg: 20px !default;
+$line-weight: 1px !default;
+$path : '../images/' !default;
+$types : (default:#fff , link:transparent , primary:#428BCA , info:#5BC0DE ,  muted:#999, success:#5CB85C, warning: #F0AD4E , danger: #D9534F , dark:  #000, light: #c4caa5) !default;
+$sizes : ( xs: 80%, sm: 90% , md: 100%, lg: 110%, xlg: 130%, xxlg: 160% , xxxlg: 200%) !default;
+
+
+html, body {
+  height: 100%;
+  font-size: 12.8px;
+}
+
+.nt-content {
+  background: #ffffff;
+  padding: 20px;
+}
+
+.nt-main {
+  height: calc(100% - 80px);
+}
+
+.nt-wrapper {
+  padding: 20px;
+}
+
+
+.collapsed-menu span {
+  width: 0px;
+  transition: width .2s ease;
+}
+
+.collapsed-menu i {
+  transform: translateX(5px);
+  transition: font-size .2s ease .2s, transform .2s ease .2s;
+  vertical-align: middle;
+  font-size: 22px;
+}
+
+
+
+.page-enter-active, .page-leave-active {
+  transition: opacity .5s;
+}
+
+.page-enter, .page-leave-to {
+  opacity: 0;
+}
