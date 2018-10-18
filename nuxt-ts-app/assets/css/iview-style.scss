@@ -79,9 +79,10 @@ html{
   }
 }
 
-.ivu-menu-light.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu){
+.ivu-menu-light.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu),
+.ivu-menu-item:hover{
   color: #ebebeb;
-  background: #18233C;
+  background: #18233C ;
 }
 
 .ivu-layout-header .ivu-dropdown{

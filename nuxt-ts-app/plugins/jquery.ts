@@ -1,1 +1,4 @@
-//window.$ = require('jquery');
+const $ = require('jquery');
+window.$ = $;
+
+

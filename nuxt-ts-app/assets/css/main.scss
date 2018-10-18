@@ -3,13 +3,13 @@
 @import "flex.scss";
 @import "iview-style.scss";
 
-$font-size : 14px !default;//变量的值可以根据自己需求定义著作权归作者所有。
+$font-size : 12px !default;//变量的值可以根据自己需求定义著作权归作者所有。
 $default-color : #444 !default;
 $is-mobile : true !default;
 $line-height : 1.7 !default;
 $family : "microsoft yahei" !default;
 $placeholder : #999 !default;
-$screen-width : 1280px !default;
+$screen-width : 1366px !default;
 $btn-padding: 14px 7px !default;
 $space-xs: 5px !default;
 $space-md: 10px !default;
@@ -22,7 +22,7 @@ $sizes : ( xs: 80%, sm: 90% , md: 100%, lg: 110%, xlg: 130%, xxlg: 160% , xxxlg:
 
 html, body {
   height: 100%;
-  font-size: 12.8px;
+  font-size: $font-size;
 }
 
 .nt-content {

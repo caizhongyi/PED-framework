@@ -1,7 +1,7 @@
 !function (a, b) {
     function c() {
         var b = f.getBoundingClientRect().width;
-        b / i < 1280 && (b = 1280 * i);
+        b / i < 1366 && (b = 1366 * i);
         var c = b / 100;
         f.style.fontSize = c + "px", k.rem = a.rem = c
     }
