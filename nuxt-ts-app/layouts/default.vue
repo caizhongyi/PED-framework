@@ -60,7 +60,7 @@
                     </i-menu>-->
 
                     <Menu ref="menu" v-show="!collapsed" :active-name="$route.path" :open-names="openedNames" :accordion="false" :theme="theme" width="auto" @on-select="route">
-                      <!--  <template v-for="item in menuList">
+                        <template v-for="item in menuList">
                             <template v-if="item.children && item.children.length === 1">
                                 <side-menu-item v-if="showChildren(item)" :key="`menu-${item.name}`" :parent-item="item"></side-menu-item>
                                 <menu-item v-else :name="getNameOrHref(item, true)" :key="`menu-${item.children[0].name}`"><i-icon :type="item.children[0].icon || ''"/><span>{{ showTitle(item.children[0]) }}</span></menu-item>
@@ -69,7 +69,7 @@
                                 <side-menu-item v-if="showChildren(item)" :key="`menu-${item.name}`" :parent-item="item"></side-menu-item>
                                 <menu-item v-else :name="getNameOrHref(item)" :key="`menu-${item.name}`"><i-icon :type="item.icon || ''"/><span>{{ showTitle(item) }}</span></menu-item>
                             </template>
-                        </template>-->
+                        </template>
                     </Menu>
              <!--       <div class="menu-collapsed" v-show="collapsed" :list="menuList">
                         <template v-for="item in menuList">
@@ -101,10 +101,13 @@
   import { Component, Vue } from "nuxt-property-decorator";
   import _ from "underscore";
   import mixin from '~/components/menu/mixin'
+  import SideMenuItem from '~/components/menu/side-menu-item'
   //import locale from '~/node_modules/iview/dist/locale/zh-CN';
 
   @Component({
-    components: {}
+    components: {
+      SideMenuItem
+    }
   })
   export default class extends mixin {
     middleware = 'auth';
@@ -159,7 +162,6 @@
     }
 
     created(){
-      console.log(this);
       this.openedNames = this.getRoute();
       //console.log(this.openedNames);
     }
