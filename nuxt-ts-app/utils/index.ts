@@ -13,7 +13,7 @@ export default {
   //获取客户端cookie
   getcookiesInClient: function(key) {
     return Cookie.get(key) ? Cookie.get(key) : ''
-  }
+  },
 }
 
 

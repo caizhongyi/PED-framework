@@ -9,10 +9,9 @@
   import Draggable from "./lib/draggable";
 
   @Component({})
-  export default class DragBlock extends Vue {
+  export default class  extends Vue {
     @Prop({ default: 'all' })
     direction;
-
     /*@Model()
     visible:boolean = false;
 

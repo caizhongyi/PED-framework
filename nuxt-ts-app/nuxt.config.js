@@ -13,14 +13,15 @@ const port =
   argv.port ||
   process.env.PORT ||
   process.env.npm_package_config_nuxt_port ||
-  "3000";
+  "3000"; // 端口
 const host =
   argv.hostname ||
   process.env.HOST ||
   process.env.npm_package_config_nuxt_host ||
-  "localhost";
+  "localhost";  //域名
 module.exports = {
   env: {
+    __ENV: process.env.__ENV,
     baseUrl:
       process.env.BASE_URL ||
       `http://${host}:${port}`
@@ -70,16 +71,13 @@ module.exports = {
     "iview/dist/styles/iview.css",
     "~/assets/css/main.scss",
   ],
-  env: {
-    __ENV: process.env.__ENV
-  },
   plugins: [
     { src: "~/plugins/iview", ssr: true },
     { src: '~/plugins/directives', ssr: false },  //指令
     { src: '~/plugins/v-charts', ssr: false },
     { src: '~/plugins/filters', ssr: false },
     { src: '~/plugins/vue-seamless-scroll', ssr: false },
-  //  { src: '~/plugins/jquery', ssr: false },
+    { src: '~/plugins/jquery', ssr: false },
   ],
   build: {
     vendor: [
