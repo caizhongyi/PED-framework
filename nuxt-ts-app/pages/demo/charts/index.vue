@@ -10,20 +10,8 @@
 </template>
 
 <script lang="ts">
-  import {
-    Component,
-    Prop,
-    Vue,
-    Watch,
-    Model
-  } from "nuxt-property-decorator"
-  import {
-    State,
-    Getter,
-    Action,
-    Mutation,
-    namespace
-  } from "vuex-class"
+  import { Component, Prop, Vue,Watch,Model} from "nuxt-property-decorator"
+  import { State,Getter, Action, Mutation,namespace} from "vuex-class"
 
   import VeLine from 'v-charts/lib/line'
 

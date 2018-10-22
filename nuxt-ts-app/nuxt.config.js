@@ -133,4 +133,7 @@ module.exports = {
     "~/modules/typescript.js"
   ],
   axios: {},
+  render: {
+    resourceHints: false,
+  }
 };
