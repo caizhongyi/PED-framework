@@ -3,9 +3,9 @@ import $ from 'jquery';
 const directives = {
   draggable: {
     inserted: (el, binding, vnode) => {
-      let triggerDom = document.querySelector(binding.value.trigger)
+      let triggerDom:any = document.querySelector(binding.value.trigger)
       triggerDom.style.cursor = 'move'
-      let bodyDom = document.querySelector(binding.value.body)
+      let bodyDom:any = document.querySelector(binding.value.body)
       let pageX = 0
       let pageY = 0
       let transformX = 0
@@ -37,7 +37,7 @@ const directives = {
     },
     update: (el, binding, vnode) => {
       if (!binding.value.recover) return
-      let bodyDom = document.querySelector(binding.value.body)
+      let bodyDom:any = document.querySelector(binding.value.body)
       bodyDom.style.transform = ''
     }
   }

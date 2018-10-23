@@ -4,16 +4,16 @@
             <i-header>
                 <i-row>
                     <i-col span="20">
-                        <i-menu mode="horizontal" class="clearfix" active-name="1">
+                        <i-menu mode="horizontal" class="clearfix" :active-name="$route.path" @on-select="turnToPage">
                             <div class="layout-logo">智慧校园SAAS管理平台</div>
                             <div class="layout-nav">
-                                <i-menu-item name="1">
+                                <i-menu-item name="/">
                                     <i-icon type="ios-navigate"></i-icon>
-                                    Item 1
+                                    首页
                                 </i-menu-item>
-                                <i-menu-item name="2">
+                                <i-menu-item name="/demo/charts">
                                     <i-icon type="ios-keypad"></i-icon>
-                                    Item 2
+                                    charts
                                 </i-menu-item>
                                 <i-menu-item name="3">
                                     <i-icon type="ios-analytics"></i-icon>
@@ -29,16 +29,16 @@
                     </i-col>
                     <i-col span="4">
                         <div class="pull-right">
-                            <Dropdown style="margin-left: 20px">
-                                <Button type="primary">
+                            <Dropdown  trigger="click" @on-click="logout">
+                                <Button  >
                                     <Icon type="md-person"></Icon>
                                     用户名
                                     <Icon type="ios-arrow-down"></Icon>
                                 </Button>
                                 <DropdownMenu slot="list">
-                                    <DropdownItem>修改</DropdownItem>
-                                    <DropdownItem disabled>个人信息</DropdownItem>
-                                    <DropdownItem divided>退出</DropdownItem>
+                                    <DropdownItem><Icon type="ios-open-outline" /> 修改</DropdownItem>
+                                    <DropdownItem disabled><Icon type="md-list-box" /> 个人信息</DropdownItem>
+                                    <DropdownItem divided name="logout"><Icon type="ios-log-out" /> 退出</DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
                         </div>
@@ -127,12 +127,13 @@
     currentRouteList : any = [];
     theme = "light";
     menuList: any = [
-      { name: "", meta: { icon: "ios-book", title: "首页" }, children: [] },
-      { name: "baidu", meta: { icon: "ios-book", title: "百度" }, href: "https://www.baidu.com/", children: [] },
+      { name: "", icon: "md-home", meta: {  title: "首页" }, children: [] },
+      { name: "baidu",icon: "md-settings", meta: {  title: "百度" }, href: "https://www.baidu.com/", children: [] },
       {
-        name: "demo", meta: { icon: "ios-book", title: "示例" }, children: [
-          { name: "charts", meta: { icon: "ios-book", title: "图表" } },
-          { name: "design", meta: { icon: "ios-book", title: "设计器" } }
+        name: "demo", icon: "md-albums", meta: {  title: "示例" }, children: [
+          { name: "charts", icon: "md-radio-button-off", meta: {  title: "图表" } },
+          { name: "design", icon: "md-radio-button-off", meta: {  title: "设计器" } },
+          { name: "marquee", icon: "md-radio-button-off", meta: { title: "文字滚动" } },
         ]
       }
     ];
@@ -206,7 +207,10 @@
         return [""];
       }
     }
-
+    logout( name ){
+      console.log(name)
+      this.$router.push('/login');
+    }
     created() {
       this.openedNames = this.getRoute();
     }
