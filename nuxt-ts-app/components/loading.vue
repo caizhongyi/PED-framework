@@ -18,14 +18,6 @@
       this.$emit("input", val);
     }
 
-  /*  @Model()
-    visible: boolean = false;
-
-    @Watch("visible")
-    onChangeVisible(val) {
-      this.$emit("input", val);
-    }*/
-
     mounted() {
     }
   }

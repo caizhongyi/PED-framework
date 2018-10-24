@@ -32,7 +32,7 @@ For detailed explanation on how things work, checkout the [Nuxt.js docs](https:/
 服务器执行exit主动退出登录用户，再次验证外网访问情况
 
 # 目录结构
-
+``` 
 - assets 为webpack编译的资源目录
 - components Vue组件目录
 - directive 指令目录，公有的从git上获取
@@ -46,18 +46,20 @@ For detailed explanation on how things work, checkout the [Nuxt.js docs](https:/
 - store 全局变量或函数目录，例如用户信息等
 - util 公用函数
 mixin.ts 混入函数变量等
-
+``` 
 # nuxt.config.js
 nuxt配置文件，域名，端口以及静态脚本引用等
+``` 
 {
    plugins：{ src: '~/plugins/directives', ssr: false }, //插件配置
    css：[], //css加载
    head:{}, //html头配置
 }
-
+``` 
 
 # package.json
 npm插件管理文件
+``` 
 install xxx --save
 "config": {
     "nuxt": {
@@ -65,21 +67,22 @@ install xxx --save
       "port": "3000" //端口
     }
 }
-
+``` 
 
 # vue cli
 vue init nuxt-community/typescript-template nuxt-ts
 
-#ui框架用 iview
-#图形架框用 v-chart
+# ui框架用 iview
+# 图形架框用 v-chart
 
-#异步请求用 axios
+# 异步请求用 axios
+``` 
 import axios from 'axios';
 let a = await axios.get("./random-data.json");
 console.log(a)
-
-#index.d.ts
-// 第三插件变量声明
+``` 
+# 第三插件变量声明 index.d.ts
+``` 
 declare module 'vue/types/vue' {
   interface Vue {
     $router: VueRouter,
@@ -87,9 +90,9 @@ declare module 'vue/types/vue' {
     $refs: any
   }
 }
-
-iview地址 https://www.iviewui.com/
-vue地址 https://cn.vuejs.org/v2/guide/
+``` 
+#  iview地址 (https://www.iviewui.com)
+#  vue地址 (https://cn.vuejs.org/v2/guide)
 
 
 
