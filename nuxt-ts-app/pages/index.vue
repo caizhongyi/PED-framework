@@ -30,7 +30,7 @@ import DragBlock from "~/components/drag-block/index.vue"
     Loading ,
   }
 })
-export default class extends Vue {
+export default class Index extends Vue {
   scrollToTop = true;
   loadingVisible = false;
   @State people;

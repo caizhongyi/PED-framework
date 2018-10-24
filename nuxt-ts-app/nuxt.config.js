@@ -51,7 +51,7 @@ module.exports = {
     script: [
       //{ innerHTML: require('./flexible.js') + ';console.log(11)' , type: 'text/javascript', charset: 'utf-8'},
       //{ src:'https://res.wx.qq.com/open/js/jweixin-1.2.0.js' },  //微信开发
-      { src: '/js/flexible-pc.js' }, // rem自适应
+     // { src: '/js/flexible-pc.js' }, // rem自适应
     ],
     // 不对<script>标签中内容做转义处理
     __dangerouslyDisableSanitizers: ['script']
@@ -87,12 +87,11 @@ module.exports = {
       "qs",
     ],
     postcss: [
-      //px转换rem自适应
-      require('postcss-px2rem')({
-        remUnit: 12.8
-        // 12.8  flexible-pc.js pc端1280的设计图
-        // 75    flexible.js  移动端750的设计图
-      })
+     //px转换rem自适应
+    // require('postcss-px2rem')({remUnit: 12.8 }),   // 12.8  flexible-pc.js pc端1280的设计图// 75    flexible.js  移动端750的设计图
+     require('postcss-nested')(),
+    // require('postcss-responsive-type')(),
+    // require('postcss-hexrgba')(),
     ],
     extend(config, ctx) {
       for (let o of config.module.rules) {

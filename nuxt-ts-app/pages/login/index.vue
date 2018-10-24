@@ -12,6 +12,7 @@
                 </div>
             </Card>
         </div>
+        <Spin size="large" fix v-if="spinShow"></Spin>
     </div>
 </template>
 
@@ -27,7 +28,7 @@
   })
   export default class extends Vue {
     scrollToTop = true;
-
+    spinShow = false;
     layout() {
       return "empty";
     }
@@ -41,12 +42,19 @@
     }
 
     handleSubmit(e) {
-      if( this.$route.params.ref ){
-        this.$router.push(this.$route.params.ref);
-      }
-      else{
-        this.$router.push("/");
-      }
+      let _this = this;
+      this.spinShow = true;
+
+      setTimeout(()=>{
+        _this.spinShow = false;
+
+        if( _this.$route.params.ref ){
+          _this.$router.push(_this.$route.params.ref);
+        }
+        else{
+          _this.$router.push("/");
+        }
+      },1000)
     }
   }
 

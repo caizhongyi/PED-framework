@@ -11,9 +11,9 @@
                                     <i-icon type="ios-navigate"></i-icon>
                                     首页
                                 </i-menu-item>
-                                <i-menu-item name="/demo/charts">
+                                <i-menu-item name="/demo/table">
                                     <i-icon type="ios-keypad"></i-icon>
-                                    charts
+                                    table
                                 </i-menu-item>
                                 <i-menu-item name="3">
                                     <i-icon type="ios-analytics"></i-icon>
@@ -152,7 +152,8 @@
 
     getBreadCrumbList( newRoute: any ){
       this.breadCrumbList = [];
-      this.currentRouteList = newRoute.name.split("-");
+      if( newRoute.name )
+        this.currentRouteList = newRoute.name.split("-");
       this.getMenuTitle(this.menuList, 0 );
     }
     getMenuTitle(item, index ) {
