@@ -1,5 +1,5 @@
 <template>
-    <div class="viewport" style="overflow:hidden; height: 300px" >
+    <div class="viewport" style="overflow:hidden; height: 100px" >
         <no-ssr><vue-seamless-scroll  :data="marquee"   class="marquee">
             <Row v-for="o in marquee" :key="o.id">
                 <Col span="6"><p>{{ o.name }}</p></Col>
@@ -25,22 +25,9 @@
       { id : 1 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
       { id : 2 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
       { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
-      { id : 3 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
+      { id : 4 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
+      { id : 5 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
+      { id : 6 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
     ]
     filters() {
       return {

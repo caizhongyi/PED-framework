@@ -11,10 +11,11 @@ export default class  extends Vue {
   }
   getNameOrHref (item, children0, name ) {
     if( typeof name == 'undefined'){
-      return `/${item.href ? `isTurnByHref_${item.href}` : (children0 ? item.children[0].name : item.name)}`
+      return `/${item.href ? `isTurnByHref_${item.href}` : ( item.name)}`
     }
     else{
       return `${name}/${item.href ? `isTurnByHref_${item.href}` : (children0 ? item.children[0].name : item.name)}`
     }
   }
+
 }

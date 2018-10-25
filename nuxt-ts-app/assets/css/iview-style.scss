@@ -2,7 +2,6 @@ html{
   background: #232F49 ;
 }
 
-
 .nt-breadcrumb {
   padding-bottom: 20px
 }
@@ -44,7 +43,6 @@ html{
     color: #fff !important;
   }
   a {
-    display: block;
     color: #fff;
   }
 }
@@ -55,6 +53,7 @@ html{
   a,&,.ivu-btn{
     color: #ebebeb;
   }
+  .ivu-dropdown-item{}
   height: auto;
   line-height:4;
   padding: 0 10px;
@@ -64,6 +63,9 @@ html{
     float: left;
     margin-right: 10px;
     padding:  0 10px;
+    .ivu-icon{
+      font-size: 30px;
+    }
   }
   .ivu-men.ivu-menu-horizontal{
     &:after{
@@ -99,6 +101,15 @@ html{
   transition: all 0.2s ease-in-out;
   position: relative;
   min-height: 100%;
+  a{
+    color: #fff;
+  }
+  .ivu-tooltip,
+  .ivu-dropdown{
+    display: block;
+    text-align: center;
+    font-size: 20px;
+  }
   .ivu-layout-sider-children{
     .ivu-menu.ivu-menu-vertical {
       width: 80%;

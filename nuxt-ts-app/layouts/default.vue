@@ -5,7 +5,10 @@
                 <i-row>
                     <i-col span="20">
                         <i-menu mode="horizontal" class="clearfix" :active-name="$route.path" @on-select="turnToPage">
-                            <div class="layout-logo">智慧校园SAAS管理平台</div>
+                            <div class="layout-logo inline-group">
+                                <span>智慧校园SAAS管理平台</span>
+                                <a href="javascript:void(0)" @click="collapsedChange"><Icon type="md-menu" /></a>
+                            </div>
                             <div class="layout-nav">
                                 <i-menu-item name="/">
                                     <i-icon type="ios-navigate"></i-icon>
@@ -30,11 +33,9 @@
                     <i-col span="4">
                         <div class="pull-right">
                             <Dropdown  trigger="click" @on-click="logout">
-                                <Button  >
-                                    <Icon type="md-person"></Icon>
-                                    用户名
-                                    <Icon type="ios-arrow-down"></Icon>
-                                </Button>
+                                <Icon type="md-person"></Icon>
+                                用户名
+                                <Icon type="ios-arrow-down"></Icon>
                                 <DropdownMenu slot="list">
                                     <DropdownItem><Icon type="ios-open-outline" /> 修改</DropdownItem>
                                     <DropdownItem disabled><Icon type="md-list-box" /> 个人信息</DropdownItem>
@@ -59,35 +60,34 @@
                               <i-menu-item name="/demo/marquee"  title="文字滚动">文字滚动</i-menu-item>
                           </i-submenu>
                       </i-menu>-->
-
-                    <Menu ref="menu" v-show="!collapsed" :active-name="$route.path" :open-names="openedNames"
+                   <Menu ref="menu" v-show="!collapsed" :active-name="$route.path" :open-names="openedNames"
                           :accordion="false" :theme="theme"  @on-select="turnToPage">
                         <template v-for="item in menuList">
                             <template v-if="item.children && item.children.length === 1">
                                 <side-menu-item v-if="showChildren(item)" :key="`menu-${item.name}`"
-                                                :name="getNameOrHref(item)" :parent-item="item"></side-menu-item>
-                                <menu-item v-else :name="getNameOrHref(item, true)"
+                                                :name="getNameOrHref(item , false )" :parent-item="item"></side-menu-item>
+                                <menu-item v-else :name="getNameOrHref(item, false)"
                                            :key="`menu-${item.children[0].name}`">
                                     <i-icon :type="item.children[0].icon || ''"/>
                                     <span>{{ showTitle(item.children[0]) }}</span></menu-item>
                             </template>
                             <template v-else>
                                 <side-menu-item v-if="showChildren(item)" :key="`menu-${item.name}`"
-                                                :name="getNameOrHref(item)" :parent-item="item"></side-menu-item>
+                                                :name="getNameOrHref(item ,false )" :parent-item="item"></side-menu-item>
                                 <menu-item v-else :name="getNameOrHref(item , false )" :key="`menu-${item.name}`">
                                     <i-icon :type="item.icon || ''"/>
                                     <span>{{ showTitle(item) }}</span></menu-item>
                             </template>
                         </template>
                     </Menu>
-                    <!--       <div class="menu-collapsed" v-show="collapsed" :list="menuList">
-                               <template v-for="item in menuList">
-                                   <collapsed-menu v-if="item.children && item.children.length > 1" @on-click="handleSelect" hide-title :root-icon-size="rootIconSize" :icon-size="iconSize" :theme="theme" :parent-item="item" :key="`drop-menu-${item.name}`"></collapsed-menu>
-                                   <Tooltip transfer v-else :content="(item.meta && item.meta.title) || (item.children && item.children[0] && item.children[0].meta.title)" placement="right" :key="`drop-menu-${item.name}`">
-                                       <a @click="handleSelect(getNameOrHref(item, true))" class="drop-menu-a" :style="{textAlign: 'center'}"><common-icon :size="rootIconSize" :color="textColor" :type="item.icon || (item.children && item.children[0].icon)"/></a>
-                                   </Tooltip>
-                               </template>
-                           </div>-->
+                   <div class="menu-collapsed" v-show="collapsed" :list="menuList">
+                       <template v-for="item in menuList">
+                           <collapsed-menu v-if="item.children && item.children.length > 1"  :name="getNameOrHref(item , false)" hide-title root-icon-size="14" icon-size="large"  :parent-item="item" :key="`drop-menu-${item.name}`"></collapsed-menu>
+                           <Tooltip transfer v-else :content="(item.meta && item.meta.title) || (item.children && item.children[0] && item.children[0].meta.title)" placement="right" :key="`drop-menu-${item.name}`">
+                               <a @click="turnToPage(getNameOrHref(item, false))" class="drop-menu-a" :style="{textAlign: 'center'}"><i-icon size="large"  :type="item.icon || (item.children && item.children[0].icon)"/></a>
+                           </Tooltip>
+                       </template>
+                   </div>
 
                 </i-sider>
                 <i-layout class="nt-wrapper layout">
@@ -112,11 +112,12 @@
   import _ from "underscore";
   import mixin from "~/components/menu/mixin";
   import SideMenuItem from "~/components/menu/side-menu-item";
+  import CollapsedMenu from "~/components/menu/collapsed-menu";
   //import locale from '~/node_modules/iview/dist/locale/zh-CN';
 
   @Component({
     components: {
-      SideMenuItem
+      SideMenuItem , CollapsedMenu
     }
   })
   export default class extends mixin {
@@ -150,6 +151,9 @@
         this.getBreadCrumbList(newRoute);
     }
 
+    collapsedChange () {
+      this.collapsed = !this.collapsed;
+    }
     getBreadCrumbList( newRoute: any ){
       this.breadCrumbList = [];
       if( newRoute.name )
