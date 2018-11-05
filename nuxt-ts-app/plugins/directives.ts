@@ -1,4 +1,4 @@
-import directive from '../directive/directives'
+import directives from '../directives/index'
 import Vue from 'vue'
   /**
    * 拖拽指令 v-draggable="options"
@@ -8,4 +8,9 @@ import Vue from 'vue'
    *  recover: /拖动结束之后是否恢复到原来的位置/
    * }
    */
-Vue.directive('draggable', directive.draggable)
+
+for(let item in directives){
+  Vue.directive( item , directives[item] )
+}
+
+export default directives;

@@ -20,7 +20,7 @@
      // vueSeamless
     }
   })
-  export default class  extends Vue {
+  export default class marquee  extends Vue {
     marquee = [
       { id : 1 ,name : 'a' , status : 1 , type : 1 , date : new Date() },
       { id : 2 ,name : 'a' , status : 1 , type : 1 , date : new Date() },

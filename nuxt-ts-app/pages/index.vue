@@ -1,16 +1,11 @@
 <template>
-
   <div>
+   <!-- <button type="button" @click="goto()">link</button>-->
+   <!-- <router-link to="/">跳转</router-link>-->
 
-    <div class="box" v-draggable="{ trigger : '.box' ,  body: '.box'}">drag</div>
-
-    <button type="button" @click="goto()">link</button>
-
-    <h1 class="header">Nuxt TypeScript Starter</h1>
-    <div class="cards">
-    </div>
-    <router-link to="/">跳转</router-link>
-    <loading v-model="loadingVisible"></loading>
+    <!--<loading v-model="loadingVisible"></loading>-->
+    <br>
+    <br>
 </div>
 
 </template>
@@ -23,6 +18,7 @@ import {
 import { State ,Mutation ,Action ,Getter } from "vuex-class"
 import Loading from "~/components/loading.vue"
 import DragBlock from "~/components/drag-block/index.vue"
+import $ from "jquery"
 
 @Component({
   components: {
@@ -39,10 +35,17 @@ export default class Index extends Vue {
     return this.title + this.text
   }*/
   mounted() {
-    this.setPeople([1,2]);
+   // this.setPeople([1,2]);
+   // console.log(this.ajax)
+   // console.log(this.people)
+    console.log(this)
+    // this.ajax.post('',{});
     /*this.$router.push({
       name:'login'
     })*/
+  }
+  changed( index ){
+    console.log(index)
   }
   goto(){
     this.$router.push({
@@ -53,18 +56,5 @@ export default class Index extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-.header {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana,
-    sans-serif;
-}
 
-.cards {
-  display: flex;
-  flex-wrap: wrap;
-}
-.box{
-  width: 100px;
-  height: 100px;
-  background: red;
-}
 </style>

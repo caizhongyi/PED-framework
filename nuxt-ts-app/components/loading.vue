@@ -7,13 +7,13 @@
   import { Component, Model, Prop, Vue, Watch } from "nuxt-property-decorator";
 
   @Component({})
-  export default class  extends Vue {
+  export default class Loading  extends Vue {
 
     // v-model 默认值
     @Prop({ default : false })
     value: boolean ;
 
-    @Watch("value")
+    @Watch("value",{ immediate : false })
     onChangeValue(val) {
       this.$emit("input", val);
     }

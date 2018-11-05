@@ -35,8 +35,8 @@ For detailed explanation on how things work, checkout the [Nuxt.js docs](https:/
 ``` 
 - assets 为webpack编译的资源目录
 - components Vue组件目录
-- directive 指令目录，公有的从git上获取
-- filter 过虑器，公有的从git上获取
+- directives 指令目录，公有的 ~/filters/filter/index 从git上获取
+- filters 过虑器，公有的  ~/directives/directive/index  从git上获取
 - layouts 主框架模版目录 ， 通过 layout(){return  'empty';  } 来设定 。 通过 head() { return {  title : '' } } 来设定 html头部
 - middleware 中间键
 - node_modules npm管理的组件目录
@@ -94,6 +94,94 @@ declare module 'vue/types/vue' {
 #  iview地址 (https://www.iviewui.com)
 #  vue地址 (https://cn.vuejs.org/v2/guide)
 
+# process 配置
+安装 cross-env
+__ENV = development 开发环境
+__ENV = release 测试环境
+__ENV = production 线上环境
 
+~/plugins/axios.ts 配置 Ajax 访问地址
+nuxt.config.js  配置应用程序访问地址
 
+Windows配置
+``` 
+#node中常用的到的环境变量是NODE_ENV，首先查看是否存在 
+set NODE_ENV 
+#如果不存在则添加环境变量 
+set NODE_ENV= prod  
+#环境变量追加值 set 变量名=%变量名%;变量内容 
+set path=%path%;C:\web;C:\Tools 
+#某些时候需要删除环境变量 
+set NODE_ENV=
+``` 
+Linux配置
+``` 
+#node中常用的到的环境变量是NODE_ENV，首先查看是否存在
+echo $NODE_ENV
+#如果不存在则添加环境变量
+export NODE_ENV=prod
+#环境变量追加值
+export path=$path:/home/download:/usr/local/
+#某些时候需要删除环境变量
+unset NODE_ENV
+#某些时候需要显示所有的环境变量
+env
+``` 
 
+# 第三方插件引入
+1.安装 plugin
+``` 
+npm install plugin 
+``` 
+2.~/plugins 新建  plugin.ts
+
+``` 
+import Vue from 'vue'
+import plugin from 'plugin'
+
+Vue.use(plugin)
+``` 
+3. nuxt.config.js 中的 plugins 字段加一个项
+``` 
+plugins: [
+    { src: "~/plugins/plugin", ssr: false },  // ssr:false 只在客户端运行，调用的时候需要加上 <no-ssr><plugin ref="plugin"></plugin><no-ssr>
+]
+``` 
+
+4. ~/plugins/jquery.ts
+``` 
+const $ = require('jquery');
+const jqueryPlugin = require('jqueryPlugin');  //可能需更改 jqueryPlugin.js 的文件 ,需要 export 里面的方法或对象
+$.fn.jqueryPlugin = jqueryPlugin;
+export default $;
+``` 
+
+# 常用组件 
+1.dync-form.vue   // 动态生成 Form 表单 
+``` 
+示例
+/demo/form
+``` 
+2.ajax.vue // 异步调用
+``` 
+示例
+<ajax ref="ajax" loading="true"></ajax>
+
+let ajax = this.$refs.ajax;
+let res = await ajax.post()
+``` 
+3.page-table.vue // 分页控件 
+``` 
+示例
+/demo/table.vue
+``` 
+# underscore
+处理数据库，例如删除，过滤，查找等等
+
+# 命名规规范
+1.常量全大写.例如：const STATUS = 1
+2.变量，对象，数组等为驼峰写法。 例如： let ajaxStatus
+3.类名第一个字母大写。 例如： class AjaxClass
+
+# 全局注册组件
+~/plugins/components.ts 中注册

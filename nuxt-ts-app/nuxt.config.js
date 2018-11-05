@@ -1,5 +1,5 @@
 const parseArgs = require("minimist");
-const webpack = require('webpack');
+const webpack = require("webpack");
 const argv = parseArgs(process.argv.slice(2), {
   alias: {
     H: "hostname",
@@ -9,22 +9,40 @@ const argv = parseArgs(process.argv.slice(2), {
   unknown: parameter => false
 });
 
+let hostname = "localhost" ,  hostPort = 3000 ;
+
+console.log('env:' + process.env.__ENV)
+
+switch (process.env.__ENV) {
+  case  "development" :
+    hostname = "localhost";
+    break;
+  case  "release" :
+    hostname = "0.0.0.0";
+    break;
+  case  "production" :
+    hostname = "0.0.0.0";
+    break;
+}
+
 const port =
   argv.port ||
-  process.env.PORT ||
+  process.env.PORT || hostPort ||
   process.env.npm_package_config_nuxt_port ||
   "3000"; // 端口
 const host =
-  argv.hostname ||
+  argv.hostname || hostname ||
   process.env.HOST ||
   process.env.npm_package_config_nuxt_host ||
   "localhost";  //域名
+
+
+let baseUrl =  process.env.BASE_URL || `http://${host}:${port}`
+
 module.exports = {
   env: {
     __ENV: process.env.__ENV,
-    baseUrl:
-      process.env.BASE_URL ||
-      `http://${host}:${port}`
+    baseUrl: baseUrl
   },
   head: {
     title: "admin",
@@ -46,18 +64,19 @@ module.exports = {
         rel: "icon",
         type: "image/x-icon",
         href: "/favicon.ico"
-      }
+      },
+       // { rel: 'stylesheet', types: 'text/css', href: '/bootstrap.min.css' }
     ],
     script: [
       //{ innerHTML: require('./flexible.js') + ';console.log(11)' , type: 'text/javascript', charset: 'utf-8'},
       //{ src:'https://res.wx.qq.com/open/js/jweixin-1.2.0.js' },  //微信开发
-     // { src: '/js/flexible-pc.js' }, // rem自适应
+      // { src: '/js/flexible-pc.js' }, // rem自适应
     ],
     // 不对<script>标签中内容做转义处理
-    __dangerouslyDisableSanitizers: ['script']
+    __dangerouslyDisableSanitizers: ["script"]
   },
   router: {
-    middleware: 'auth'
+    middleware: "auth"
   },
   /*
   ** Customize the progress-bar color
@@ -69,29 +88,32 @@ module.exports = {
   css: [
     "font-awesome/css/font-awesome.css",
     "iview/dist/styles/iview.css",
-    "~/assets/css/main.scss",
+    "~/assets/css/main.scss"
   ],
   plugins: [
     { src: "~/plugins/iview", ssr: true },
-    { src: '~/plugins/directives', ssr: false },  //指令
-    { src: '~/plugins/v-charts', ssr: false },
-    { src: '~/plugins/filters', ssr: false },
-    { src: '~/plugins/vue-seamless-scroll', ssr: false },
-    { src: '~/plugins/jquery', ssr: false },
+    { src: "~/plugins/directives", ssr: false },  //指令
+    { src: "~/plugins/v-charts", ssr: false },
+    { src: "~/plugins/filters", ssr: false },
+    { src: "~/plugins/vue-seamless-scroll", ssr: false },
+    { src: "~/plugins/jquery", ssr: false },
+    { src: "~/plugins/components", ssr: false },
+    { src: "~/plugins/vue-nestable", ssr: false },
+    { src: "~/plugins/vue-drag-tree", ssr: false },
   ],
   build: {
     vendor: [
       "axios",
       "iview",
       "v-charts",
-      "qs",
+      "qs"
     ],
     postcss: [
-     //px转换rem自适应
-    // require('postcss-px2rem')({remUnit: 12.8 }),   // 12.8  flexible-pc.js pc端1280的设计图// 75    flexible.js  移动端750的设计图
-     require('postcss-nested')(),
-    // require('postcss-responsive-type')(),
-    // require('postcss-hexrgba')(),
+      //px转换rem自适应
+      // require('postcss-px2rem')({remUnit: 12.8 }),   // 12.8  flexible-pc.js pc端1280的设计图// 75    flexible.js  移动端750的设计图
+      require("postcss-nested")()
+      // require('postcss-responsive-type')(),
+      // require('postcss-hexrgba')(),
     ],
     extend(config, ctx) {
       for (let o of config.module.rules) {
@@ -120,19 +142,38 @@ module.exports = {
         }
       }
       if (ctx.isClient) {
-       /* config.entry['polyfill'] = ['babel-polyfill']
-        Object.assign(config.resolve.alias, {
-          'utils': path.resolve(__dirname, 'utils')
-        })*/
+        /* config.entry['polyfill'] = ['babel-polyfill']
+         Object.assign(config.resolve.alias, {
+           'utils': path.resolve(__dirname, 'utils')
+         })*/
       }
     }
   },
   modules: [
     "@nuxtjs/axios",
+    "@nuxtjs/proxy",
     "~/modules/typescript.js"
   ],
-  axios: {},
-  render: {
-    resourceHints: false,
+  /* axios: {
+      retry: { retries: 3 },
+      //开发模式下开启debug
+      debug: process.env.__ENV == "production" ? false : true,
+      //设置不同环境的请求地址
+      baseURL: "http://www.apms.com/index.php?",
+      withCredentials: true,
+  },
+   */
+  proxy: {
+  //开启代理
+    "/api/": {
+        target:  process.env.__ENV== 'production' ? "http://180.106.148.81:18082/testapms/index.php" ://正式
+            ( process.env.__ENV== 'release' ? "http://180.106.148.81:18082/testapms/index.php" ://测试
+                "http://www.apms.com/index.php"  ),//本地
+        pathRewrite: { "^/api/": "?_url=api/" }
+    }
   }
-};
+}
+
+//if(process.browser){
+// require('xxx');
+//}

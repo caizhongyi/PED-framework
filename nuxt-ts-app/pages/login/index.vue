@@ -18,12 +18,16 @@
   import { Component, Vue } from "nuxt-property-decorator";
   import { State } from "vuex-class";
 
+/*  import '~/assets/js/jigsaw-random-code/jigsaw.js';
+
+  declare var jigsaw;*/
+
   @Component({
     components: {
       LoginForm
     }
   })
-  export default class extends Vue {
+  export default class Login extends Vue {
     scrollToTop = true;
     spinShow = false;
     layout() {

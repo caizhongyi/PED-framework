@@ -18,7 +18,7 @@
   @Component({
     components: { VeLine }
   })
-  export default class  extends Vue {
+  export default class charts extends Vue {
     chartSettings = {};
     chartData = {
         columns : ['时间' , '比值', '占比'],

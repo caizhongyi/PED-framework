@@ -7,39 +7,37 @@
                         <i-menu mode="horizontal" class="clearfix" :active-name="$route.path" @on-select="turnToPage">
                             <div class="layout-logo inline-group">
                                 <span>智慧校园SAAS管理平台</span>
-                                <a href="javascript:void(0)" @click="collapsedChange"><Icon type="md-menu" /></a>
+                                <a href="javascript:void(0)" @click="collapsedChange">
+                                    <Icon type="md-menu"/>
+                                </a>
                             </div>
                             <div class="layout-nav">
-                                <i-menu-item name="/">
-                                    <i-icon type="ios-navigate"></i-icon>
-                                    首页
-                                </i-menu-item>
-                                <i-menu-item name="/demo/table">
-                                    <i-icon type="ios-keypad"></i-icon>
-                                    table
-                                </i-menu-item>
-                                <i-menu-item name="3">
-                                    <i-icon type="ios-analytics"></i-icon>
-                                    Item 3
-                                </i-menu-item>
-                                <i-menu-item name="4">
-                                    <i-icon type="ios-paper"></i-icon>
-                                    Item 4
+                                <i-menu-item :name="`/${item.name == 'index' ? '' : item.name }`" v-for="(item,key) in menu" :key="key">
+                                    <i-icon :type="item.icon"></i-icon>
+                                    {{ item.meta.title }}
                                 </i-menu-item>
                             </div>
-
                         </i-menu>
                     </i-col>
                     <i-col span="4">
                         <div class="pull-right">
-                            <Dropdown  trigger="click" @on-click="logout">
+                            <Dropdown trigger="click" @on-click="logout">
                                 <Icon type="md-person"></Icon>
                                 用户名
                                 <Icon type="ios-arrow-down"></Icon>
                                 <DropdownMenu slot="list">
-                                    <DropdownItem><Icon type="ios-open-outline" /> 修改</DropdownItem>
-                                    <DropdownItem disabled><Icon type="md-list-box" /> 个人信息</DropdownItem>
-                                    <DropdownItem divided name="logout"><Icon type="ios-log-out" /> 退出</DropdownItem>
+                                    <DropdownItem>
+                                        <Icon type="ios-open-outline"/>
+                                        修改
+                                    </DropdownItem>
+                                    <DropdownItem disabled>
+                                        <Icon type="md-list-box"/>
+                                        个人信息
+                                    </DropdownItem>
+                                    <DropdownItem divided name="logout">
+                                        <Icon type="ios-log-out"/>
+                                        退出
+                                    </DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
                         </div>
@@ -60,34 +58,44 @@
                               <i-menu-item name="/demo/marquee"  title="文字滚动">文字滚动</i-menu-item>
                           </i-submenu>
                       </i-menu>-->
-                   <Menu ref="menu" v-show="!collapsed" :active-name="$route.path" :open-names="openedNames"
-                          :accordion="false" :theme="theme"  @on-select="turnToPage">
+                    <Menu ref="menu" v-show="!collapsed" :active-name="$route.path" :open-names="openedNames"
+                          :accordion="false" :theme="theme" @on-select="turnToPage">
                         <template v-for="item in menuList">
-                            <template v-if="item.children && item.children.length === 1">
+                            <!--<template v-if="item.children && item.children.length === 1">
                                 <side-menu-item v-if="showChildren(item)" :key="`menu-${item.name}`"
-                                                :name="getNameOrHref(item , false )" :parent-item="item"></side-menu-item>
+                                                :name="getNameOrHref(item , false )"
+                                                :parent-item="item"></side-menu-item>
                                 <menu-item v-else :name="getNameOrHref(item, false)"
                                            :key="`menu-${item.children[0].name}`">
                                     <i-icon :type="item.children[0].icon || ''"/>
                                     <span>{{ showTitle(item.children[0]) }}</span></menu-item>
-                            </template>
-                            <template v-else>
+                            </template>-->
+                            <template>
                                 <side-menu-item v-if="showChildren(item)" :key="`menu-${item.name}`"
-                                                :name="getNameOrHref(item ,false )" :parent-item="item"></side-menu-item>
+                                                :name="getNameOrHref(item ,false )"
+                                                :parent-item="item"></side-menu-item>
                                 <menu-item v-else :name="getNameOrHref(item , false )" :key="`menu-${item.name}`">
                                     <i-icon :type="item.icon || ''"/>
                                     <span>{{ showTitle(item) }}</span></menu-item>
                             </template>
                         </template>
                     </Menu>
-                   <div class="menu-collapsed" v-show="collapsed" :list="menuList">
-                       <template v-for="item in menuList">
-                           <collapsed-menu v-if="item.children && item.children.length > 1"  :name="getNameOrHref(item , false)" hide-title root-icon-size="14" icon-size="large"  :parent-item="item" :key="`drop-menu-${item.name}`"></collapsed-menu>
-                           <Tooltip transfer v-else :content="(item.meta && item.meta.title) || (item.children && item.children[0] && item.children[0].meta.title)" placement="right" :key="`drop-menu-${item.name}`">
-                               <a @click="turnToPage(getNameOrHref(item, false))" class="drop-menu-a" :style="{textAlign: 'center'}"><i-icon size="large"  :type="item.icon || (item.children && item.children[0].icon)"/></a>
-                           </Tooltip>
-                       </template>
-                   </div>
+                    <div class="menu-collapsed" v-show="collapsed" :list="menuList">
+                        <template v-for="item in menuList">
+                            <collapsed-menu v-if="item.children && item.children.length > 1"
+                                            :name="getNameOrHref(item , false)" hide-title root-icon-size="14"
+                                            icon-size="large" :parent-item="item"
+                                            :key="`drop-menu-${item.name}`"></collapsed-menu>
+                            <Tooltip transfer v-else
+                                     :content="(item.meta && item.meta.title) || (item.children && item.children[0] && item.children[0].meta.title)"
+                                     placement="right" :key="`drop-menu-${item.name}`">
+                                <a @click="turnToPage(getNameOrHref(item, false))" class="drop-menu-a"
+                                   :style="{textAlign: 'center'}">
+                                    <i-icon size="large" :type="item.icon || (item.children && item.children[0].icon)"/>
+                                </a>
+                            </Tooltip>
+                        </template>
+                    </div>
 
                 </i-sider>
                 <i-layout class="nt-wrapper layout">
@@ -102,42 +110,38 @@
                 </i-layout>
             </i-layout>
         </i-layout>
+        <ajax ref="ajax"></ajax>
     </div>
-
 </template>
 
 <script lang="ts">
 
   import { Component, Prop, Vue, Watch, Model } from "nuxt-property-decorator";
+  import { State, Mutation, Action, Getter } from "vuex-class";
   import _ from "underscore";
   import mixin from "~/components/menu/mixin";
   import SideMenuItem from "~/components/menu/side-menu-item";
   import CollapsedMenu from "~/components/menu/collapsed-menu";
+  import Ajax from "~/components/ajax";
+  import util from "~/utils";
   //import locale from '~/node_modules/iview/dist/locale/zh-CN';
 
   @Component({
     components: {
-      SideMenuItem , CollapsedMenu
+      SideMenuItem, CollapsedMenu, Ajax
     }
   })
-  export default class extends mixin {
+  export default class Default extends mixin {
+    ajax: any;
     middleware = "auth";
     collapsed = false;
     openedNames: any = [];
     breadCrumbList: any = [];
-    currentRouteList : any = [];
+    currentRouteList: any = [];
     theme = "light";
-    menuList: any = [
-      { name: "", icon: "md-home", meta: {  title: "首页" }, children: [] },
-      { name: "baidu",icon: "md-settings", meta: {  title: "百度" }, href: "https://www.baidu.com/", children: [] },
-      {
-        name: "demo", icon: "md-albums", meta: {  title: "示例" }, children: [
-          { name: "charts", icon: "md-radio-button-off", meta: {  title: "图表" } },
-          { name: "design", icon: "md-radio-button-off", meta: {  title: "设计器" } },
-          { name: "marquee", icon: "md-radio-button-off", meta: { title: "文字滚动" } },
-        ]
-      }
-    ];
+    @State menu;
+   // @Mutation getMenu;
+    menuList:any = [];
 
     get menuitemClasses() {
       return [
@@ -146,34 +150,72 @@
       ];
     }
 
-    @Watch("$route")
-    changeRoute( newRoute: any ) {
-        this.getBreadCrumbList(newRoute);
+    @Watch("$route",{ immediate : true })
+    changeRoute(newRoute: any) {
+      this.getMenuList(newRoute.name);
+      this.getBreadCrumbList(newRoute);
     }
 
-    collapsedChange () {
+    collapsedChange() {
       this.collapsed = !this.collapsed;
     }
-    getBreadCrumbList( newRoute: any ){
+
+    getBreadCrumbList(newRoute: any) {
       this.breadCrumbList = [];
-      if( newRoute.name )
+      if (newRoute.name)
         this.currentRouteList = newRoute.name.split("-");
-      this.getMenuTitle(this.menuList, 0 );
+      this.getMenuTitle(this.menuList, 0);
     }
-    getMenuTitle(item, index ) {
+
+    getMenuTitle(item, index) {
       let name = this.currentRouteList[index];
-      if( !name ) return ;
+      if (!name) return;
       for (let o of item) {
         if (o["name"] == name) {
-          this.breadCrumbList.push({ name: o.name , title: o['meta'].title });
+          this.breadCrumbList.push({ name: o.name, title: o["meta"].title });
           if (o.children && o.children.length != 0) {
-            this.getMenuTitle(o.children, ++ index);
+            this.getMenuTitle(o.children, ++index);
           }
         }
         else {
 
         }
       }
+    }
+
+    getMenuList( name:any ) {
+      //控件示例
+      let demoMenu:any =  {
+        name: "demo", icon: "md-albums", meta: { title: "示例" }, children: [
+          { name: "charts", icon: "md-radio-button-off", meta: { title: "图表" } },
+          { name: "design", icon: "md-radio-button-off", meta: { title: "设计器" } },
+          { name: "marquee", icon: "md-radio-button-off", meta: { title: "文字滚动" } },
+          { name: "drag", icon: "md-radio-button-off", meta: { title: "拖动" } },
+          { name: "form", icon: "md-radio-button-off", meta: { title: "表单生成器" } },
+          { name: "table", icon: "md-radio-button-off", meta: { title: "表格" } },
+          { name: "random-code", icon: "md-radio-button-off", meta: { title: "验证码" } },
+        ]
+      };
+
+      let paths = this.$route.path.split('/');
+      name = name ? name : paths[1]  ;
+
+      if( !name ) {
+        this.menuList = demoMenu ; return this;
+      }
+
+      const names =  name.split('-');
+      name = names.length ? names[0] : name;
+
+      let filterList : any = _( this.menu ).filter(( n )=>{
+         return n.name == name;
+      });
+      filterList = filterList && filterList[0] ? filterList[0] : null ;
+      if( !filterList ) return this;
+
+      this.menuList = [...filterList.children,...demoMenu ];
+
+      return this;
     }
 
     //页面跳转
@@ -185,13 +227,6 @@
       this.$router.push(name);
     }
 
-    /*  route(name) {
-        ////console.log(this.$refs.menu)
-        //console.log(this.$route)
-        this.breadcrumb = this.getRoute(name);
-        this.$router.push(name);
-        this.$emit('on-select', name)
-      }*/
 
     getRoute(path = this.$route.path) {
       if (path != "/") {
@@ -212,15 +247,17 @@
         return [""];
       }
     }
-    logout( name ){
-      console.log(name)
-      this.$router.push('/login');
+
+    logout(name) {
+      this.$router.push("/login");
     }
+
     created() {
-      this.openedNames = this.getRoute();
     }
 
     mounted() {
+      this.openedNames = this.getRoute();
+      this.ajax = this.$refs.ajax;
     }
   }
 </script>

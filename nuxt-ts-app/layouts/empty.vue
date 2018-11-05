@@ -10,7 +10,7 @@
   @Component({
     components: {}
   })
-  export default class  extends Vue {
+  export default class Empty extends Vue {
     isCollapsed = false;
 
     get menuitemClasses() {

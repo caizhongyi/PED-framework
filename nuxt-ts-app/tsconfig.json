@@ -25,7 +25,10 @@
       "~/pages/*": ["./pages/*"],
       "~/plugins/*": ["./plugins/*"],
       "~/static/*": ["./static/*"],
-      "~/store/*": ["./store/*"]
+      "~/utils/*": ["./utils/*"],
+      "~/store/*": ["./store/*"],
+      "~/directives/*": ["./directives/*"],
+      "~/filters/*": ["./filters/*"]
     }
   }
 }

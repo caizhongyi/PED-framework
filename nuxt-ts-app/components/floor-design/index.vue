@@ -52,7 +52,7 @@
     components: {
     }
   })
-  export default class  extends Vue {
+  export default class FloorDesign  extends Vue {
     @Prop({ default: 'all' })
     direction;
     design: any;

@@ -9,7 +9,7 @@
   import Draggable from "./lib/draggable";
 
   @Component({})
-  export default class  extends Vue {
+  export default class DragBlock extends Vue {
     @Prop({ default: 'all' })
     direction;
     /*@Model()

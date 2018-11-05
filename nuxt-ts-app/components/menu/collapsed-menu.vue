@@ -18,7 +18,7 @@ import { Component, Prop, Vue,Watch,Model} from "nuxt-property-decorator"
 import mixin from './mixin'
 
 @Component({})
-export default class  extends mixin {
+export default class CollapsedMenu  extends mixin {
  // mixins: [ mixin, itemMixin ],
   @Prop({ default : false , type : Boolean }) hideTitle ;
   @Prop() name:String ;
