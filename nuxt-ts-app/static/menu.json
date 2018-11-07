@@ -1,0 +1,21 @@
+[
+  { "name": "index", "icon": "md-home",  "meta": { "title": "首页" }, "children": [
+    { "name": "role", "icon": "md-list-box", "meta": { "title": "111" }, "children": [] }
+  ] },
+  { "name": "settings", "icon": "md-list-box", "meta": { "title": "系统设置" }, "children": [
+      { "name": "role", "icon": "md-list-box", "meta": { "title": "角色管理" }, "children": [] },
+      { "name": "menu", "icon": "md-list-box", "meta": { "title": "菜单管理" }, "children": [] },
+      { "name": "user", "icon": "md-list-box", "meta": { "title": "帐号管理" }, "children": [] }
+  ]},
+  { "name": "devices", "icon": "md-list-box",  "meta": { "title": "设备管理" }, "children": [
+    { "name": "role", "icon": "md-list-box", "meta": { "title": "设备配置" }, "children": [] },
+    { "name": "menu", "icon": "md-list-box", "meta": { "title": "产家管理" }, "children": [] },
+    { "name": "user", "icon": "md-list-box", "meta": { "title": "设备管理" }, "children": [] }
+  ]},
+  { "name": "apps", "icon": "md-list-box",  "meta": { "title": "应用配置" }, "children": [
+    { "name": "role", "icon": "md-list-box", "meta": { "title": "应用配置" }, "children": [] },
+    { "name": "menu", "icon": "md-list-box", "meta": { "title": "应用列表" }, "children": [
+      { "name": "role", "icon": "md-list-box", "meta": { "title": "111" }, "children": [] }
+    ] }
+  ]}
+]
