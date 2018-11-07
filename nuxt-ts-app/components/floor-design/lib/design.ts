@@ -6,6 +6,8 @@ declare var document;
 
 /**
  * 楼层设计器
+ *
+ * 背景必须为正方形图
  */
 export default class Design {
   $design = $();
@@ -20,33 +22,43 @@ export default class Design {
     x: 0,
     y: 0
   };
-
-  constructor() {
+  options : any = {
+    template :{},
+    rotate : true,
+    name : '',
+    disabled : false,
+  }
+  constructor( selector = ".drag-design" , options? ) {
     let that = this;
-    this.$design = $(".drag-design");
+    this.options = {  ...this.options , ...options } ;
+
+    this.$design = $(selector);
 
     let layers = JSON.parse(localStorage.getItem("designData") || "[]");
 
     this.create(layers);
 
-    $(".drag-elements").on("click", ".drag-layer", (e) => {
-      that.add({ x: 0, y: 0, name: $(e.target).text() });
-    });
-
-    this.$design.on("contextmenu", (e) => {
-      window.event.returnValue = false;
-      if (e.button == 2) {
-        e.preventDefault();
-        let $target = $(e.target);
-        if ($(e.target).hasClass("drag-layer")) {
-          let rotate = ($target.data("rotate") || 0) + 90;
-          $target.data("rotate", rotate).find("span").css({ "transform": "rotate(" + (rotate) + "deg)" });
+/*    $(".drag-elements").on("click", ".drag-layer", (e) => {
+      that.add({ x: 0, y: 0, name: $(e.target).text() , background : 'https://icarusion.gitee.io/iview/e1cf12c07bf6458992569e67927d767e.png'});
+    });*/
+    if( this.options.disabled == false ){
+      this.$design.on("contextmenu", (e) => {
+        window.event.returnValue = false;
+        if (e.button == 2) {
+          e.preventDefault();
+          let $target = $(e.target);
+          if ($(e.target).hasClass("drag-layer") && that.options.rotate) {
+            let rotate = ($target.data("rotate") || 0) + 90;
+            $target.data("rotate", rotate)
+              .find(".layer-content").css({
+              "transform": "rotate(" + (rotate) + "deg)"
+            });
+          }
         }
-      }
-      return false;
-    });
-
-    this.selectArea();
+        return false;
+      });
+      this.selectArea();
+    }
     this.timeSave();
   }
   /**
@@ -267,7 +279,8 @@ export default class Design {
         if ($(e.target).hasClass("active")) {
           that.clearAllActive();
         }
-      }
+      },
+      ...this.options,
     }).$;
     this.setLayer($el, prop);
     $el.appendTo(this.$design);
@@ -311,11 +324,12 @@ export default class Design {
     return {
       x: parseFloat($el.css("left")),
       y: parseFloat($el.css("top")),
-      name: $el.find("span").text(),
+      name: $el.find(".layer-info").text(),
       direction: this.getDirection($el.data("rotate")),
       rotate: $el.data("rotate"),
       width: $el.width(),
-      height: $el.height()
+      height: $el.height(),
+      background : $el.find('.layer-content').css('background-image').replace('url(','').replace(')','')
     };
   }
 
@@ -325,9 +339,9 @@ export default class Design {
       top: data.y,
       width: data.width,
       height: data.height
-    }).find("span").html(data.name).css({
-      transform: "rotate(" + data.rotate + "deg)"
-    }).data("rotate", data.rotate);
+    }).data("rotate", data.rotate)
+    .find(".layer-content").css('background-image' , 'url('+ data.background +')').css({transform: "rotate(" + data.rotate + "deg)" })
+      .end().find(".layer-info").html(data.name)
     return this;
   }
 
@@ -354,13 +368,20 @@ export default class Design {
 /**
  * 拖动元素
  * */
-export class DesignElement {
+class DesignElement {
   $ = $();
+  constructor($design:any, dragOptions:any) {
 
-  constructor($design, dragOptions) {
-    this.$ = $("<div class=\"drag-layer\" ><span></span><i class=\"ivu-icon ivu-icon-ios-trash\"></i><em class=\"drop-size\"></em></div>").appendTo($design);
+    this.$ = $("<div class=\"drag-layer\" >" +
+      "<span class='layer-content'></span>" +
+      "<span class='layer-info'></span>" +
+      ( dragOptions.disabled == true ? '': '<i class=\"ivu-icon ivu-icon-ios-trash\"></i>') +
+      ( dragOptions.disabled == true ? '': '<em class=\"drop-size\"></em>') +
+      "</div>").appendTo($design);
 
-    new Draggable(this.$,dragOptions);
+    if(dragOptions.disabled == false){
+      new Draggable(this.$,dragOptions);
+    }
 
     this.$.find(".drop-size").on("mousedown", function(e) {
       let $dragLayer = $(this).closest(".drag-layer");
@@ -404,13 +425,4 @@ export class DesignElement {
   }
 }
 
-/*
-$("#red").treeview({
-    animated: "fast",
-    collapsed: true,
-    unique: true,
-    persist: "cookie",
-    toggle: function() {
-        window.console && console.log("%o was toggled", this);
-    }
-});*/
+

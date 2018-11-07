@@ -4,7 +4,7 @@
             <i-header>
                 <i-row>
                     <i-col span="20">
-                        <i-menu mode="horizontal" class="clearfix" :active-name="$route.path" @on-select="turnToPage">
+                        <i-menu mode="horizontal" class="clearfix" :active-name="headMenuActiveName" @on-select="turnToPage">
                             <div class="layout-logo inline-group">
                                 <span>智慧校园SAAS管理平台</span>
                                 <a href="javascript:void(0)" @click="collapsedChange">
@@ -100,9 +100,7 @@
                 </i-sider>
                 <i-layout class="nt-wrapper layout">
                     <i-breadcrumb class="nt-breadcrumb">
-                        <i-breadcrumb-item> 首页</i-breadcrumb-item>
-                        <i-breadcrumb-item v-for="(item,key) in breadCrumbList" :key="key">{{ item.title }}
-                        </i-breadcrumb-item>
+                        <i-breadcrumb-item v-for="(item,key) in breadCrumbList" :key="key"> {{ item.title }} </i-breadcrumb-item>
                     </i-breadcrumb>
                     <i-content class="nt-content">
                         <nuxt/>
@@ -137,11 +135,12 @@
     collapsed = false;
     openedNames: any = [];
     breadCrumbList: any = [];
-    currentRouteList: any = [];
     theme = "light";
     @State menu;
    // @Mutation getMenu;
     menuList:any = [];
+
+    headMenuActiveName:any = '';
 
     get menuitemClasses() {
       return [
@@ -151,8 +150,8 @@
     }
 
     @Watch("$route",{ immediate : true })
-    changeRoute(newRoute: any) {
-      this.getMenuList(newRoute.name);
+    changeRoute(newRoute) {
+      this.getMenuList(newRoute);
       this.getBreadCrumbList(newRoute);
     }
 
@@ -160,30 +159,27 @@
       this.collapsed = !this.collapsed;
     }
 
-    getBreadCrumbList(newRoute: any) {
+    getBreadCrumbList(newRoute) {
       this.breadCrumbList = [];
-      if (newRoute.name)
-        this.currentRouteList = newRoute.name.split("-");
-      this.getMenuTitle(this.menuList, 0);
+      this.headMenuActiveName = '';
+      let currentRouteList = newRoute.path.split("/");
+      this.getMenuTitle( currentRouteList , 1 , this.menu);
     }
 
-    getMenuTitle(item, index) {
-      let name = this.currentRouteList[index];
-      if (!name) return;
-      for (let o of item) {
-        if (o["name"] == name) {
-          this.breadCrumbList.push({ name: o.name, title: o["meta"].title });
-          if (o.children && o.children.length != 0) {
-            this.getMenuTitle(o.children, ++index);
-          }
-        }
-        else {
-
-        }
+    getMenuTitle( currentRouteList , index , menu ) {
+      let menuItem : any = _( menu ).filter(( n )=>{
+        currentRouteList[index] = currentRouteList[index] || 'index';
+        return currentRouteList[index] == n.sourceName;
+      });
+      if( menuItem && menuItem.length ){
+        this.breadCrumbList.push({ name: menuItem[0].name, title: menuItem[0]["meta"].title });
+        !this.headMenuActiveName && (this.headMenuActiveName = (`/${menuItem[0].name}`));
+        this.getMenuTitle( currentRouteList , ++index , menuItem[0].children )
       }
+      return this;
     }
 
-    getMenuList( name:any ) {
+    getMenuList( route :any ) {
       //控件示例
       let demoMenu:any =  {
         name: "demo", icon: "md-albums", meta: { title: "示例" }, children: [
@@ -197,15 +193,15 @@
         ]
       };
 
-      let paths = this.$route.path.split('/');
-      name = name ? name : paths[1]  ;
+      let paths = route.path.split('/');
+      let name = paths[1] || 'index' ;
 
       if( !name ) {
         this.menuList = demoMenu ; return this;
       }
 
-      const names =  name.split('-');
-      name = names.length ? names[0] : name;
+     /* const names =  name.split('-');
+      name = names.length ? names[0] : name;*/
 
       let filterList : any = _( this.menu ).filter(( n )=>{
          return n.name == name;

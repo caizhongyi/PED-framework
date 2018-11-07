@@ -61,6 +61,7 @@ nuxt配置文件，域名，端口以及静态脚本引用等
 npm插件管理文件
 ``` 
 install xxx --save
+"version" : "1.0.0" , //版本号管理 ，分三个段分别为 大版本，中版本，小版本
 "config": {
     "nuxt": {
       "host": "localhost", //ip 外网则改为 0.0.0.0
@@ -70,8 +71,9 @@ install xxx --save
 ``` 
 
 # vue cli
+``` 
 vue init nuxt-community/typescript-template nuxt-ts
-
+``` 
 # ui框架用 iview
 # 图形架框用 v-chart
 
@@ -182,6 +184,8 @@ let res = await ajax.post()
 1.常量全大写.例如：const STATUS = 1
 2.变量，对象，数组等为驼峰写法。 例如： let ajaxStatus
 3.类名第一个字母大写。 例如： class AjaxClass
+4.文件名和目录名建议两个单词间用 "-", 不要用大写字符。 例如： file-name.vue
 
 # 全局注册组件
 ~/plugins/components.ts 中注册
+
