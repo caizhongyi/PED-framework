@@ -4,7 +4,7 @@
             <Button type="primary" class="pull-right">新增应用</Button>
         </Row>
         <Row>
-            <Col span="6" v-for="(item,index) in data">
+            <Col span="6" v-for="(item,index) in data" :key="index">
                 <div class="img-box">
                     <div class="img-box-img" :style="{backgroundImage:'url(' + item.backgroundImage + ')'}" alt=""></div>
                     <div class="img-box-detail">

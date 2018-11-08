@@ -1,74 +1,74 @@
 <template>
     <span>
         <template v-for="item in model">
-            <FormItem  :prop="item.field" :label="item.label" :required="item.required">
-            <DatePicker  v-if="item.type == 'date'" type="date" placeholder="选择日期" :format="item.format" :disabled="item.disabled" v-model="data[item.field]"></DatePicker>
-            <DatePicker  v-else-if="item.type == 'datetime'" type="datetime" placeholder="选择日期时间" :format="item.format" :disabled="item.disabled" v-model="data[item.field]"></DatePicker>
-            <DatePicker v-else-if="item.type == 'datetimeRange'" type="datetimerange" placeholder="选择日期区间" :format="item.format" :disabled="item.disabled"
-                        :start-date="item.startDate"
-                        :end-date="item.endDate" v-model="data[item.field]"></DatePicker>
-            <DatePicker v-else-if="item.type == 'dateRange'" type="daterange" placeholder="选择日期区间" :format="item.format" :start-date="item.startDate" :disabled="item.disabled"
-                        :end-date="item.endDate" v-model="data[item.field]"></DatePicker>
-             <RadioGroup  v-else-if="item.type == 'radio'" v-model="data[item.field]" :disabled="item.disabled">
-                <Radio :label="subItem.value" v-for="(subItem,key) in item.data" :key="key" :disabled="subItem.disabled"> {{ subItem.text}}
-                </Radio>
-            </RadioGroup>
-            <CheckboxGroup v-else-if="item.type == 'checkbox'" v-model="data[item.field]" :disabled="item.disabled">
-                <Checkbox :label="subItem.value" v-for="(subItem,key) in item.data" :key="key" :disabled="subItem.disabled">  {{ subItem.text }}
-                </Checkbox>
-            </CheckboxGroup>
-            <i-switch v-else-if="item.type == 'switch'" v-model="data[item.field]" size="large" :disabled="item.disabled">
-                <span slot="open">On</span>
-                <span slot="close">Off</span>
-            </i-switch>
-            <Slider v-else-if="item.type == 'slider'" v-model="data[item.field]" :range="item.range || false " :disabled="item.disabled"></Slider>
-             <Input v-else-if="item.type == 'textarea'" v-model="data[item.field]" type="textarea"
-                    :autosize="item.autosize || {minRows: 5,maxRows: 5}"
-                    :placeholder="item.placeholder || '请输入信息'" :disabled="item.disabled"></Input>
-            <Select v-else-if="item.type == 'select'" v-model="data[item.field]" :placeholder="item.placeholder" :disabled="item.disabled">
-                <Option :value="subItem.value" v-for="(subItem,key) in item.data" :key="key">{{ subItem.text}}</Option>
-            </Select>
-            <div v-else-if="item.type == 'upload'">
-                 <div class="upload-list" v-for="subItem in item.uploadList">
-                <template v-if="subItem.status === 'finished'">
-                    <img :src="subItem.url">
-                    <div class="upload-list-cover">
-                        <Icon type="ios-eye-outline" @click.native="view(subItem.name)"></Icon>
-                        <Icon type="ios-trash-outline" @click.native="item.remove(subItem , item )"></Icon>
-                    </div>
-                </template>
-                <template v-else>
-                    <Progress v-if="subItem.showProgress" :percent="subItem.percentage" hide-info></Progress>
-                </template>
-            </div>
-                 <Upload
-                         ref="upload"
-                         :show-upload-list="false"
-                         :default-file-list="item.value"
-                         :on-success="item.successCallback"
-                         :format="['jpg','jpeg','png']"
-                         :max-size="2048"
-                         :on-format-error="item.formatError"
-                         :on-exceeded-size="item.maxSize "
-                         :before-upload="item.beforeUpload"
-                         multiple
-                         type="drag"
-                         :action="item.action || ''"
-                         v-if="!item.disabled"
-                         style="display: inline-block;width:58px;">
-                <div style="width: 58px;height:58px;line-height: 58px;">
-                    <Icon type="ios-camera" size="20"></Icon>
+            <FormItem v-if=" item.type || ( item.type && item.type != 'custom')" :prop="item.field" :label="item.label" :required="item.required">
+                <DatePicker  v-if="item.type == 'date'" type="date" placeholder="选择日期" :format="item.format" :disabled="item.disabled" v-model="data[item.field]"></DatePicker>
+                <DatePicker  v-else-if="item.type == 'datetime'" type="datetime" placeholder="选择日期时间" :format="item.format" :disabled="item.disabled" v-model="data[item.field]"></DatePicker>
+                <DatePicker v-else-if="item.type == 'datetimeRange'" type="datetimerange" placeholder="选择日期区间" :format="item.format" :disabled="item.disabled"
+                            :start-date="item.startDate"
+                            :end-date="item.endDate" v-model="data[item.field]"></DatePicker>
+                <DatePicker v-else-if="item.type == 'dateRange'" type="daterange" placeholder="选择日期区间" :format="item.format" :start-date="item.startDate" :disabled="item.disabled"
+                            :end-date="item.endDate" v-model="data[item.field]"></DatePicker>
+                 <RadioGroup  v-else-if="item.type == 'radio'" v-model="data[item.field]" :disabled="item.disabled">
+                    <Radio :label="subItem.value" v-for="(subItem,key) in item.data" :key="key" :disabled="subItem.disabled"> {{ subItem.text}}
+                    </Radio>
+                </RadioGroup>
+                <CheckboxGroup v-else-if="item.type == 'checkbox'" v-model="data[item.field]" :disabled="item.disabled">
+                    <Checkbox :label="subItem.value" v-for="(subItem,key) in item.data" :key="key" :disabled="subItem.disabled">  {{ subItem.text }}
+                    </Checkbox>
+                </CheckboxGroup>
+                <i-switch v-else-if="item.type == 'switch'" v-model="data[item.field]" size="large" :disabled="item.disabled">
+                    <span slot="open">On</span>
+                    <span slot="close">Off</span>
+                </i-switch>
+                <Slider v-else-if="item.type == 'slider'" v-model="data[item.field]" :range="item.range || false " :disabled="item.disabled"></Slider>
+                 <Input v-else-if="item.type == 'textarea'" v-model="data[item.field]" type="textarea"
+                        :autosize="item.autosize || {minRows: 5,maxRows: 5}"
+                        :placeholder="item.placeholder || '请输入信息'" :disabled="item.disabled"></Input>
+                <Select v-else-if="item.type == 'select'" v-model="data[item.field]" :placeholder="item.placeholder" :disabled="item.disabled">
+                    <Option :value="subItem.value" v-for="(subItem,key) in item.data" :key="key">{{ subItem.text}}</Option>
+                </Select>
+                <div v-else-if="item.type == 'upload'">
+                     <div class="upload-list" v-for="subItem in item.uploadList">
+                    <template v-if="subItem.status === 'finished'">
+                        <img :src="subItem.url">
+                        <div class="upload-list-cover">
+                            <Icon type="ios-eye-outline" @click.native="view(subItem.name)"></Icon>
+                            <Icon type="ios-trash-outline" @click.native="item.remove(subItem , item )"></Icon>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <Progress v-if="subItem.showProgress" :percent="subItem.percentage" hide-info></Progress>
+                    </template>
                 </div>
-            </Upload>
-            </div>
-            <Input v-else-if="item.type == 'input'" type="text" v-model="data[item.field]"  :disabled="item.disabled" :placeholder="item.placeholder || '请输入信息'"></Input>
-            <Input v-else-if="item.type == 'password'" type="password" v-model="data[item.field]"  :disabled="item.disabled" :placeholder="item.placeholder || '请输入密码'"></Input>
-            <InputNumber v-else-if="item.type == 'inputNumber'" :max="item.max" :min="item.min || 0" :step="item.step || 1" :formatter="item.formatter" :parser="item.parser" v-model="data[item.field]"></InputNumber>
-            <InputNumber v-else-if="item.type == 'cascader'" :data="item.data" v-model="data[item.field]"></InputNumber>
-        </FormItem>
+                     <Upload
+                             ref="upload"
+                             :show-upload-list="false"
+                             :default-file-list="item.value"
+                             :on-success="item.successCallback"
+                             :format="['jpg','jpeg','png']"
+                             :max-size="2048"
+                             :on-format-error="item.formatError"
+                             :on-exceeded-size="item.maxSize "
+                             :before-upload="item.beforeUpload"
+                             multiple
+                             type="drag"
+                             :action="item.action || ''"
+                             v-if="!item.disabled"
+                             style="display: inline-block;width:58px;">
+                    <div style="width: 58px;height:58px;line-height: 58px;">
+                        <Icon type="ios-camera" size="20"></Icon>
+                    </div>
+                </Upload>
+                </div>
+                <Input v-else-if="item.type == 'input'" type="text" v-model="data[item.field]"  :disabled="item.disabled" :placeholder="item.placeholder || '请输入信息'"></Input>
+                <Input v-else-if="item.type == 'password'" type="password" v-model="data[item.field]"  :disabled="item.disabled" :placeholder="item.placeholder || '请输入密码'"></Input>
+                <InputNumber v-else-if="item.type == 'inputNumber'" :max="item.max" :min="item.min || 0" :step="item.step || 1" :formatter="item.formatter" :parser="item.parser" v-model="data[item.field]"></InputNumber>
+                <InputNumber v-else-if="item.type == 'cascader'" :data="item.data" v-model="data[item.field]"></InputNumber>
+            </FormItem>
             <i-card v-if="item.children" :style="{ 'margin-left': `${labelWidth}px`}">
-            <dync-form-item :model="item.children" :data="data" :ruleValidate="ruleValidate"></dync-form-item>
-        </i-card>
+                <dync-form-item :model="item.children" :data="data" :ruleValidate="ruleValidate"></dync-form-item>
+            </i-card>
         </template>
     </span>
 </template>
@@ -87,6 +87,8 @@
     @Prop() data;
     @Prop() ruleValidate;
     @Prop() labelWidth;
+
+
 
     mounted() {  // Vue 的 mounted 初始化回调
       let upload: any = this.$refs.upload;
@@ -153,12 +155,12 @@
             item.success && item.success(res, file);
             this.model.push();
           },
-            item = {  ...uploadSettings, ...item }
+          item = {  ...uploadSettings, ...item }
           index ++ ;
         }
-        this.data[item.field] = item.value;
+        let { field , value  } = item;
+        //this.data[field] = value;
       }
-      this.model.push();
     }
   }
 </script>

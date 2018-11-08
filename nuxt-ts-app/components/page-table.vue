@@ -5,7 +5,7 @@
             <!--<div slot="header"></div>-->
             <!--<div slot="footer"> </div>-->
         </Table>
-        <div v-if="columns[0].type == 'selection'">
+        <div v-if="columns && columns[0].type == 'selection'">
             <br>
             <Button @click="deleteAll">删除</Button>
         </div>

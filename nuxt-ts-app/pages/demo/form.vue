@@ -1,15 +1,17 @@
 <template>
-    <dync-form res="dyncForm" v-model="form" :label-width="80" @success="submit" @fail="fail">
-        <template slot="header">header</template>
-        <template slot slot-scope="props">
-            <FormItem prop="custom" label="自定义" :required="true">
-                <Input v-model="props.data['custom']" ></Input>
-            </FormItem>
-        </template>
-        <template slot="footer">footer</template>
-    </dync-form>
+     <div>
+         <dync-form ref="dyncForm"  v-model="form" :label-width="80" @success="submit" @fail="fail">
+             <template slot="header">header</template>
+             <template slot slot-scope="props">
+                 <FormItem prop="custom" label="自定义" :required="true">
+                     <Input v-model="props.data['custom']" ></Input>
+                 </FormItem>
+             </template>
+             <template slot="footer">footer</template>
+         </dync-form>
 
-    <dync-form ref="noSubmitForm" v-model="form" :label-width="80" @success="submit" @fail="fail" :submit-button="false"></dync-form>
+         <!--<dync-form ref="noSubmitForm" v-model="form" :label-width="80" @success="submit" @fail="fail" :submit-button="false"></dync-form>-->
+     </div>
 </template>
 
 <script lang="ts">
@@ -23,11 +25,14 @@
     components: { DyncForm }
   })
   export default class  extends Vue {    //  typescript 创建类继成 Vue
+
+    data = {
+      name : 1
+    }
     form: any = [
       {
         field: "name",
         label: "名称",
-        value: 1,
         type: "input",
         required: true,
         rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }],
@@ -43,14 +48,12 @@
       {
         field: "gender",
         label: "姓别",
-       // value: 1,
         type: "checkbox",
         data: [{ text: "Male", value: "male" }, { text: "Female", value: "female" }]
       },
       {
         field: "interest",
         label: "interest",
-        //value: 1,
         type: "checkbox",
         data: [{ text: "Eat", value: "eat" }, { text: "Sleep", value: "sleep" }]
       },
@@ -114,9 +117,13 @@
       console.log( data )
       return this;
     }
-
+    reset(){
+      this.dyncForm.reset();
+    }
     mounted() {  // Vue 的 mounted 初始化回调
         this.dyncForm = this.$refs.dyncForm;
+        //this.dyncForm.value(this.data);
+        this.dyncForm.data = this.data;
     }
   }
 </script>

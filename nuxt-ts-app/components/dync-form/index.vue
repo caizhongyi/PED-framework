@@ -82,8 +82,12 @@
       this.$emit("input", val);
     }
 
+    @Watch("data")
+    onChangeData(val) {
+      this.model.push();
+    }
 
-    submit(name) {
+    submit(name = 'form') {
       let myform: any = this.$refs[name];
       myform.validate && myform.validate((valid) => {
         if (valid) {
@@ -95,9 +99,11 @@
       return this;
     }
 
-    reset(name) {
-      let form: any = this.$refs[name];
-      form.resetFields();
+    reset(name = 'form') {
+      //this.form.resetFields();
+      for(let item in this.data){
+        this.data[item] = undefined;
+      }
       return this;
     }
 
@@ -106,7 +112,15 @@
       this.modalVisible = true;
       return this;
     }
-
+/*    value( data){
+      if(data){
+        this.data = { ...this.data , ...data };
+        return this;
+      }
+      else{
+        return this.data;
+      }
+    }*/
     mounted() {
       this.form = this.$refs.form;
 
