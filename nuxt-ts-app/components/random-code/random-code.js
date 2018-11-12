@@ -114,14 +114,14 @@ var jigsaw = function () {
       var sliderIcon = createElement('span');
       var text = createElement('span');
 
-      block.className = 'block';
-      sliderContainer.className = 'sliderContainer';
-      refreshIcon.className = 'refreshIcon';
-      sliderMask.className = 'sliderMask';
-      slider.className = 'slider';
-      sliderIcon.className = 'sliderIcon';
+      block.className = 'random-code-block';
+      sliderContainer.className = 'random-code-container';
+      refreshIcon.className = 'icon-refresh';
+      sliderMask.className = 'random-code-mask';
+      slider.className = 'random-code-slider';
+      sliderIcon.className = 'icon-slider';
       text.innerHTML = '向右滑动滑块填充拼图';
-      text.className = 'sliderText';
+      text.className = 'random-code-text';
 
       var el = this.el;
       el.appendChild(canvas);
@@ -206,7 +206,7 @@ var jigsaw = function () {
         var blockLeft = (w - 40 - 20) / (w - 40) * moveX;
         _this2.block.style.left = blockLeft + 'px';
 
-        addClass(_this2.sliderContainer, 'sliderContainer_active');
+        addClass(_this2.sliderContainer, 'active');
         _this2.sliderMask.style.width = moveX + 'px';
         trail.push(moveY);
       });
@@ -214,7 +214,7 @@ var jigsaw = function () {
         if (!isMouseDown) return false;
         isMouseDown = false;
         if (e.x == originX) return false;
-        removeClass(_this2.sliderContainer, 'sliderContainer_active');
+        removeClass(_this2.sliderContainer, 'active');
         _this2.trail = trail;
 
         var _verify = _this2.verify(),
@@ -223,15 +223,15 @@ var jigsaw = function () {
 
         if (spliced) {
           if (TuringTest) {
-            addClass(_this2.sliderContainer, 'sliderContainer_success');
+            addClass(_this2.sliderContainer, 'success');
             _this2.success && _this2.success();
           } else {
-            addClass(_this2.sliderContainer, 'sliderContainer_fail');
+            addClass(_this2.sliderContainer, 'fail');
             _this2.text.innerHTML = '再试一次';
             _this2.reset();
           }
         } else {
-          addClass(_this2.sliderContainer, 'sliderContainer_fail');
+          addClass(_this2.sliderContainer, 'fail');
           _this2.fail && _this2.fail();
           setTimeout(function () {
             _this2.reset();
@@ -257,7 +257,7 @@ var jigsaw = function () {
   }, {
     key: 'reset',
     value: function reset() {
-      this.sliderContainer.className = 'sliderContainer';
+      this.sliderContainer.className = 'random-code-container';
       this.slider.style.left = 0;
       this.block.style.left = 0;
       this.sliderMask.style.width = 0;

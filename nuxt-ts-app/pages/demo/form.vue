@@ -4,7 +4,7 @@
              <template slot="header">header</template>
              <template slot slot-scope="props">
                  <FormItem prop="custom" label="自定义" :required="true">
-                     <Input v-model="props.data['custom']" ></Input>
+                     <Input v-model="props.data['custom']" placeholder="自定义" ></Input>
                  </FormItem>
              </template>
              <template slot="footer">footer</template>

@@ -45,7 +45,7 @@ export default class Index extends Vue {
     })*/
   }
   changed( index ){
-    console.log(index)
+   // console.log(index)
   }
   goto(){
     this.$router.push({

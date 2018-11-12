@@ -112,3 +112,34 @@ body,.ivu-menu-item,.ivu-menu{
   cursor: pointer;
   margin: 0 2px;
 }
+
+.img-box{
+  margin: 10px;
+  border: 1px solid #d5d5d5;
+  padding: 5px;
+  &-img{
+    width: 100%;
+    height: 200px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
+  &-detail{
+    text-align: center;
+    margin-top: 10px;
+    button{
+      margin-left: 10px;
+    }
+  }
+}
+.ivu-card-bordered{
+  margin-bottom: 24px;
+}
+
+.list-unstyled{
+  &,li{
+    margin: 0 ;
+    padding: 0;
+    list-style: none;
+  }
+}

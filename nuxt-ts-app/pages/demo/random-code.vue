@@ -1,5 +1,5 @@
 <template>
-    <random-code></random-code>
+    <random-code @success="success" @fail="fail"></random-code>
 </template>
 
 <script lang="ts">
@@ -14,7 +14,13 @@
       RandomCode
     }
   })
-  export default class  extends Vue {    //  typescript 创建类继成 Vue
+  export default class Code  extends Vue {    //  typescript 创建类继成 Vue
+    success(){
+      console.log('success')
+    }
+    fail(){
+      console.log('fail')
+    }
     mounted() {  // Vue 的 mounted 初始化回调
 
     }

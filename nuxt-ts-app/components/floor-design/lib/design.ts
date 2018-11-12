@@ -61,6 +61,50 @@ export default class Design {
     }
     this.timeSave();
   }
+
+  //放缩
+  resize ( contentElement  ) {
+    var _this = this;
+    function f( contentElement , element ) {
+      var $content = $(contentElement);
+      var $element = $(element).hide();
+      // !$content.data('size') && $content.data('size' , size );
+      $content.css({
+        '-webkit-transform':'scale('+ 1 +')',
+        'transform':'scale('+ 1 +')',
+        //'margin-top' : -(size.height - defaultSize.height)/ 2 - (resize.height - defaultSize.height)/ 3,
+        'margin-left' : 0
+      })
+
+      var size = {
+        width : $content.width(),
+        height : $content.height()
+      }
+      var defaultSize = {
+        width : $element.width(),
+        height : $element.height()
+      }
+
+      var p = size.width / defaultSize.width;
+      var resize = {
+        width : defaultSize.width * p,
+        height :  defaultSize.height * p,
+      }
+      $content.css({
+        '-webkit-transform':'scale('+ p +')',
+        'transform':'scale('+ p +')',
+        //'margin-top' : -(size.height - defaultSize.height)/ 2 - (resize.height - defaultSize.height)/ 3,
+        'margin-left' : (resize.width - defaultSize.width)/ 3
+      })
+
+      $element.show();
+    }
+    $(window).resize(function () {
+      f( contentElement , _this.$design );
+    });
+    f(contentElement , this.$design );
+    return this;
+  }
   /**
    * 拖动元素选择
    * */

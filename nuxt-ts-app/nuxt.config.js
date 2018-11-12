@@ -8,20 +8,30 @@ const argv = parseArgs(process.argv.slice(2), {
   string: ["H"],
   unknown: parameter => false
 });
-
+let publicPath = '/' ;
 let hostname = "localhost" ,  hostPort = 3000 ;
+let proxy = {
+  target :`${hostname}:${hostPort}`,
+  pathRewrite : { "^/api/": "?_url=api/" }
+};
 
 console.log('env:' + process.env.__ENV)
 
 switch (process.env.__ENV) {
+  //本地
   case  "development" :
-    hostname = "localhost";
     break;
+  //测试
   case  "release" :
+    proxy = 'http://180.106.148.81:18082/testapms/index.php';
     hostname = "0.0.0.0";
+    publicPath = '/testapms/';
     break;
+  //正式
   case  "production" :
+    proxy = 'http://180.106.148.81:18082/testapms/index.php';
     hostname = "0.0.0.0";
+    publicPath = '/testapms/';
     break;
 }
 
@@ -65,7 +75,7 @@ module.exports = {
         type: "image/x-icon",
         href: "/favicon.ico"
       },
-       // { rel: 'stylesheet', types: 'text/css', href: '/bootstrap.min.css' }
+        //{ rel: 'stylesheet', types: 'text/css', href: '/bootstrap.min.css' }
     ],
     script: [
       //{ innerHTML: require('./flexible.js') + ';console.log(11)' , type: 'text/javascript', charset: 'utf-8'},
@@ -93,15 +103,15 @@ module.exports = {
   plugins: [
     { src: "~/plugins/iview", ssr: true },
     { src: "~/plugins/directives", ssr: false },  //指令
-    { src: "~/plugins/v-charts", ssr: false },
+    { src: "~/plugins/v-charts", ssr: true },
     { src: "~/plugins/filters", ssr: false },
     { src: "~/plugins/vue-seamless-scroll", ssr: false },
     { src: "~/plugins/jquery", ssr: false },
-    { src: "~/plugins/components", ssr: false },
-    { src: "~/plugins/vue-nestable", ssr: false },
-    { src: "~/plugins/vue-drag-tree", ssr: false },
+    { src: "~/plugins/components", ssr: true },
+    { src: "~/plugins/vue-drag-tree", ssr: true },
   ],
   build: {
+    publicPath: publicPath,
     vendor: [
       "axios",
       "iview",
@@ -165,12 +175,7 @@ module.exports = {
    */
   proxy: {
   //开启代理
-    "/api/": {
-        target:  process.env.__ENV== 'production' ? "http://180.106.148.81:18082/testapms/index.php" ://正式
-            ( process.env.__ENV== 'release' ? "http://180.106.148.81:18082/testapms/index.php" ://测试
-                "http://www.apms.com/index.php"  ),//本地
-        pathRewrite: { "^/api/": "?_url=api/" }
-    }
+    "/api/": proxy
   }
 }
 
