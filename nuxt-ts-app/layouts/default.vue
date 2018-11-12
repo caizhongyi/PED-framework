@@ -181,23 +181,11 @@
 
     getMenuList( route :any ) {
       //控件示例
-      let demoMenu:any =  {
-        name: "demo", icon: "md-albums", meta: { title: "示例" }, children: [
-          { name: "charts", icon: "md-radio-button-off", meta: { title: "图表" } },
-          { name: "design", icon: "md-radio-button-off", meta: { title: "设计器" } },
-          { name: "marquee", icon: "md-radio-button-off", meta: { title: "文字滚动" } },
-          { name: "drag", icon: "md-radio-button-off", meta: { title: "拖动" } },
-          { name: "form", icon: "md-radio-button-off", meta: { title: "表单生成器" } },
-          { name: "table", icon: "md-radio-button-off", meta: { title: "表格" } },
-          { name: "random-code", icon: "md-radio-button-off", meta: { title: "验证码" } },
-        ]
-      };
-
       let paths = route.path.split('/');
       let name = paths[1] || 'index' ;
 
       if( !name ) {
-        this.menuList = demoMenu ; return this;
+         return this;
       }
 
      /* const names =  name.split('-');
@@ -209,7 +197,7 @@
       filterList = filterList && filterList[0] ? filterList[0] : null ;
       if( !filterList ) return this;
 
-      this.menuList = [...filterList.children,...demoMenu ];
+      this.menuList = filterList.children;
 
       return this;
     }
