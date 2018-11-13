@@ -1,5 +1,9 @@
 const parseArgs = require("minimist");
 const webpack = require("webpack");
+const { resolve } = require('path');
+let Vue = require('vue');
+
+
 const argv = parseArgs(process.argv.slice(2), {
   alias: {
     H: "hostname",
@@ -10,12 +14,12 @@ const argv = parseArgs(process.argv.slice(2), {
 });
 let publicPath = '/' ;
 let hostname = "localhost" ,  hostPort = 3000 ;
+let mode = 'history';
 let proxy = {
   target :`${hostname}:${hostPort}`,
   pathRewrite : { "^/api/": "?_url=api/" }
 };
 
-console.log('env:' + process.env.__ENV)
 
 switch (process.env.__ENV) {
   //本地
@@ -25,13 +29,15 @@ switch (process.env.__ENV) {
   case  "release" :
     proxy = 'http://180.106.148.81:18082/testapms/index.php';
     hostname = "0.0.0.0";
-    publicPath = '/testapms/';
+    //process.env.BASE_URL =  'http://180.106.148.81:18082/testapms/';
+    publicPath = 'http://180.106.148.81:18082/testapms/';
+    mode = 'hash';
     break;
   //正式
   case  "production" :
     proxy = 'http://180.106.148.81:18082/testapms/index.php';
     hostname = "0.0.0.0";
-    publicPath = '/testapms/';
+    publicPath = 'http://180.106.148.81:18082/testapms/';
     break;
 }
 
@@ -47,7 +53,10 @@ const host =
   "localhost";  //域名
 
 
-let baseUrl =  process.env.BASE_URL || `http://${host}:${port}`
+let baseUrl =  process.env.BASE_URL || `http://${host}:${port}`;
+//baseUrl = baseUrl + '/testapms/';
+console.log('env:' + process.env.__ENV)
+console.log('baseUrl:' + baseUrl)
 
 module.exports = {
   env: {
@@ -86,6 +95,18 @@ module.exports = {
     __dangerouslyDisableSanitizers: ["script"]
   },
   router: {
+   // base : '/testapms/',
+    mode: mode,  // "hash" | "history" | "abstract" //"hash" (浏览器环境) | "abstract" (Node.js 环境
+    extendRoutes (routes, resolve) {
+     /* for(let item of routes){
+        item.path = '/testapms' + item.path ;
+      }*/
+      /*routes.push({
+        name: 'custom',
+        path: '*',
+        component: resolve(__dirname, 'pages/404.vue')
+      })*/
+    },
     middleware: "auth"
   },
   /*
@@ -110,6 +131,9 @@ module.exports = {
     { src: "~/plugins/components", ssr: true },
     { src: "~/plugins/vue-drag-tree", ssr: true },
   ],
+ // buildDir: 'testapms',
+ // srcDir: __dirname,
+  //rootDir: 'testapms/',
   build: {
     publicPath: publicPath,
     vendor: [

@@ -39,6 +39,7 @@ export default class Index extends Vue {
    // console.log(this.ajax)
    // console.log(this.people)
     console.log(this)
+    console.log(location)
     // this.ajax.post('',{});
     /*this.$router.push({
       name:'login'

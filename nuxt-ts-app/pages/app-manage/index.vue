@@ -34,11 +34,11 @@
   export default class AppManage extends Vue {    //  typescript 创建类继成 Vue
     dyncForm:any;
     appData = [
-      { backgroundImage: "/img/51.png", name: "【小区】智慧小区1"},
-      { backgroundImage: "/img/51.png", name: "【小区】智慧小区2"},
-      { backgroundImage: "/img/51.png", name: "【小区】智慧小区3"},
-      { backgroundImage: "/img/51.png", name: "【小区】智慧小区4"},
-      { backgroundImage: "/img/51.png", name: "【小区】智慧小区5"},
+      { backgroundImage: "img/51.png", name: "【小区】智慧小区1"},
+      { backgroundImage: "img/51.png", name: "【小区】智慧小区2"},
+      { backgroundImage: "img/51.png", name: "【小区】智慧小区3"},
+      { backgroundImage: "img/51.png", name: "【小区】智慧小区4"},
+      { backgroundImage: "img/51.png", name: "【小区】智慧小区5"},
     ];
 
     form: any = [

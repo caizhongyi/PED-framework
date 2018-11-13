@@ -9,7 +9,6 @@ Vue.component("Ajax" , Ajax );
 Vue.component("PageTable" , PageTable );
 Vue.component("DyncForm" , DyncForm );
 
-
 //require = require('require-component')(require);
 
 /*

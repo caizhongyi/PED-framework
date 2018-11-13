@@ -1,4 +1,4 @@
-# 下载下来后先安装根目录下node-v8.11.3-x64.msi
+# 下载下来后先安装根目录下 node-v8.11.3-x64.msi
 
 # nuxt-ts-app
 
@@ -189,3 +189,53 @@ let res = await ajax.post()
 # 全局注册组件
 ~/plugins/components.ts 中注册
 
+
+
+# swagger的使用
+swagger是一款自动获取接口说明生成在线文档的软件。
+目前已经部署在EMP测试服务器192.168.21.47上，访问地址：
+
+a，http://192.168.21.47:10004/swagger/swagger-php/portal.php （检测文档是否规范，显示具体出错点）
+
+b，http://192.168.21.47:10004/swagger/swagger-ui/index.html （实际使用的在线文档地址）
+
+【 接口文档使用说明 】
+
+a，编写接口文档。在每个class和请求方法前添加phpdoc说明信息，具体格式去搜索swagger-php相关内容学习下。
+    （参考：https://www.jianshu.com/p/6840514c4c8e） 
+    
+b，更新到测试环境。登录服务器192.168.21.47（参看附件）后，进入cd /home/emp/wwwroot/apms执行git pull更新即可（无需svn跳转机）
+
+c，确认更新情况，访问b链接查看接口文档。如果问题则访问上述a链接，查看具体报错信息。
+
+# 管理平台测试环境的使用
+a，前端访问地址：http://180.106.148.81:18082/testapms
+
+b，后端访问地址：http://180.106.148.81:18082/testapms/index.php?_url=api/{controller}/{action}&{params}
+（注：后台接口全部放在app/api/controller下）   
+
+【 测试环境更新说明 】(后端接口更新则忽略1、2)
+
+1，前端build生成本地dist文件
+
+2，拷贝dist到后端的根目录front中
+
+3，提交git，并在网络出口001下的iot/spms目录操作：
+
+    （保持svn跳板机登录下执行）git pull
+    docker build -t hub.local:9080/iot/apms:test  .
+    docker push hub.local:9080/iot/apms:test  
+    
+4，执行doker生效
+
+    网页登录：http://180.106.148.81:8088/
+    重启服务：schoolsaas-manager (镜像后缀为：test)
+    
+5，查询变更测试代码
+
+    登录【容器1】180.106.148.81
+    kubectl exec -it {这里是容器实例名，从云平台那边查询获取} -n user-2  /bin/bash
+
+# 路径
+必须用 ~ 符号作为根目录
+static目录下的访问路径为 ~/img/a.png
