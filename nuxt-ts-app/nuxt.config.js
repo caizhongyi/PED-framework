@@ -53,7 +53,7 @@ const host =
   "localhost";  //域名
 
 
-let baseUrl =  process.env.BASE_URL || `http://${host}:${port}`;
+let baseUrl =  process.env.BASE_URL || `http://${host}:${port}/`;
 //baseUrl = baseUrl + '/testapms/';
 console.log('env:' + process.env.__ENV)
 console.log('baseUrl:' + baseUrl)
@@ -87,6 +87,8 @@ module.exports = {
         //{ rel: 'stylesheet', types: 'text/css', href: '/bootstrap.min.css' }
     ],
     script: [
+      //{ src: baseUrl + 'node_modules/jquery/dist/jquery.js' , type: 'text/javascript', charset: 'utf-8' },
+      //{ src: baseUrl + 'node_modules/nestable/jquery.nestable.js' , type: 'text/javascript', charset: 'utf-8'},
       //{ innerHTML: require('./flexible.js') + ';console.log(11)' , type: 'text/javascript', charset: 'utf-8'},
       //{ src:'https://res.wx.qq.com/open/js/jweixin-1.2.0.js' },  //微信开发
       // { src: '/js/flexible-pc.js' }, // rem自适应
@@ -136,6 +138,13 @@ module.exports = {
   //rootDir: 'testapms/',
   build: {
     publicPath: publicPath,
+    plugins: [
+      new webpack.ProvidePlugin({
+        $: "jquery",
+        jQuery: "jquery",
+        'window.jQuery': 'jquery',
+      }),
+    ],
     vendor: [
       "axios",
       "iview",

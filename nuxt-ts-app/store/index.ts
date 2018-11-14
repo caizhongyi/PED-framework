@@ -45,6 +45,7 @@ export const actions = {
         { name: "form", icon: "md-radio-button-off", meta: { title: "表单生成器" } },
         { name: "table", icon: "md-radio-button-off", meta: { title: "表格" } },
         { name: "random-code", icon: "md-radio-button-off", meta: { title: "验证码" } },
+        { name: "nestable", icon: "md-radio-button-off", meta: { title: "树形拖动排序" } },
       ]
     };
     menu = [ ...menu, ...demoMenu ];

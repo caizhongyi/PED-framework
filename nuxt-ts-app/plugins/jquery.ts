@@ -1,5 +1,3 @@
-const $ = require('jquery');
-
-export default $;
-
-
+import $ from 'jquery';
+import 'nestable';
+export default $ ;

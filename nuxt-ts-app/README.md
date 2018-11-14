@@ -152,9 +152,8 @@ plugins: [
 
 4. ~/plugins/jquery.ts
 ``` 
-const $ = require('jquery');
-const jqueryPlugin = require('jqueryPlugin');  //可能需更改 jqueryPlugin.js 的文件 ,需要 export 里面的方法或对象
-$.fn.jqueryPlugin = jqueryPlugin;
+import $ from 'jquery';
+import 'nestable'; //引入jquery.plugin.js 的插件 
 export default $;
 ``` 
 
@@ -188,7 +187,6 @@ let res = await ajax.post()
 
 # 全局注册组件
 ~/plugins/components.ts 中注册
-
 
 
 # swagger的使用
