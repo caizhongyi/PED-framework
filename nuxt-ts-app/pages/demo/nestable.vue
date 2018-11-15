@@ -13,7 +13,7 @@
                        @drop="dropHandler">
         </vue-drag-tree></no-ssr>
 
-        <nestable></nestable>
+        <nestable ref="nestable" v-model="data" @remove="remove" @edit="edit" @change="change"></nestable>
     </div>
 </template>
 
@@ -29,86 +29,6 @@
     }
   })
   export default class  extends Vue {    //  typescript 创建类继成 Vue
-    treeData = {
-      lists:  [
-        {
-          "id":40,
-          "parent_id":0,
-          "order":0,
-          "name":"动物类",
-          "uri":"/masd/ds",
-          "open":true,
-          "lists":[]
-        },{
-          "id":5,
-          "parent_id":0,
-          "order":1,
-          "name":"昆虫类",
-          "uri":"/masd/ds",
-          "open":true,
-          "lists":[
-            {
-              "id":12,
-              "parent_id":5,
-              "open":true,
-              "order":0,
-              "name":"蚂蚁",
-              "uri":"/masd/ds",
-              "lists":[]
-            }
-          ]
-        },
-        {
-          "id":19,
-          "parent_id":0,
-          "order":2,
-          "name":"植物类",
-          "uri":"/masd/ds",
-          "open":true,
-          "lists":[]
-        }
-      ],
-      columns: [
-        {
-          type: 'selection',
-          title: '菜单名称',
-          field: 'name',
-          width: 200,
-          align: 'center',
-          formatter: (item) => {
-            return '<a>'+item.name+'</a>'
-          }
-        },
-        {
-          title: '链接',
-          field: 'url',
-          width: 200,
-          align: 'center'
-        },
-        {
-          title: '操作',
-          type: 'action',
-          width: 350,
-          align: 'center',
-          actions: [
-            {
-              text: '查看角色',
-              onclick: this.onDetail,
-              formatter: (item) => {
-                return '<i>查看角色</i>'
-              }
-            },
-            {
-              text: '编辑',
-              onclick: this.onEdit,
-              formatter: (item) => {
-                return '<i>编辑</i>'
-              }
-            }
-          ]
-        },
-      ]
-    };
     data = [
       {
         name: 'Node 0-0',
@@ -143,7 +63,19 @@
         children: []
       }
       ]
-
+    nestable:any;
+    edit( item , data ){
+      setTimeout(()=>{
+        this.nestable.modal = false;
+      },2000)
+      console.log(this.data)
+    }
+    remove( item , data ){
+      console.log(this.data)
+    }
+    change( data ){
+      console.log(this.data)
+    }
     onEdit(){}
     onDetail(){}
     onTreeDataChange(){
@@ -188,7 +120,7 @@
     }
 
     mounted() {  // Vue 的 mounted 初始化回调
-
+        this.nestable = this.$refs.nestable;
     }
   }
 </script>

@@ -37,7 +37,8 @@
         <ajax ref="ajax"></ajax><!-- 自定义组件 ~/components/ajax -->
         <Modal
                 v-model="modal1"
-                title="Common Modal dialog box title"
+                title="修改"
+                :loading="true"
                 @on-ok="ok"
                 @on-cancel="cancel">
             <p>Name : {{ current.name }} , Value : {{ current.value }}</p>
@@ -67,7 +68,7 @@
       { field : 'dateRange' , placeholder:'dateRange' , type : 'dateRange' },
       { field : 'City' , placeholder:'城市',value : 'beijing' , type : 'select' ,data : [{ text: '>New York' , value : 'beijing'},{ text: 'London' , value : 'shanghai'}]},
     ]
-
+    table:any;
     value: any = 2; // 变量声明 ，any是无类型。 可以 object Array function boolean等类型
     params = { current : 1 };
     form = {
@@ -209,6 +210,9 @@
 
     //提交修改
     editSubmit(data){
+      setTimeout(()=>{
+        this.table.modal = false;
+      },1000)
       console.log(data);
     }
     //取消修改
@@ -243,6 +247,7 @@
     mounted() {  // Vue 的 mounted 初始化回调
       let _this = this;
       // jQuery('.class').netstable();
+      this.table = this.$refs.table;
       console.log(this.name)
     }
   }

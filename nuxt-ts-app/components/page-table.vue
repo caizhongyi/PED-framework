@@ -13,7 +13,7 @@
             <br>
             <Page :total="total" :current="page" :page-size="pageSize" show-elevator show-total @on-change="change"/>
         </div>
-        <Modal title="修改"   v-model="modalVisible" @on-ok="ok" @on-cancel="cancel">
+        <Modal title="修改" :loading="true"  v-model="modal" @on-ok="ok" @on-cancel="cancel">
             <dync-form ref="form" v-model="formModel" :label-width="80" @success="formSubmit" @fail="formSubmitFail" :submit-button="false"></dync-form>
         </Modal>
         <ajax ref="ajax" loading="false"></ajax>
@@ -39,7 +39,7 @@
     total : any = 0 ;
     page = 1 ;
     pageSize = 10 ;
-    modalVisible = false;
+    modal = false;
     formData = {};
     loading = false;
 
@@ -80,7 +80,7 @@
 
     //新增表单
     add(){
-      this.modalVisible = true ;
+      this.modal = true ;
       this.formData = {};
       return this;
     }

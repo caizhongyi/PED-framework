@@ -96,7 +96,6 @@
           this.$emit("fail"  , this.data );
         }
       });
-      return this;
     }
 
     reset(name = 'form') {
