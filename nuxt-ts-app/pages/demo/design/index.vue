@@ -5,7 +5,7 @@
                 <i-tree :data="data1" @on-select-change="change"></i-tree>
             </i-col>
             <i-col span="20">
-                <floor-design ref="design"></floor-design>
+                <designer ref="design"></designer>
             </i-col>
         </i-row>
     </div>
@@ -13,11 +13,11 @@
 
 <script lang="ts">
   import { Component, Vue, Watch } from "nuxt-property-decorator";
-  import FloorDesign from "~/components/floor-design/index.vue";
+  import Designer from "~/components/g-designer/index";
 
   @Component({
     components: {
-      FloorDesign
+      Designer
     }
   })
   export default class marquee extends Vue {

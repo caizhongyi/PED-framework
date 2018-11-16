@@ -10,13 +10,13 @@ declare var document;
  * 背景必须为正方形图
  */
 export default class Design {
-  $design = $();
-  $activeLayers = $();
-  layerSize = {
+  $design : any = $();
+  $activeLayers : any = $();
+  layerSize : any = {
     width: 100,
     height: 100
   };
-  activePos = {
+  activePos : any = {
     pageX: 0,
     pageY: 0,
     x: 0,
@@ -60,6 +60,10 @@ export default class Design {
       this.selectArea();
     }
     this.timeSave();
+  }
+
+  isView(){
+    return this.$design.hasClass('design-view');
   }
 
   //放缩

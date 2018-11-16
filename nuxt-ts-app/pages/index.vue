@@ -17,12 +17,11 @@ import {
 } from "nuxt-property-decorator"
 import { State ,Mutation ,Action ,Getter } from "vuex-class"
 import Loading from "~/components/loading.vue"
-import DragBlock from "~/components/drag-block/index.vue"
+
 import $ from "jquery"
 
 @Component({
   components: {
-    DragBlock ,
     Loading ,
   }
 })
