@@ -86,6 +86,9 @@ export default class Design {
       }
 
       var p = size.width / defaultSize.width;
+
+      p = p > 1 ? 1 : p ;
+
       var resize = {
         width : defaultSize.width * p,
         height :  defaultSize.height * p,
@@ -215,57 +218,32 @@ export default class Design {
     });
     return this;
   }
-  /**
-   * 创建元素
-   * */
-  createL(row, col) {
-    let layers = [{ "x": 154, "y": 50, "name": "房间 " }, { "x": 372, "y": 54, "name": "房间 " }, {
-      "x": 262,
-      "y": 52,
-      "name": "房间 "
-    }, { "x": 480, "y": 55, "name": "房间 " }];
-    for (let i = 0; i < row; i++) {
-      for (let j = 0; j < col; j++) {
-        layers.push({
-          x: i * this.layerSize.width,
-          y: j * this.layerSize.height,
-          name: "房间"
-        });
-      }
-    }
-    this.create(layers);
-    return this;
+
+  template( options ){
+    return  $.extend({} , {
+      image:  '',
+      name : '' ,
+      direction: "down",
+      rotate: 0,
+      width: 75,
+      height: 100,
+      type : 1,
+      status: 0,
+      id : 0
+    } , options );
   }
 
-  createR(row, col) {
-    let layers: any = [];
-    for (let i = 0; i < row; i++) {/**/
-      for (let j = 0; j < col; j++) {
-        let item = {
-          x: 50 + j * this.layerSize.width,
-          y: 50 + i * this.layerSize.height,
-          name: "房间"
-        };
-        layers.push(item);
-      }
-    }
-    this.create(layers);
-    return this;
-  }
-
-  createU(row, col) {
-    let layers = [{ "x": 154, "y": 50, "name": "房间 " }, { "x": 372, "y": 54, "name": "房间 " }, {
-      "x": 262,
-      "y": 52,
-      "name": "房间 "
-    }, { "x": 480, "y": 55, "name": "房间 " }];
+  createTemplateList( row , col , options ){
+    let layer = this.template( options );
+    let layers = [];
     for (let i = 0; i < row; i++) {
       for (let j = 0; j < col; j++) {
-
+        layer.x += layer.width;
+        layer.y += layer.height;
+        layers.push(layer);
       }
     }
-    this.create(layers);
-    return this;
+    return this.create( layers );
   }
   /**
    * 清空
