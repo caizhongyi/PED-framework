@@ -21,9 +21,8 @@
                     </i-col>
                     <i-col span="4">
                         <div class="pull-right">
-                            <Dropdown trigger="click" @on-click="logout">
-                                <Icon type="md-person"></Icon>
-                                用户名
+                            <Dropdown size="large" trigger="click" @on-click="logout">
+                                <Icon type="md-person"></Icon> 用户名
                                 <Icon type="ios-arrow-down"></Icon>
                                 <DropdownMenu slot="list">
                                     <DropdownItem>
@@ -41,7 +40,6 @@
                                 </DropdownMenu>
                             </Dropdown>
                         </div>
-
                     </i-col>
                 </i-row>
             </i-header>
@@ -174,6 +172,7 @@
       if( menuItem && menuItem.length ){
         this.breadCrumbList.push({ name: menuItem[0].name, title: menuItem[0]["meta"].title });
         !this.headMenuActiveName && (this.headMenuActiveName = (`/${menuItem[0].name}`));
+        this.headMenuActiveName  = this.headMenuActiveName == '/index' ? '/' : this.headMenuActiveName ;
         this.getMenuTitle( currentRouteList , ++index , menuItem[0].children )
       }
       return this;

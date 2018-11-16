@@ -29,7 +29,7 @@ export default class CollapsedMenu  extends mixin {
     return this.parentItem.name
   }
   get children () {
-    return this.parentItem.children
+    return this.parentItem.children;
   }
   handleClick (name) {
     this.$router.push(name);
@@ -39,6 +39,8 @@ export default class CollapsedMenu  extends mixin {
     const height = children.length * 38
     const isOverflow = pageY + height < window.innerHeight
     this.placement = isOverflow ? 'right-start' : 'right-end'
+  }
+  mounted(){
   }
 }
 </script>

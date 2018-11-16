@@ -95,11 +95,12 @@ export default class Design {
       }
       $content.css({
         '-webkit-transform':'scale('+ p +')',
-        'transform':'scale('+ p +')',
+        'transform':'scale('+ p +')'
         //'margin-top' : -(size.height - defaultSize.height)/ 2 - (resize.height - defaultSize.height)/ 3,
-        'margin-left' : (resize.width - defaultSize.width)/ 3
       })
-
+      $element.css({
+        'margin-left' : (resize.width - defaultSize.width)/ 2
+      })
       $element.show();
     }
     $(window).resize(function () {
@@ -234,8 +235,8 @@ export default class Design {
   }
 
   createTemplateList( row , col , options ){
-    let layer = this.template( options );
-    let layers = [];
+    let layer:any = this.template( options );
+    let layers:any = [];
     for (let i = 0; i < row; i++) {
       for (let j = 0; j < col; j++) {
         layer.x += layer.width;
@@ -303,7 +304,7 @@ export default class Design {
         }
       },
       ...this.options,
-    }).$;
+    } , prop ).$;
     this.setLayer($el, prop);
     $el.appendTo(this.$design);
     return this;
@@ -392,7 +393,7 @@ export default class Design {
  * */
 class DesignElement {
   $ = $();
-  constructor($design:any, dragOptions:any) {
+  constructor($design:any, dragOptions:any , prop) {
 
     this.$ = $("<div class=\"drag-layer\" >" +
       "<span class='layer-content'></span>" +
@@ -400,6 +401,14 @@ class DesignElement {
       ( dragOptions.disabled == true ? '': '<i class=\"ivu-icon ivu-icon-ios-trash\"></i>') +
       ( dragOptions.disabled == true ? '': '<em class=\"drop-size\"></em>') +
       "</div>").appendTo($design);
+
+    if( dragOptions.target ){
+      if( prop.id && prop.id != 0 && prop.type <=5 ){
+        this.$.css('cursor','pointer').on('click',function(){
+          location.href = dragOptions.target + '&id=' + prop.id ;
+        });
+      }
+    }
 
     if(dragOptions.disabled == false){
       new Draggable(this.$,dragOptions);

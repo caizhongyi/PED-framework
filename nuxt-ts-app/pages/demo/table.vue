@@ -33,7 +33,7 @@
 
         </i-row>-->
         <br>
-        <page-table ref="table" url="/page-data.json"  method="get" :columns="columns" :form-model="formModel" :params="params" @edit-submit="editSubmit" @edit-cancel="editCancel"></page-table> <!-- 自定义组件 ~/components/page-table.vue -->
+        <page-table ref="table" url="/page-data.json" :exp="{ filename : 'filename '}"  method="get" :columns="columns" :form-model="formModel" :params="params" @edit-submit="editSubmit" @edit-cancel="editCancel"></page-table> <!-- 自定义组件 ~/components/page-table.vue -->
         <ajax ref="ajax"></ajax><!-- 自定义组件 ~/components/ajax -->
         <Modal
                 v-model="modal1"

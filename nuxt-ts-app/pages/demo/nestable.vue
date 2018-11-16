@@ -13,7 +13,7 @@
                        @drop="dropHandler">
         </vue-drag-tree></no-ssr>
 
-        <nestable ref="nestable" v-model="data" @remove="remove" @edit="edit" @change="change"></nestable>
+        <nestable ref="nestable" v-model="data" @remove="remove" @submit="submit" @change="change"></nestable>
     </div>
 </template>
 
@@ -64,7 +64,7 @@
       }
       ]
     nestable:any;
-    edit( item , data ){
+    submit( item , data ){
       setTimeout(()=>{
         this.nestable.modal = false;
       },2000)

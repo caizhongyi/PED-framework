@@ -1,46 +1,19 @@
 <template>
     <div>
-        <menu id="nestable-menu">
-            <i-button type="default" data-action="expand-all" @click="expandAll">Expand All</i-button>
-            <i-button type="default" data-action="collapse-all" @click="collapseAll">Collapse All</i-button>
+        <menu id="nestable-menu" v-if="optionButton">
+            <i-button type="default" icon="md-add"  data-action="expand-all" @click="expandAll">展开</i-button>
+            <i-button type="default" icon="md-remove"  data-action="collapse-all" @click="collapseAll">缩起</i-button>
+            <i-button type="primary" icon="md-add" @click="add">新增</i-button>
+            <slot></slot>
         </menu>
-        <div class="dd" id="nestable">
-            <ol class="dd-list">
-                <li class="dd-item" data-id="1">
-                    <div class="dd-handle">Item 1</div>
-                </li>
-                <li class="dd-item" data-id="2">
-                    <div class="dd-handle">Item 2</div>
-                    <ol class="dd-list">
-                        <li class="dd-item" data-id="3"><div class="dd-handle">Item 3</div></li>
-                        <li class="dd-item" data-id="4"><div class="dd-handle">Item 4</div></li>
-                        <li class="dd-item" data-id="5">
-                            <div class="dd-handle">Item 5</div>
-                            <ol class="dd-list">
-                                <li class="dd-item" data-id="6"><div class="dd-handle">Item 6</div></li>
-                                <li class="dd-item" data-id="7"><div class="dd-handle">Item 7</div></li>
-                                <li class="dd-item" data-id="8"><div class="dd-handle">Item 8</div></li>
-                            </ol>
-                        </li>
-                        <li class="dd-item" data-id="9"><div class="dd-handle">Item 9</div></li>
-                        <li class="dd-item" data-id="10"><div class="dd-handle">Item 10</div></li>
-                    </ol>
-                </li>
-                <li class="dd-item" data-id="11">
-                    <div class="dd-handle">Item 11</div>
-                </li>
-                <li class="dd-item" data-id="12">
-                    <div class="dd-handle">Item 12</div>
-                </li>
-            </ol>
-        </div>
+
         <div class="dd dd-small-handle" >
-            <nestable-item v-model="value" :root="root"  @edit="edit" @remove="remove"></nestable-item>
+            <nestable-item v-model="value" :root="root" ></nestable-item>
         </div>
 
         <Modal
                 v-model="modal"
-                title="修改"
+                title="提示"
                 :loading="true"
                 @on-ok="ok"
                 @on-cancel="cancel">
@@ -62,9 +35,22 @@
   export default class Nestable extends Vue {
     $nestable : any ;
     @Prop() value : any ;
+    @Prop({ default : true }) optionButton : any ;
 
     modal: any = false ;
     form: any;
+
+    /* 目前支持字段
+    *  :data-id="item.id"
+            :data-name="item.name"
+            :data-url="item.url"
+            :data-desc="item.desc"
+            :data-params="item.params"
+            :data-icon="item.icon"
+            :data-shown="item.shown"
+            :data-order="item.order"
+    * */
+
     @Prop({ default : ()=>{ return [
         {
           field: "name",
@@ -77,6 +63,27 @@
           field: "url",
           label: "链接地址",
           type: "input"
+        },
+        {
+          field: "icon",
+          label: "icon",
+          type: "input"
+        },
+        {
+          field: "shown",
+          label: "shown",
+          type: "radio",
+          data : [{ text : '显示' , value : 1  },{ text : '不显示' , value : 0  }]
+        },
+        {
+          field: "desc",
+          label: "desc",
+          type: "input",
+        },
+        {
+          field: "order",
+          label: "order",
+          type: "input",
         }
       ];}}) formModel : any ;
     root : any  = this ;
@@ -89,9 +96,15 @@
       return this;
     }
 
+    add(){
+      this.form.data = {};
+      this.modal = true;
+      return this;
+    }
+
     submit(){
       this.$emit('input', this.value );
-      this.$emit('edit', this.form.data , this.value );
+      this.$emit('submit', this.form.data , this.value );
       return this;
     }
     fail(){}

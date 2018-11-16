@@ -5,14 +5,17 @@
             <!--<div slot="header"></div>-->
             <!--<div slot="footer"> </div>-->
         </Table>
-        <div v-if="columns && columns[0].type == 'selection'">
-            <br>
-            <Button @click="deleteAll">删除</Button>
-        </div>
-        <div>
-            <br>
-            <Page :total="total" :current="page" :page-size="pageSize" show-elevator show-total @on-change="change"/>
-        </div>
+        <br>
+        <i-row>
+            <i-col span="12">
+                <i-button type="primary" icon="md-add" @click="add">新增</i-button>
+                <Button type="primary"  @click="exportData" v-if="exp" icon="ios-download-outline">导出数据</Button>
+                <slot></slot>
+                <Button v-if="columns && columns[0].type == 'selection'" icon="md-beaker" @click="deleteAll">删除所有</Button>
+            </i-col>
+            <i-col span="12" class="text-right"><Page :total="total" :current="page" :page-size="pageSize" show-elevator show-total @on-change="change"/></i-col>
+        </i-row>
+
         <Modal title="修改" :loading="true"  v-model="modal" @on-ok="ok" @on-cancel="cancel">
             <dync-form ref="form" v-model="formModel" :label-width="80" @success="formSubmit" @fail="formSubmitFail" :submit-button="false"></dync-form>
         </Modal>
@@ -45,6 +48,7 @@
 
     @Prop() formModel:any ;
     @Prop() columns: any ;
+    @Prop({ default : false }) exp: any ;
     @Prop({ default : 'post' }) method: string ;
     @Prop() url: string ;
     @Prop( { default: ()=>{ return { page : 1 , total: 0 } } }) params : any ;
@@ -115,9 +119,7 @@
 
     //导出表单
     exportData () {
-      this.table.exportCsv({
-        filename: 'The original data'
-      });
+      this.table.exportCsv({ filename: this.exp.filename || '导出文件'});
       return this;
     }
 
