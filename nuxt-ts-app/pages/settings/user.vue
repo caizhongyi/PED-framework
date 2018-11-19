@@ -70,6 +70,7 @@
         }, success: (res, file) => {
           file.url = "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
           file.name = "7eb99afb9d5f317c912f08b5212fd69a";
+          this.data['upload'].push(file);
           this.$Message.info("success");
         }
       },

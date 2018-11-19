@@ -133,11 +133,8 @@
           }
         };
         if( item.type == 'upload'){
-          let uploader = upload[index];
-          item.uploader = uploader;
-          //item.uploadList = uploader.fileList || [];
           item['removeFile'] =  (file) => {
-            const fileList = uploader.fileList;
+            const fileList = this.value[item.field]; //uploader.fileList;
             fileList.splice(fileList.indexOf(file), 1);
             fileList.push();
           }
@@ -152,7 +149,7 @@
             /*file.url = "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
             file.name = "7eb99afb9d5f317c912f08b5212fd69a";*/
             item.success && item.success(res, file);
-            uploader.fileList.push();
+            this.value[item.field].push();
           },
           item = {  ...uploadSettings, ...item }
           index ++ ;

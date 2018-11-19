@@ -82,11 +82,6 @@
       this.$emit("input", val);
     }
 
-    /*@Watch("data")
-    onChangeData(val) {
-      this.model.push();
-    }*/
-
     submit(name = 'form') {
       let myform: any = this.$refs[name];
       myform.validate && myform.validate((valid) => {
@@ -122,7 +117,6 @@
     }*/
     mounted() {
       this.form = this.$refs.form;
-
     }
   }
 </script>
