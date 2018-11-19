@@ -17,7 +17,7 @@
         </i-row>
 
         <Modal title="修改" :loading="true"  v-model="modal" @on-ok="ok" @on-cancel="cancel">
-            <dync-form ref="form" v-model="formModel" :label-width="80" @success="formSubmit" @fail="formSubmitFail" :submit-button="false"></dync-form>
+            <dync-form ref="form" :model="formModel" :label-width="80" v-model="formData" @success="formSubmit" @fail="formSubmitFail" :submit-button="false"></dync-form>
         </Modal>
         <ajax ref="ajax" loading="false"></ajax>
     </div>

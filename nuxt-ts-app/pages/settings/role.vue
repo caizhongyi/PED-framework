@@ -1,5 +1,5 @@
 <template>
-    <dync-form ref="form"  v-model="formModel" :label-width="80" @success="submit" @fail="fail">
+    <dync-form ref="form"  :model="formModel" :label-width="80" @success="submit" @fail="fail">
         <template slot slot-scope="props">
         </template>
     </dync-form>

@@ -17,7 +17,7 @@
                 :loading="true"
                 @on-ok="ok"
                 @on-cancel="cancel">
-            <dync-form  ref="form" v-model="formModel" @success="submit" :label-width="70"  :submit-button="false"></dync-form>
+            <dync-form  ref="form" :model="formModel" @success="submit" :label-width="70"  :submit-button="false"></dync-form>
         </Modal>
 
     </div>

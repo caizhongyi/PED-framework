@@ -1,6 +1,6 @@
 <template>
     <div>
-        <dync-form ref="dyncForm"  v-model="form" :label-width="80" @success="submit" @fail="fail">
+        <dync-form ref="dyncForm"  :model="form" :label-width="80" @success="submit" @fail="fail">
             <!--<template slot="header">header</template>-->
             <template slot slot-scope="props">
             </template>

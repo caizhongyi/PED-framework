@@ -1,6 +1,6 @@
 <template>
     <div >  <!-- 必须有根结点 -->
-        <dync-form v-model="formData"  :inline="true" @success="submitSearch" :submit-button="{ icon : 'ios-search' , text : '查询' }">
+        <dync-form :model="formData"  :inline="true" @success="submitSearch" :submit-button="{ icon : 'ios-search' , text : '查询' }">
             <template slot="footer">
                 <FormItem>
                     <Button type="primary"  @click="exportData()" icon="ios-download-outline">Export source data</Button>
@@ -33,7 +33,15 @@
 
         </i-row>-->
         <br>
-        <page-table ref="table" url="/page-data.json" :exp="{ filename : 'filename '}"  method="get" :columns="columns" :form-model="formModel" :params="params" @edit-submit="editSubmit" @edit-cancel="editCancel"></page-table> <!-- 自定义组件 ~/components/page-table.vue -->
+        <page-table ref="table"
+                    url="/page-data.json"
+                    :exp="{ filename : 'filename '}"
+                    method="get"
+                    :columns="columns"
+                    :form-model="formModel"
+                    :params="params"
+                    @edit-submit="editSubmit"
+                    @edit-cancel="editCancel"></page-table> <!-- 自定义组件 ~/components/page-table.vue -->
         <ajax ref="ajax"></ajax><!-- 自定义组件 ~/components/ajax -->
         <Modal
                 v-model="modal1"
@@ -74,7 +82,7 @@
     form = {
       user : ''
     };
-    private firstName : any  = 'cai' ; //typescript中支持 private、public、protected
+    firstName : any  = 'cai' ; //typescript中支持 private、public、protected
     lastName : any  = 'zhongyi' ;
     modal1: boolean = false;
     current: any = {};
@@ -248,7 +256,7 @@
       let _this = this;
       // jQuery('.class').netstable();
       this.table = this.$refs.table;
-      console.log(this.name)
+
     }
   }
 </script>

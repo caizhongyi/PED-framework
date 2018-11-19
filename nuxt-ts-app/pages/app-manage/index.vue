@@ -15,7 +15,7 @@
             </Col>
         </Row>
         <Modal :width="500" title="新增应用" v-model="showAppData"  @on-ok="submit" @on-cancel="fail">
-            <dync-form v-model="form" :label-width="80" :submit-button="false" ref="forms">
+            <dync-form :model="form" :label-width="80" :submit-button="false" ref="forms">
                 <template slot slot-scope="props"> </template>
             </dync-form>
         </Modal>

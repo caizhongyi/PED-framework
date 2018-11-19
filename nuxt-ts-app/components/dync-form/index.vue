@@ -1,15 +1,15 @@
 ﻿<template>
     <div>
-        <Form ref="form" label-position="right" :model="data" :inline="inline" :label-width="labelWidth"
+        <Form ref="form" label-position="right" :model="value" :inline="inline" :label-width="labelWidth"
               :rules="ruleValidate">
-            <slot name="header" :data="data"></slot>
-            <dync-form-item :model="model" :data="data" :rule-validate="ruleValidate" :label-width="labelWidth"></dync-form-item>
-            <slot :data="data"></slot>
+            <slot name="header" :data="value"></slot>
+            <dync-form-item :model="model" v-model="value" :rule-validate="ruleValidate" :label-width="labelWidth"></dync-form-item>
+            <slot :data="value"></slot>
             <FormItem  v-if="submitButton">
                 <Button type="primary" @click="submit('form')" :icon="submitButton.icon">{{ submitButton.text }}</Button>
                 <Button @click="reset('form')" v-if="!submitButton.icon">重置</Button>
             </FormItem>
-            <slot name="footer" :data="data"></slot>
+            <slot name="footer" :data="value"></slot>
         </Form>
 
         <Modal title="图片浏览" v-model="modalVisible" >
@@ -33,9 +33,9 @@
   export default class DyncForm extends Vue {
 
     form : any ;
-    data: any = {};
+    @Prop( { default : ()=>{ return {} } } ) value: any ;
     @Prop() inline: any;
-    @Model() model: any;
+    @Prop() model: any;
     @Prop() rules: any;
     @Prop() labelWidth: any;
     @Prop() type: any;
@@ -82,26 +82,26 @@
       this.$emit("input", val);
     }
 
-    @Watch("data")
+    /*@Watch("data")
     onChangeData(val) {
       this.model.push();
-    }
+    }*/
 
     submit(name = 'form') {
       let myform: any = this.$refs[name];
       myform.validate && myform.validate((valid) => {
         if (valid) {
-          this.$emit("success" , this.data );
+          this.$emit("success" , this.value );
         } else {
-          this.$emit("fail"  , this.data );
+          this.$emit("fail"  , this.value );
         }
       });
     }
 
     reset(name = 'form') {
       //this.form.resetFields();
-      for(let item in this.data){
-        this.data[item] = undefined;
+      for(let item in this.value){
+        this.value[item] = undefined;
       }
       return this;
     }

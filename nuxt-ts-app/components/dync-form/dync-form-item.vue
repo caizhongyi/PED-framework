@@ -2,34 +2,34 @@
     <span>
         <template v-for="item in model">
             <FormItem v-if=" item.type || ( item.type && item.type != 'custom')" :prop="item.field" :label="item.label" :required="item.required">
-                <DatePicker  v-if="item.type == 'date'" type="date" placeholder="选择日期" :format="item.format" :disabled="item.disabled" v-model="data[item.field]"></DatePicker>
-                <DatePicker  v-else-if="item.type == 'datetime'" type="datetime" placeholder="选择日期时间" :format="item.format" :disabled="item.disabled" v-model="data[item.field]"></DatePicker>
+                <DatePicker  v-if="item.type == 'date'" type="date" placeholder="选择日期" :format="item.format" :disabled="item.disabled" v-model="value[item.field]"></DatePicker>
+                <DatePicker  v-else-if="item.type == 'datetime'" type="datetime" placeholder="选择日期时间" :format="item.format" :disabled="item.disabled" v-model="value[item.field]"></DatePicker>
                 <DatePicker v-else-if="item.type == 'datetimeRange'" type="datetimerange" placeholder="选择日期区间" :format="item.format" :disabled="item.disabled"
                             :start-date="item.startDate"
-                            :end-date="item.endDate" v-model="data[item.field]"></DatePicker>
+                            :end-date="item.endDate" v-model="value[item.field]"></DatePicker>
                 <DatePicker v-else-if="item.type == 'dateRange'" type="daterange" placeholder="选择日期区间" :format="item.format" :start-date="item.startDate" :disabled="item.disabled"
-                            :end-date="item.endDate" v-model="data[item.field]"></DatePicker>
-                 <RadioGroup  v-else-if="item.type == 'radio'" v-model="data[item.field]" :disabled="item.disabled">
+                            :end-date="item.endDate" v-model="value[item.field]"></DatePicker>
+                 <RadioGroup  v-else-if="item.type == 'radio'" v-model="value[item.field]" :disabled="item.disabled">
                     <Radio :label="subItem.value" v-for="(subItem,key) in item.data" :key="key" :disabled="subItem.disabled"> {{ subItem.text}}
                     </Radio>
                 </RadioGroup>
-                <CheckboxGroup v-else-if="item.type == 'checkbox'" v-model="data[item.field]" :disabled="item.disabled">
+                <CheckboxGroup v-else-if="item.type == 'checkbox'" v-model="value[item.field]" :disabled="item.disabled">
                     <Checkbox :label="subItem.value" v-for="(subItem,key) in item.data" :key="key" :disabled="subItem.disabled">  {{ subItem.text }}
                     </Checkbox>
                 </CheckboxGroup>
-                <i-switch v-else-if="item.type == 'switch'" v-model="data[item.field]" size="large" :disabled="item.disabled">
+                <i-switch v-else-if="item.type == 'switch'" v-model="value[item.field]" size="large" :disabled="item.disabled">
                     <span slot="open">On</span>
                     <span slot="close">Off</span>
                 </i-switch>
-                <Slider v-else-if="item.type == 'slider'" v-model="data[item.field]" :range="item.range || false " :disabled="item.disabled"></Slider>
-                 <Input v-else-if="item.type == 'textarea'" v-model="data[item.field]" type="textarea"
+                <Slider v-else-if="item.type == 'slider'" v-model="value[item.field]" :range="item.range || false " :disabled="item.disabled"></Slider>
+                 <Input v-else-if="item.type == 'textarea'" v-model="value[item.field]" type="textarea"
                         :autosize="item.autosize || {minRows: 5,maxRows: 5}"
                         :placeholder="item.placeholder || '请输入信息'" :disabled="item.disabled"></Input>
-                <Select v-else-if="item.type == 'select'" v-model="data[item.field]" :placeholder="item.placeholder" :disabled="item.disabled">
+                <Select v-else-if="item.type == 'select'" v-model="value[item.field]" :placeholder="item.placeholder" :disabled="item.disabled">
                     <Option :value="subItem.value" v-for="(subItem,key) in item.data" :key="key">{{ subItem.text}}</Option>
                 </Select>
                 <div v-else-if="item.type == 'upload'">
-                     <div class="upload-list" v-for="subItem in item.uploadList">
+                     <div class="upload-list" v-for="subItem in value[item.field]">
                     <template v-if="subItem.status === 'finished'">
                         <img :src="subItem.url">
                         <div class="upload-list-cover">
@@ -44,7 +44,7 @@
                      <Upload
                              ref="upload"
                              :show-upload-list="false"
-                             :default-file-list="item.value"
+                             :default-file-list="value[item.field]"
                              :on-success="item.successCallback"
                              :format="['jpg','jpeg','png']"
                              :max-size="2048"
@@ -61,13 +61,13 @@
                     </div>
                 </Upload>
                 </div>
-                <Input v-else-if="item.type == 'input'" type="text" v-model="data[item.field]"  :disabled="item.disabled" :placeholder="item.placeholder || '请输入信息'"></Input>
-                <Input v-else-if="item.type == 'password'" type="password" v-model="data[item.field]"  :disabled="item.disabled" :placeholder="item.placeholder || '请输入密码'"></Input>
-                <InputNumber v-else-if="item.type == 'inputNumber'" :max="item.max" :min="item.min || 0" :step="item.step || 1" :formatter="item.formatter" :parser="item.parser" v-model="data[item.field]"></InputNumber>
-                <InputNumber v-else-if="item.type == 'cascader'" :data="item.data" v-model="data[item.field]"></InputNumber>
+                <Input v-else-if="item.type == 'input'" type="text" v-model="value[item.field]"  :disabled="item.disabled" :placeholder="item.placeholder || '请输入信息'"></Input>
+                <Input v-else-if="item.type == 'password'" type="password" v-model="value[item.field]"  :disabled="item.disabled" :placeholder="item.placeholder || '请输入密码'"></Input>
+                <InputNumber v-else-if="item.type == 'inputNumber'" :max="item.max" :min="item.min || 0" :step="item.step || 1" :formatter="item.formatter" :parser="item.parser" v-model="value[item.field]"></InputNumber>
+                <InputNumber v-else-if="item.type == 'cascader'" :data="item.data" v-model="value[item.field]"></InputNumber>
             </FormItem>
             <i-card v-if="item.children" :style="{ 'margin-left': `${labelWidth}px`}">
-                <dync-form-item :model="item.children" :data="data" :ruleValidate="ruleValidate"></dync-form-item>
+                <dync-form-item :model="item.children" v-model="value" :ruleValidate="ruleValidate"></dync-form-item>
             </i-card>
         </template>
     </span>
@@ -84,10 +84,9 @@
   export default class DyncFormItem  extends Vue {    //  typescript 创建类继成 Vue
 
     @Prop({ default : ()=>{ return  [] }}) model;
-    @Prop() data;
+    @Prop({ default : ()=>{ return  {} }}) value;
     @Prop() ruleValidate;
     @Prop() labelWidth;
-
 
 
     mounted() {  // Vue 的 mounted 初始化回调
@@ -136,11 +135,11 @@
         if( item.type == 'upload'){
           let uploader = upload[index];
           item.uploader = uploader;
-          item.uploadList = uploader.fileList || [];
+          //item.uploadList = uploader.fileList || [];
           item['removeFile'] =  (file) => {
             const fileList = uploader.fileList;
             fileList.splice(fileList.indexOf(file), 1);
-            this.model.push();
+            fileList.push();
           }
 
           if( !item['remove'] ){
@@ -153,12 +152,12 @@
             /*file.url = "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
             file.name = "7eb99afb9d5f317c912f08b5212fd69a";*/
             item.success && item.success(res, file);
-            this.model.push();
+            uploader.fileList.push();
           },
           item = {  ...uploadSettings, ...item }
           index ++ ;
         }
-        let { field , value  } = item;
+        // let { field , value  } = item;
         //this.data[field] = value;
       }
     }

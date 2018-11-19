@@ -1,6 +1,6 @@
 <template>
     <div>
-        <dync-form v-model="model" :label-width="80" @success="submit" @fail="fail">
+        <dync-form :model="model" :label-width="80" @success="submit" @fail="fail">
             <template slot slot-scope="props">
                 <FormItem prop="custom" label="最新心跳包" >
                     心跳时间：2018-11-01 12：34：56

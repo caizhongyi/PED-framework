@@ -1,6 +1,6 @@
 <template>
      <div>
-         <dync-form ref="dyncForm"  v-model="form" :label-width="80" @success="submit" @fail="fail">
+         <dync-form ref="dyncForm"  :model="form" v-model="data" :label-width="80" @success="submit" @fail="fail">
              <template slot="header">header</template>
              <template slot slot-scope="props">
                  <FormItem prop="custom" label="自定义" :required="true">
@@ -27,8 +27,10 @@
   export default class  extends Vue {    //  typescript 创建类继成 Vue
 
     data = {
-      name : 1
+      name : 1,
+      email : ''
     }
+
     form: any = [
       {
         field: "name",
@@ -46,16 +48,23 @@
         }]
       },
       {
+        field: "email",
+        label: "email",
+        type: "input",
+        rule : [{ type: 'email', message: 'Incorrect email format', trigger: 'blur' }]
+      },
+      {
         field: "gender",
         label: "姓别",
-        type: "checkbox",
+        type: "radio",
         data: [{ text: "Male", value: "male" }, { text: "Female", value: "female" }]
       },
       {
         field: "interest",
         label: "interest",
         type: "checkbox",
-        data: [{ text: "Eat", value: "eat" }, { text: "Sleep", value: "sleep" }]
+        data: [{ text: "Eat", value: "eat" }, { text: "Sleep", value: "sleep" }],
+        rule: [{ required: true, type : 'array', message: "The name cannot be empty", trigger: "blur" }]
       },
       { field: "date", label: "date", value: '2008-3-3', type: "date" },
       { field: "datetime", label: "datetime", value:'2008-1-3 12:12:21', type: "datetime" },
@@ -103,8 +112,30 @@
         type: "select",
         data: [{ text: ">New York", value: "beijing" }, { text: "London", value: "shanghai" }]
       },
-      { field: "Desc", label: "描述", value: '描述', type: "textarea", autosize: { minRows: 2, maxRows: 5 }, placeholder: "Desc" },
-      { field: "custom", label: "Custom", value: 'Custom',  placeholder: "Custom", rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }] },
+      { field: "Desc", label: "描述", value: '描述', type: "textarea", autosize: { minRows: 2, maxRows: 5 }, placeholder: "Desc", rule:[
+          { validator :  (rule, value, callback) => {
+              if (!value) {
+                return callback(new Error('Age cannot be empty'));
+              }
+              // 模拟异步验证效果
+              setTimeout(() => {
+                if (!Number.isInteger(value)) {
+                  callback(new Error('Please enter a numeric value'));
+                } else {
+                  if (value < 18) {
+                    callback(new Error('Must be over 18 years of age'));
+                  } else {
+                    callback();
+                  }
+                }
+              }, 1000);
+            }
+          }
+        ] , message: "The name cannot be empty", trigger: "blur" },
+      { field: "custom", label: "Custom", value: 'Custom',  placeholder: "Custom", rule: [
+         { required: true, message: "The name cannot be empty", trigger: "blur" },
+         { type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' },
+        ] },
     ];
     dyncForm : any ;
     submit( data ){
@@ -122,8 +153,7 @@
     }
     mounted() {  // Vue 的 mounted 初始化回调
         this.dyncForm = this.$refs.dyncForm;
-        //this.dyncForm.value(this.data);
-        this.dyncForm.data = this.data;
+        this.data.email = 'emal'
     }
   }
 </script>

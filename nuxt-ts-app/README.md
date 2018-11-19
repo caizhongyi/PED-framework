@@ -93,9 +93,9 @@ declare module 'vue/types/vue' {
   }
 }
 ``` 
-#  iview地址 (https://www.iviewui.com)
-#  vue地址 (https://cn.vuejs.org/v2/guide)
-
+#  iview api (https://www.iviewui.com)
+#  vue api (https://cn.vuejs.org/v2/guide)
+#  vcharts api (https://v-charts.js.org/#/data)
 # process 配置
 安装 cross-env
 __ENV = development 开发环境
@@ -164,9 +164,12 @@ export default $;
 /demo/form
 ``` 
 2.ajax.vue // 异步调用
+
+主要调用axios插件， ~/plugins/axios.ts 为更改配置后的插件。
+
 ``` 
 示例
-<ajax ref="ajax" loading="true"></ajax>
+<ajax ref="ajax" loading="true"></ajax>  //loading:false 则不出现loading效果
 
 let ajax = this.$refs.ajax;
 let res = await ajax.post()

@@ -22,10 +22,12 @@
                     <i-col span="4">
                         <div class="pull-right">
                             <Dropdown size="large" trigger="click" @on-click="logout">
-                                <Icon type="md-person"></Icon> 用户名
-                                <Icon type="ios-arrow-down"></Icon>
+                                <a href="javascript:;">
+                                    <Icon type="md-person"></Icon> 用户名
+                                    <Icon type="ios-arrow-down"></Icon>
+                                </a>
                                 <DropdownMenu slot="list">
-                                    <DropdownItem>
+                                    <DropdownItem name="/settings/user">
                                         <Icon type="ios-open-outline"/>
                                         修改
                                     </DropdownItem>
@@ -232,7 +234,11 @@
     }
 
     logout(name) {
-      this.$router.push("/login");
+      if( name == 'logout')
+        this.$router.push("/login");
+      else
+        this.$router.push(name);
+      return this;
     }
 
     created() {

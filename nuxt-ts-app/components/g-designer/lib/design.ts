@@ -340,7 +340,6 @@ export default class Design {
     return this;
   }
 
-
   getDirection(rotate) {
     if (rotate % 360 == 0) {
       return "南";
