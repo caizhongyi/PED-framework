@@ -39,6 +39,7 @@ export default class Design {
     localStorageName: 'gDesignerData',
     dragAreaClass: 'drag-area-box',
     dragElementContainerClass: 'g-designer-container',
+    dbclick : (e)=>{}
   }
   constructor( selector = ".g-designer" , options? ) {
     let that = this;
@@ -436,7 +437,10 @@ class DesignElement {
       new Draggable( this.$, options );
     }
 
-    this.$.find(`.${ options.dropSizeClass }`).on("mousedown", function(e) {
+    this.$.on('dbclick',( e )=> {
+      options['dbclick'] && options['dbclick'](e);
+    }).find(`.${ options.dropSizeClass }`).on("mousedown", function(e) {
+      e.stopPropagation();
       let $dragLayer = $(this).closest(`.${ options.elementClass }`);
       $dragLayer.addClass("resizing").data("resizePosition", {
         x: e.pageX,

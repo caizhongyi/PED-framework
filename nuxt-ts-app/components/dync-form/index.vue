@@ -5,10 +5,11 @@
             <slot name="header" :data="value"></slot>
             <dync-form-item :model="model" v-model="value" :rule-validate="ruleValidate" :label-width="labelWidth"></dync-form-item>
             <slot :data="value"></slot>
-            <FormItem  v-if="submitButton">
+            <FormItem  v-if="submitButton && !inline">
                 <Button type="primary" @click="submit('form')" :icon="submitButton.icon">{{ submitButton.text }}</Button>
                 <Button @click="reset('form')" v-if="!submitButton.icon">重置</Button>
             </FormItem>
+            <Button v-if="inline" type="primary" @click="submit('form')" :icon="submitButton.icon">{{ submitButton.text }}</Button>
             <slot name="footer" :data="value"></slot>
         </Form>
 

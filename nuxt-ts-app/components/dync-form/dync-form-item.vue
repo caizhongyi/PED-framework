@@ -1,13 +1,13 @@
 <template>
     <span>
-        <template v-for="item in model">
+        <template v-for="(item,key) in model" >
             <FormItem v-if=" item.type || ( item.type && item.type != 'custom')" :prop="item.field" :label="item.label" :required="item.required">
-                <DatePicker  v-if="item.type == 'date'" type="date" placeholder="选择日期" :format="item.format" :disabled="item.disabled" v-model="value[item.field]"></DatePicker>
-                <DatePicker  v-else-if="item.type == 'datetime'" type="datetime" placeholder="选择日期时间" :format="item.format" :disabled="item.disabled" v-model="value[item.field]"></DatePicker>
-                <DatePicker v-else-if="item.type == 'datetimeRange'" type="datetimerange" placeholder="选择日期区间" :format="item.format" :disabled="item.disabled"
+                <DatePicker  v-if="item.type == 'date'" type="date" placeholder="请选择日期" :format="item.format" :disabled="item.disabled" v-model="value[item.field]"></DatePicker>
+                <DatePicker  v-else-if="item.type == 'datetime'" type="datetime" placeholder="请选择日期时间" :format="item.format" :disabled="item.disabled" v-model="value[item.field]"></DatePicker>
+                <DatePicker v-else-if="item.type == 'datetimeRange'" type="datetimerange" placeholder="请选择日期时间区间" :format="item.format" :disabled="item.disabled"
                             :start-date="item.startDate"
                             :end-date="item.endDate" v-model="value[item.field]"></DatePicker>
-                <DatePicker v-else-if="item.type == 'dateRange'" type="daterange" placeholder="选择日期区间" :format="item.format" :start-date="item.startDate" :disabled="item.disabled"
+                <DatePicker v-else-if="item.type == 'dateRange'" type="daterange" placeholder="请选择日期区间" :format="item.format" :start-date="item.startDate" :disabled="item.disabled"
                             :end-date="item.endDate" v-model="value[item.field]"></DatePicker>
                  <RadioGroup  v-else-if="item.type == 'radio'" v-model="value[item.field]" :disabled="item.disabled">
                     <Radio :label="subItem.value" v-for="(subItem,key) in item.data" :key="key" :disabled="subItem.disabled"> {{ subItem.text}}
@@ -25,9 +25,18 @@
                  <Input v-else-if="item.type == 'textarea'" v-model="value[item.field]" type="textarea"
                         :autosize="item.autosize || {minRows: 5,maxRows: 5}"
                         :placeholder="item.placeholder || '请输入信息'" :disabled="item.disabled"></Input>
-                <Select v-else-if="item.type == 'select'" v-model="value[item.field]" :placeholder="item.placeholder" :disabled="item.disabled">
+                <Select v-else-if="item.type == 'select'" :multiple="item.multiple"  v-model="value[item.field]" :placeholder="item.placeholder" :disabled="item.disabled">
                     <Option :value="subItem.value" v-for="(subItem,key) in item.data" :key="key">{{ subItem.text}}</Option>
                 </Select>
+                <Tree ref="tree" v-else-if="item.type == 'tree'"
+                      :data="item.data"
+                      :load-data="item.loadData"
+                      @on-check-change="( val )=>{ item.checkChange && item.checkChange( val ) } "
+                      multiple
+                      empty-text="暂无数据"
+                      show-checkbox
+                      v-model="value[item.field]"
+                ></Tree>
                 <div v-else-if="item.type == 'upload'">
                      <div class="upload-list" v-for="subItem in value[item.field]">
                     <template v-if="subItem.status === 'finished'">
@@ -77,6 +86,7 @@
   import { Component, Prop, Vue, Watch, Model } from "nuxt-property-decorator";
   //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
   import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
+  import _  from "underscore"
   //组件声名
   @Component({
     components: {  }
@@ -88,10 +98,39 @@
     @Prop() ruleValidate;
     @Prop() labelWidth;
 
+    uploads:any = [];
+    trees:any = [];
+
+
+    setTreeChecked( data:any = [] , checkedData:any = []  ){
+        for( let item of data){
+          _(checkedData).map(( n )=>{
+            n.checked = n.id == item.id ;
+          })
+
+          if( item.children ){
+            this.setTreeChecked(  item.children , checkedData );
+          }
+        }
+        return this;
+    }
+
+    getTreeChecked( data:any = [] , checkedData:any = [] ){
+      data = [];
+      for( let item of checkedData){
+        data.push(item);
+        if( item.children ){
+          this.getTreeChecked( data , item.children );
+          delete item.children;
+        }
+      }
+      return data;
+    }
 
     mounted() {  // Vue 的 mounted 初始化回调
-      let upload: any = this.$refs.upload;
-      let index = 0 ;
+      this.uploads = this.$refs.upload;
+      this.trees = this.$refs.tree;
+
       for (let item of this.model) {
         if (item.rule) {
           this.ruleValidate[item.field] = item.rule;
@@ -152,7 +191,11 @@
             this.value[item.field].push();
           },
           item = {  ...uploadSettings, ...item }
-          index ++ ;
+        }
+        else if( item.type == 'tree'){
+            item['checkChange'] = ( val )=>{
+              this.value[item.field] =  this.getTreeChecked( [] , val);
+            }
         }
         // let { field , value  } = item;
         //this.data[field] = value;

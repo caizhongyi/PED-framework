@@ -1,5 +1,6 @@
 <template>
     <div>
+        <dync-form ref="searchForm" v-if="searchModel.length" :model="searchModel" :label-width="searchLabelWidth" :inline="true" @success="searchSubmit" :submit-button="{ icon : 'ios-search' , text : '查询' }"></dync-form>
         <!-- data 值必须包含id -->
         <Table ref="table" :columns="columns" :data="data" :loading="loading">
             <!--<div slot="header"></div>-->
@@ -17,8 +18,13 @@
         </i-row>
 
         <Modal title="修改" :loading="true"  v-model="modal" @on-ok="ok" @on-cancel="cancel">
-            <dync-form ref="form" :model="formModel" :label-width="80" v-model="formData" @success="formSubmit" @fail="formSubmitFail" :submit-button="false"></dync-form>
+            <dync-form ref="form" :model="formModel" :label-width="formLabelWidth" v-model="formData" @success="formSubmit" @fail="formSubmitFail" :submit-button="false"></dync-form>
         </Modal>
+
+        <Modal title="浏览" v-model="imageModalVisible" >
+          <img :src="modalImage" v-if="modalImage"/>
+        </Modal>
+
         <ajax ref="ajax" loading="false"></ajax>
     </div>
 </template>
@@ -34,6 +40,16 @@
   })
   export default class PageTable extends Vue {
 
+    @Prop( { default : ()=>{ return [] ;} }) formModel: any ;
+    @Prop( { default : 80 }) formLabelWidth: any ;
+    @Prop({ default : ()=>{ return [] ;} } ) searchModel :any ;
+    @Prop( { default : 80 }) searchLabelWidth: any ;
+    @Prop({ default : ()=>{ return [] ;} }) columns: any ;
+    @Prop({ default : false }) exp: any ;
+    @Prop({ default : 'post' }) method: string ;
+    @Prop() url: string ;
+    @Prop( { default: ()=>{ return { page : 1 , total: 0 } } }) params : any ;
+
     table : any ;
     form : any ;
 
@@ -45,13 +61,10 @@
     modal = false;
     formData = {};
     loading = false;
+    searchForm: any ;
 
-    @Prop() formModel:any ;
-    @Prop() columns: any ;
-    @Prop({ default : false }) exp: any ;
-    @Prop({ default : 'post' }) method: string ;
-    @Prop() url: string ;
-    @Prop( { default: ()=>{ return { page : 1 , total: 0 } } }) params : any ;
+    imageModalVisible: any = false;
+    modalImage: any = '';
 
     async getData( url , data ){
       let ajax:any = this.$refs.ajax;
@@ -70,11 +83,6 @@
       return this;
     }
 
-    @Watch('formData')
-    onChangeFormData( value ){
-      this.form.data = value;
-    }
-
     //修改表单
     edit( index :any  ){
       this.add();
@@ -82,6 +90,40 @@
       return this;
     }
 
+    createControl ( h , image: any ){
+      return  h('img', {
+        attrs : {
+          src : image,
+          style : 'height:50px; margin:5px;'
+        },
+        on: {
+          click: () => {
+            this.showImageModal( image );
+          }
+        }
+      })
+    }
+
+    getImageControl ( h , params : any ){
+      let image: string | Array<any> =  params.row.image ;
+      let controls : Array<any> = [];
+
+      if( typeof image == 'object' && image.length ){
+        for( let item of image ){
+          controls.push( this.createControl( h , item ) );
+        }
+      }
+      else{
+        controls.push( this.createControl( h , image ) );
+      }
+      return controls ;
+    }
+
+    showImageModal( image ){
+        this.imageModalVisible = true;
+        this.modalImage = image;
+        return this;
+    }
     //新增表单
     add(){
       this.modal = true ;
@@ -117,6 +159,9 @@
       return this;
     }
 
+    searchSubmit(){
+      this.$emit('search-submit', this.searchForm.value );
+    }
     //导出表单
     exportData () {
       this.table.exportCsv({ filename: this.exp.filename || '导出文件'});
@@ -133,12 +178,12 @@
 
     //edit-sumbit 提交回调
     ok(){
-      this.$emit('edit-submit', this.form.data );
+      this.$emit('edit-submit', this.form.value );
       return this;
     }
     //edit-cancel 提交回调
     cancel(){
-      this.$emit('edit-cancel', this.form.data );
+      this.$emit('edit-cancel', this.form.value );
       return this;
     }
 
@@ -147,6 +192,7 @@
       this.url && this.getData( this.url ,this.params );
       this.table = this.$refs.table;
       this.form = this.$refs.form;
+      this.searchForm = this.$refs.searchForm;
     }
   }
 </script>

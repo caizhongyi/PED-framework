@@ -1,20 +1,20 @@
 <template>
     <div >  <!-- 必须有根结点 -->
-        <dync-form :model="formData"  :inline="true" @success="submitSearch" :submit-button="{ icon : 'ios-search' , text : '查询' }">
+        <!--<dync-form :model="formData"  :inline="true" @success="submitSearch" :submit-button="{ icon : 'ios-search' , text : '查询' }">
             <template slot="footer">
                 <FormItem>
                     <Button type="primary"  @click="exportData()" icon="ios-download-outline">Export source data</Button>
                 </FormItem>
             </template>
-        </dync-form>
-        <Form  class="class"  inline>
+        </dync-form>-->
+        <!--<Form  class="class"  inline>
             <FormItem>
                 <Button icon="md-add" @click="add">新建</Button>
             </FormItem>
             <FormItem>
                 <Input icon="ios-search"></Input>
             </FormItem>
-        </Form>
+        </Form>-->
      <!--   <i-row>
             <i-col span="10">
                 <Form ref="formInline" class="class" :model="form"  inline>
@@ -32,14 +32,15 @@
             </i-col> &lt;!&ndash; ivew Button 与 icon &ndash;&gt;
 
         </i-row>-->
-        <br>
         <page-table ref="table"
                     url="/page-data.json"
                     :exp="{ filename : 'filename '}"
                     method="get"
                     :columns="columns"
                     :form-model="formModel"
+                    :search-model="searchModel"
                     :params="params"
+                    @search-submit="searchSubmit"
                     @edit-submit="editSubmit"
                     @edit-cancel="editCancel"></page-table> <!-- 自定义组件 ~/components/page-table.vue -->
         <ajax ref="ajax"></ajax><!-- 自定义组件 ~/components/ajax -->
@@ -72,10 +73,14 @@
   export default class Table extends Vue {    //  typescript 创建类继成 Vue
 
     formData:any = [
-      { field : 'name' , placeholder:'名称', value : 1 , type : 'input' },
+      { field : 'name' , placeholder:'名称', type : 'input' },
       { field : 'dateRange' , placeholder:'dateRange' , type : 'dateRange' },
-      { field : 'City' , placeholder:'城市',value : 'beijing' , type : 'select' ,data : [{ text: '>New York' , value : 'beijing'},{ text: 'London' , value : 'shanghai'}]},
+      { field : 'City' , placeholder:'城市', type : 'select' ,data : [{ text: 'New York' , value : 'beijing'},{ text: 'London' , value : 'shanghai'}]},
     ]
+    searchModel : any = [
+      { field : 'Name' , label:'Name' ,placeholder:'名称',  type : 'input' },
+      { field : 'Age' , label:'Age' , placeholder:'dateRange' , type : 'input' },
+    ];
     table:any;
     value: any = 2; // 变量声明 ，any是无类型。 可以 object Array function boolean等类型
     params = { current : 1 };
@@ -134,6 +139,38 @@
         key: 'Age'
       },
       {
+        title: 'Image',
+        key: 'image',
+        render: (h, params) => {
+          let table:any = this.$refs.table;
+         /* let image: string | Array<any> =  params.row.image ;
+          let controls : Array<any> = [];
+
+          const createControl = ( h , image: any )=>{
+                return  h('Image', {
+                  props: { src: image },
+                  on: {
+                    click: () => {
+                      let table:any = this.$refs.table;
+                      table.showImageModal( image );
+                    }
+                  }
+                })
+          }
+
+         if( typeof image == 'object' && image.length ){
+             for( let item of image ){
+               controls.push( createControl( h , item ) );
+             }
+          }
+          else{
+            controls.push( createControl( h , image ) );
+          }*/
+
+          return h('div', table.getImageControl( h , params ));
+        }
+      },
+      {
         title: 'Action',
         key: 'action',
         width: 250,
@@ -150,9 +187,7 @@
               },
               on: {
                 click: () => {
-                  let table:any = this.$refs.table;
-                  table.edit( params.index );
-
+                  this.table.edit( params.index );
                   //this.show(params.index)
                 }
               }
@@ -164,8 +199,7 @@
               },
               on: {
                 click: () => {
-                 let table:any = this.$refs.table;
-                 table.delete( params.index );
+                 this.table.delete( params.index );
                  // this.remove(params.index)
                 }
               }
@@ -215,10 +249,13 @@
       this.current = table.data[index];
       this.modal1 = true;
     }
-
+    searchSubmit( data ){
+      console.log(data)
+    }
     //提交修改
     editSubmit(data){
       setTimeout(()=>{
+        this.table.data.push(data);
         this.table.modal = false;
       },1000)
       console.log(data);
