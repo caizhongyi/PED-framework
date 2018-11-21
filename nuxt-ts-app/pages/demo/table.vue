@@ -187,7 +187,8 @@
               },
               on: {
                 click: () => {
-                  this.table.edit( params.index );
+                  let table:any = this.$refs.table;
+                  table.edit( params.index );
                   //this.show(params.index)
                 }
               }
@@ -199,7 +200,8 @@
               },
               on: {
                 click: () => {
-                 this.table.delete( params.index );
+                  let table:any = this.$refs.table;
+                  table.delete( params.index );
                  // this.remove(params.index)
                 }
               }

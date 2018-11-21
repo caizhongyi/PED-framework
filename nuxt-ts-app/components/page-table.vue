@@ -1,6 +1,6 @@
 <template>
     <div>
-        <dync-form ref="searchForm" v-if="searchModel.length" :model="searchModel" :label-width="searchLabelWidth" :inline="true" @success="searchSubmit" :submit-button="{ icon : 'ios-search' , text : '查询' }"></dync-form>
+        <dync-form ref="searchForm" v-if="searchModel.length" :model="searchModel" v-model="searchFormData" :label-width="searchLabelWidth" :inline="true" @success="searchSubmit" :submit-button="{ icon : 'ios-search' , text : '查询' }"></dync-form>
         <!-- data 值必须包含id -->
         <Table ref="table" :columns="columns" :data="data" :loading="loading">
             <!--<div slot="header"></div>-->
@@ -12,7 +12,7 @@
                 <i-button type="primary" icon="md-add" @click="add">新增</i-button>
                 <Button type="primary"  @click="exportData" v-if="exp" icon="ios-download-outline">导出数据</Button>
                 <slot></slot>
-                <Button v-if="columns && columns[0].type == 'selection'" icon="md-beaker" @click="deleteAll">删除所有</Button>
+                <Button v-if="columns && columns[0] && columns[0].type == 'selection'" icon="md-beaker" @click="deleteAll">删除所有</Button>
             </i-col>
             <i-col span="12" class="text-right"><Page :total="total" :current="page" :page-size="pageSize" show-elevator show-total @on-change="change"/></i-col>
         </i-row>
@@ -59,7 +59,8 @@
     page = 1 ;
     pageSize = 10 ;
     modal = false;
-    formData = {};
+    formData: object = {};
+    searchFormData: object = {};
     loading = false;
     searchForm: any ;
 
@@ -67,6 +68,9 @@
     modalImage: any = '';
 
     async getData( url , data ){
+
+      if( !url ) return this;
+
       let ajax:any = this.$refs.ajax;
       this.loading = true;
       let res:any = await ajax.get( url , data );
@@ -168,11 +172,13 @@
       return this;
     }
 
-    change( params ){
+    change( page ){
       //this.$emit("input", params);
       //this.params = params;
-      this.page = params.current;
-      this.getData( this.url ,params );
+      this.page = page;
+      let params = { total : this.total, page ,...this.searchFormData };
+      this.getData( this.url ,params);
+      this.$emit('page', params );
       return this;
     }
 

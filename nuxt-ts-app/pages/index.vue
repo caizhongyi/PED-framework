@@ -37,8 +37,8 @@ export default class Index extends Vue {
    // this.setPeople([1,2]);
    // console.log(this.ajax)
    // console.log(this.people)
-    console.log(this)
-    console.log(location)
+    //console.log(Vue.filter('formatDate'))
+   // console.log(location)
     // this.ajax.post('',{});
     /*this.$router.push({
       name:'login'

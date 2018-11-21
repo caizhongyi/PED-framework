@@ -38,18 +38,18 @@
                       v-model="value[item.field]"
                 ></Tree>
                 <div v-else-if="item.type == 'upload'">
-                     <div class="upload-list" v-for="subItem in value[item.field]">
-                    <template v-if="subItem.status === 'finished'">
-                        <img :src="subItem.url">
-                        <div class="upload-list-cover">
-                            <Icon type="ios-eye-outline" @click.native="view(subItem.name)"></Icon>
-                            <Icon type="ios-trash-outline" @click.native="item.remove(subItem , item )"></Icon>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <Progress v-if="subItem.showProgress" :percent="subItem.percentage" hide-info></Progress>
-                    </template>
-                </div>
+                    <div class="upload-list" v-for="subItem in value[item.field]">
+                        <template v-if="subItem.status === 'finished'">
+                            <img :src="subItem.url" alt="subItem.name"/>
+                            <div class="upload-list-cover">
+                                <Icon type="ios-eye-outline" @click.native="view(subItem.name)"></Icon>
+                                <Icon type="ios-trash-outline" @click.native="item.remove(subItem , item )"></Icon>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <Progress v-if="subItem.showProgress" :percent="subItem.percentage" hide-info></Progress>
+                        </template>
+                     </div>
                      <Upload
                              ref="upload"
                              :show-upload-list="false"
@@ -100,7 +100,6 @@
 
     uploads:any = [];
     trees:any = [];
-
 
     setTreeChecked( data:any = [] , checkedData:any = []  ){
         for( let item of data){
@@ -173,7 +172,7 @@
         };
         if( item.type == 'upload'){
           item['removeFile'] =  (file) => {
-            const fileList = this.value[item.field]; //uploader.fileList;
+            let fileList = this.value[item.field]; //uploader.fileList;
             fileList.splice(fileList.indexOf(file), 1);
             fileList.push();
           }
