@@ -38,7 +38,7 @@
                       v-model="value[item.field]"
                 ></Tree>
                 <div v-else-if="item.type == 'upload'">
-                    <div class="upload-list" v-for="subItem in value[item.field]">
+                    <no-ssr><div class="upload-list" v-for="subItem in value[item.field]">
                         <template v-if="subItem.status === 'finished'">
                             <img :src="subItem.url" alt="subItem.name"/>
                             <div class="upload-list-cover">
@@ -49,7 +49,7 @@
                         <template v-else>
                             <Progress v-if="subItem.showProgress" :percent="subItem.percentage" hide-info></Progress>
                         </template>
-                     </div>
+                     </div></no-ssr>
                      <Upload
                              ref="upload"
                              :show-upload-list="false"
@@ -101,7 +101,7 @@
     uploads:any = [];
     trees:any = [];
 
-    setTreeChecked( data:any = [] , checkedData:any = []  ){
+    setTreeChecked( data:Array<any> = [] , checkedData:Array<any> = []  ){
         for( let item of data){
           _(checkedData).map(( n )=>{
             n.checked = n.id == item.id ;
@@ -114,13 +114,14 @@
         return this;
     }
 
-    getTreeChecked( data:any = [] , checkedData:any = [] ){
+    getTreeChecked( data:Array<any> = [] , checkedData:Array<any> = [] ){
       data = [];
       for( let item of checkedData){
-        data.push(item);
-        if( item.children ){
+        let clone : any = { ...item };
+        data.push(clone);
+        if( clone.children ){
           this.getTreeChecked( data , item.children );
-          delete item.children;
+          delete clone.children;
         }
       }
       return data;
@@ -171,8 +172,9 @@
           }
         };
         if( item.type == 'upload'){
+          this.value[item.field] = this.value[item.field] || [];
           item['removeFile'] =  (file) => {
-            let fileList = this.value[item.field]; //uploader.fileList;
+            let fileList = this.value[item.field] ; //uploader.fileList;
             fileList.splice(fileList.indexOf(file), 1);
             fileList.push();
           }

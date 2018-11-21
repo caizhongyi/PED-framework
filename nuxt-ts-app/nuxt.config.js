@@ -126,7 +126,7 @@ module.exports = {
   plugins: [
     { src: "~/plugins/iview", ssr: true },
     { src: "~/plugins/directives", ssr: false },  //指令
-    { src: "~/plugins/v-charts", ssr: true },
+    { src: "~/plugins/v-charts", ssr: false },
     { src: "~/plugins/filters", ssr: false },
     { src: "~/plugins/vue-seamless-scroll", ssr: false },
     { src: "~/plugins/jquery", ssr: false },

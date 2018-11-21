@@ -4,9 +4,11 @@
             <input type="radio" name="a" @change="change(value)" >
         </label>
         <button type="button" @click="click()">click</button>
-        <ve-line :data="chartData" :settings="chartSettings">
-            <div class="data-empty">没有数据😂</div>
-        </ve-line>
+        <no-ssr><ve-line :data="chartData" :settings="chartSettings"> <!--<div class="data-empty">没有数据😂</div>--> </ve-line></no-ssr>
+        <no-ssr><ve-histogram :data="chartData" :settings="chartSettings"></ve-histogram></no-ssr>
+        <no-ssr><ve-pie :data="chartData"></ve-pie></no-ssr>
+        <no-ssr><ve-ring :data="chartData"></ve-ring></no-ssr>
+        <no-ssr> <ve-gauge :data="chartData"></ve-gauge></no-ssr>
     </div>
 
 </template>
@@ -15,10 +17,10 @@
   import { Component, Prop, Vue,Watch,Model} from "nuxt-property-decorator"
   import { State,Getter, Action, Mutation,namespace} from "vuex-class"
 
-  import VeLine from 'v-charts/lib/line'
+ // import VeLiquidfill from 'v-charts/lib/liquidfill'
 
   @Component({
-    components: { VeLine }
+  //  components: { VeLiquidfill }
   })
   export default class charts extends Vue {
     chartSettings = {
