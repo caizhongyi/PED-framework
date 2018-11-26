@@ -46,7 +46,7 @@
                 </i-row>
             </i-header>
             <i-layout class="ivu-layout-has-sider nt-main">
-                <i-sider hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed"
+                <i-sider v-if="siderVisible" hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed"
                          class="nt-sider layout">
                     <!--  <i-menu ref="menu" :active-name="$route.path"   width="auto" :open-names="openedNames" :class="menuitemClasses"
                               @on-select="route">
@@ -58,7 +58,7 @@
                               <i-menu-item name="/demo/marquee"  title="文字滚动">文字滚动</i-menu-item>
                           </i-submenu>
                       </i-menu>-->
-                    <Menu ref="menu" v-show="!collapsed" :active-name="$route.path" :open-names="openedNames"
+                    <Menu ref="siderMenu" v-show="!collapsed" :active-name="menuActiveName" :open-names="openedNames"
                           :accordion="false" :theme="theme" @on-select="turnToPage">
                         <template v-for="item in menuList">
                             <!--<template v-if="item.children && item.children.length === 1">
@@ -99,7 +99,7 @@
 
                 </i-sider>
                 <i-layout class="nt-wrapper layout">
-                    <i-breadcrumb class="nt-breadcrumb">
+                    <i-breadcrumb class="nt-breadcrumb" v-if="breadcrumbVisible">
                         <i-breadcrumb-item v-for="(item,key) in breadCrumbList" :key="key"> {{ item.title }} </i-breadcrumb-item>
                     </i-breadcrumb>
                     <i-content class="nt-content">
@@ -118,7 +118,7 @@
   import { State, Mutation, Action, Getter } from "vuex-class";
   import _ from "underscore";
   import mixin from "~/components/menu/mixin";
-  import SideMenuItem from "~/components/menu/side-menu-item";
+  import siderMenuItem from "~/components/menu/side-menu-item";
   import CollapsedMenu from "~/components/menu/collapsed-menu";
   import Ajax from "~/components/ajax";
   import util from "~/utils";
@@ -126,21 +126,25 @@
 
   @Component({
     components: {
-      SideMenuItem, CollapsedMenu, Ajax
+      siderMenuItem, CollapsedMenu, Ajax
     }
   })
   export default class Default extends mixin {
+    @State menu;
+    @Prop({ default : true }) siderVisible ;
+    @Prop({ default : true }) breadcrumbVisible ;
+
     ajax: any;
     middleware = "auth";
     collapsed = false;
     openedNames: any = [];
     breadCrumbList: any = [];
     theme = "light";
-    @State menu;
    // @Mutation getMenu;
     menuList:any = [];
-
+    siderMenu : any ;
     headMenuActiveName:any = '';
+    menuActiveName:any = '';
 
     get menuitemClasses() {
       return [
@@ -153,6 +157,11 @@
     changeRoute(newRoute) {
       this.getMenuList(newRoute);
       this.getBreadCrumbList(newRoute);
+
+      this.menuActiveName = this.$route.path;
+      this.$nextTick(()=>{
+        if(this.siderMenu) this.siderMenu.updateActiveName();
+      })
     }
 
     collapsedChange() {
@@ -247,6 +256,7 @@
     mounted() {
       this.openedNames = this.getRoute();
       this.ajax = this.$refs.ajax;
+      this.siderMenu = this.$refs.siderMenu;
     }
   }
 </script>

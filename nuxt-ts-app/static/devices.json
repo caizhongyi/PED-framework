@@ -1,0 +1,14 @@
+{
+  "code" : 200,
+  "data" : {},
+  "paging" : {
+    "total" : 100,
+    "data" : [
+      { "id" : 1, "type" : "烟感" , "status"  : "正常"  , "factory" : "厂家" , "date" : "181101" , "sn" : "sn" },
+      { "id" : 2, "type" : "烟感" , "status"  : "正常"  , "factory" : "厂家" , "date" : "181101" , "sn" : "sn" },
+      { "id" : 3, "type" : "烟感" , "status"  : "正常"  , "factory" : "厂家" , "date" : "181101" , "sn" : "sn" },
+      { "id" : 4, "type" : "烟感" , "status"  : "正常"  , "factory" : "厂家" , "date" : "181101" , "sn" : "sn" },
+      { "id" : 5, "type" : "烟感" , "status"  : "正常"  , "factory" : "厂家" , "date" : "181101" , "sn" : "sn" }
+    ]
+  }
+}

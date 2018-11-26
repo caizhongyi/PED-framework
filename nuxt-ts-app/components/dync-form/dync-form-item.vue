@@ -102,16 +102,16 @@
     trees:any = [];
 
     setTreeChecked( data:Array<any> = [] , checkedData:Array<any> = []  ){
-        for( let item of data){
+        for( let item of data ){
           _(checkedData).map(( n )=>{
-            n.checked = n.id == item.id ;
+            item.checked = n.id == item.id ;
           })
 
           if( item.children ){
             this.setTreeChecked(  item.children , checkedData );
           }
         }
-        return this;
+        return data;
     }
 
     getTreeChecked( data:Array<any> = [] , checkedData:Array<any> = [] ){

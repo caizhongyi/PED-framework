@@ -39,6 +39,7 @@
                     :columns="columns"
                     :form-model="formModel"
                     :search-model="searchModel"
+                    :search-label-width="80"
                     :params="params"
                     @search-submit="searchSubmit"
                     @edit-submit="editSubmit"
@@ -143,30 +144,6 @@
         key: 'image',
         render: (h, params) => {
           let table:any = this.$refs.table;
-         /* let image: string | Array<any> =  params.row.image ;
-          let controls : Array<any> = [];
-
-          const createControl = ( h , image: any )=>{
-                return  h('Image', {
-                  props: { src: image },
-                  on: {
-                    click: () => {
-                      let table:any = this.$refs.table;
-                      table.showImageModal( image );
-                    }
-                  }
-                })
-          }
-
-         if( typeof image == 'object' && image.length ){
-             for( let item of image ){
-               controls.push( createControl( h , item ) );
-             }
-          }
-          else{
-            controls.push( createControl( h , image ) );
-          }*/
-
           return h('div', table.getImageControl( h , params ));
         }
       },
@@ -176,36 +153,10 @@
         width: 250,
         align: 'center',
         render: (h, params) => {
+          let table:any = this.$refs.table;
           return h('div', [
-            h('Button', {
-              props: {
-                type: 'primary',
-                size: 'small'
-              },
-              style: {
-                marginRight: '5px'
-              },
-              on: {
-                click: () => {
-                  let table:any = this.$refs.table;
-                  table.edit( params.index );
-                  //this.show(params.index)
-                }
-              }
-            }, 'View'),
-            h('Button', {
-              props: {
-                type: 'error',
-                size: 'small'
-              },
-              on: {
-                click: () => {
-                  let table:any = this.$refs.table;
-                  table.delete( params.index );
-                 // this.remove(params.index)
-                }
-              }
-            }, 'Delete')
+            table.getEditControl(h, params),
+            table.getRemoveControl(h, params),
           ]);
         }
       }

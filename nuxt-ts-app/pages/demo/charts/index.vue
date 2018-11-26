@@ -8,7 +8,16 @@
         <no-ssr><ve-histogram :data="chartData" :settings="chartSettings"></ve-histogram></no-ssr>
         <no-ssr><ve-pie :data="chartData"></ve-pie></no-ssr>
         <no-ssr><ve-ring :data="chartData"></ve-ring></no-ssr>
-        <no-ssr> <ve-gauge :data="chartData"></ve-gauge></no-ssr>
+        <no-ssr><ve-gauge :data="chartDataSingle"></ve-gauge></no-ssr>
+
+        <no-ssr>
+            <ve-bmap
+                :settings="chartSettings"
+                :series="chartSeries"
+                :tooltip="chartTooltip">
+            </ve-bmap>
+            <ve-liquidfill :data="chartDataSingle"></ve-liquidfill>
+        </no-ssr>
     </div>
 
 </template>
@@ -30,6 +39,23 @@
         percent: '占比',
       }
     };
+    chartTooltip =  { show: true };
+    chartSeries = [
+      {
+        type: 'scatter',
+        coordinateSystem: 'bmap',
+        data: [
+          [120, 30, 1] // 经度，维度，value，...
+        ]
+      }
+    ];
+    chartDataSingle = {
+      columns: ['city', 'percent'],
+      rows: [{
+        city: '上海',
+        percent: 0.6
+      }]
+    }
     chartData = {
         columns : ['date' , 'value', 'percent'],
         rows : [

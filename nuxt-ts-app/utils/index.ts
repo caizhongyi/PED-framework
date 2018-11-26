@@ -1,4 +1,5 @@
 import Cookie from 'js-cookie';
+import _ from 'underscore';
 
 export default {
   //获取服务端cookie
@@ -27,7 +28,32 @@ export default {
        }
      }
      return queryObj;
-   }
+   },
+  setTreeChecked( data:Array<any> = [] , checkedData:Array<any> = []  ){
+    for( let item of data){
+      _(checkedData).map(( n )=>{
+        item.checked = (n.id == item.id) ;
+
+      })
+      if( item.children ){
+        this.setTreeChecked(  item.children , checkedData );
+      }
+    }
+    return data;
+
+  },
+  getTreeChecked( data:Array<any> = [] , checkedData:Array<any> = [] ){
+    data = [];
+    for( let item of checkedData){
+      let clone : any = { ...item };
+      data.push(clone);
+      if( clone.children ){
+        this.getTreeChecked( data , item.children );
+        delete clone.children;
+      }
+    }
+    return data;
+  },
 }
 
 

@@ -26,10 +26,16 @@ import $ from "jquery"
   }
 })
 export default class Index extends Vue {
-  scrollToTop = true;
-  loadingVisible = false;
+
   @State people;
   @Mutation setPeople;
+
+  scrollToTop = true;
+  loadingVisible = false;
+  layout(){
+    return "default-no-slider";
+  }
+
  /* get name (): boolean {
     return this.title + this.text
   }*/

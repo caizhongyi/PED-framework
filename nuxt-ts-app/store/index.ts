@@ -2,7 +2,7 @@ import axios from "~/plugins/axios"
 const  resetName = ( menu , name? )=>{
   for(let item of menu ){
     item['sourceName'] = item.name ;
-    name && (item.name = `${ name }/${item.sourceName}`);
+    name && (item.name = item.name == 'index' ?  `${name}` :  `${ name }/${item.sourceName}`);
     if( item.children ){
       resetName( item.children ,item.name);
     }

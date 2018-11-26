@@ -5,7 +5,7 @@
                 <i-tree :data="data1" @on-select-change="change"></i-tree>
             </i-col>
             <i-col span="20">
-                <designer ref="design"></designer>
+                <designer ref="design" v-model="designData"></designer>
             </i-col>
         </i-row>
     </div>
@@ -21,6 +21,32 @@
     }
   })
   export default class marquee extends Vue {
+    designData = [{
+      id : 0,
+      x : 10 ,
+      y : 10 ,
+      width : 100,
+      height : 100,
+      rotate : 0,
+      background : 'http://180.106.148.81:18082/schoolbeta/uploads/20181008/714b1b5f-6000-43ec-abde-ad74ce4bda8b.png',
+      type : 1,
+      hasTip : false,
+      target : '',
+      name : 'test',
+    },
+      {
+        id : 1,
+        x : 100 ,
+        y : 100 ,
+        width : 100,
+        height : 100,
+        rotate : 0,
+        background : 'http://180.106.148.81:18082/schoolbeta/uploads/20181008/714b1b5f-6000-43ec-abde-ad74ce4bda8b.png',
+        type : 1,
+        hasTip : false,
+        target : '',
+        name : 'test',
+      }];
     data = [
       { active: true, id: "1" },
       { active: false, id: "2" },
