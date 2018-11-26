@@ -118,7 +118,7 @@
   import { State, Mutation, Action, Getter } from "vuex-class";
   import _ from "underscore";
   import mixin from "~/components/menu/mixin";
-  import siderMenuItem from "~/components/menu/side-menu-item";
+  import sideMenuItem from "~/components/menu/side-menu-item";
   import CollapsedMenu from "~/components/menu/collapsed-menu";
   import Ajax from "~/components/ajax";
   import util from "~/utils";
@@ -126,7 +126,7 @@
 
   @Component({
     components: {
-      siderMenuItem, CollapsedMenu, Ajax
+      sideMenuItem, CollapsedMenu, Ajax
     }
   })
   export default class Default extends mixin {
