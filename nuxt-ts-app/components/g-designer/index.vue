@@ -33,8 +33,8 @@
         <div style="position: relative"  @contextmenu.prevent=""  @mousedown="(e)=>{  selectElementMouseDown(e ) ;}" @mouseup="(e)=>{  selectElementMouseUp(e  ) ;}" @mousemove="(e)=>{  selectElementMouseMove(e ) ;}">
             <i-card class="g-designer-container" >
                 <div class="g-designer-element"
-                     @contextmenu="(e)=>{ elementContextmenu ( e , item );}"
-                     :class="{ on : item.id == currentElement.id }"
+                     @contextmenu="(e)=>{ elementContextmenu ( e , item ) ;}"
+                     :class="{ on : item.id == currentElement.id , active : item.active }"
                      @mousedown="(e)=>{  elementMouseDown(e , item , 'move' ) ;}"
                      v-for="(item,key) in value"
                      :key="key"
@@ -82,7 +82,7 @@
     $design : any ;
     $areabox : any ;
     currentElement : any = { };
-    currentElements : any = null;
+    currentElements : any = [];
     areaElement : any = {
       x : 0,
       y : 0,
@@ -167,7 +167,7 @@
     }
 
     isActive( elements : Array<any> = [] , id  ){
-        for( let item in elements ){
+        for( let item of elements ){
            if( item['id'] == id ) return true ;
         }
         return false;
@@ -175,7 +175,7 @@
 
     selectElementMouseDown( e  ){
         if( !$(e.target).hasClass('g-designer-element')  ){
-            //this.currentElements = null;
+            this.currentElements = [];
             this.areaElement.active = true ;
             this.areaElement.x = e.pageX  - this.$design.offset().left ;
             this.areaElement.y = e.pageY  - this.$design.offset().top ;
@@ -198,8 +198,7 @@
       return this;
     }
     getInElement( area ) {
-      // let layers = [];
-      return _(this.value).filter(( n )=>{
+      let result =  _(this.value).filter(( n )=>{
         if (
           n.x + n.width > area.x
           &&
@@ -209,16 +208,15 @@
           &&
           n.y < area.y + area.height
         ) {
-          console.log(true)
-          n.on = true ;
+          n.active = true ;
           return true;
         }
         else {
-          console.log(false)
-          n.on = false ;
+          n.active = false ;
           return false;
         }
       })
+      return result;
     }
 
   /*  selectElement( e , item  ){
@@ -237,16 +235,29 @@
 
     elementMouseDown(e , item , command ){
       e.stopPropagation();
-      this.currentElement = item ;
-      this.currentElement.on = true;
-      this.currentElement.pageX = e.pageX;
-      this.currentElement.pageY = e.pageY;
-      this.currentElement.tempWidth = item.width;
-      this.currentElement.tempHeight = item.height;
-      this.currentElement.tempX = item.x;
-      this.currentElement.tempY = item.y;
+      if( this.isActive( this.currentElements, item.id )){
+        for( let item of this.currentElements ){
+           item = this.getCurrentElement( item  , e );
+         }
+      }
+      else{
+        this.currentElements = [] ;
+      }
+
+      this.currentElement = this.getCurrentElement( item  , e  );
       this.currentElement.command = command;
       return this;
+    }
+
+    getCurrentElement( currentElement , e ){
+      currentElement.on = true;
+      currentElement.pageX = e.pageX;
+      currentElement.pageY = e.pageY;
+      currentElement.tempWidth = currentElement.width;
+      currentElement.tempHeight = currentElement.height;
+      currentElement.tempX = currentElement.x;
+      currentElement.tempY = currentElement.y;
+      return currentElement;
     }
 
     selectArea( e ){
@@ -269,7 +280,6 @@
         }
 
         this.currentElements = this.getInElement( this.areaElement );
-        console.log(this.currentElements)
         // this.areaElement.width = e.pageX  - this.$design.offset().x ;
         // this.areaElement.height = e.pageY  - this.$design.offset().y ;
       }
@@ -285,21 +295,21 @@
          item.id = item.id ? item.id : uuid();
       }
 
-      $(document)
+      $(document).off(`mouseup.gResizing mousemove.gResizing`)
         .on("mouseup.gResizing", (e)=> {
         this.currentElement = {};
         this.areaElement.active = false;
         this.areaElement.width = 0;
         this.areaElement.height = 0;
       }).on("mousemove.gResizing", (e)=> {
-        //this.selectArea(e)
-        if( this.currentElements ){
-          if( this.currentElements.length ){
+        this.selectArea(e);
+        if( this.currentElements && this.currentElements.length){
+          if( this.currentElement.id  ){
             for( let item of this.currentElements ){
-              let x = e.pageX - item.pageX + item.tempX ;
-              let y = e.pageY - item.pageY  + item.tempY ;
-              item.x =  ( (x + item.width) > this.$design.width() || x < 0) ? item.x : x ;
-              item.y = ( (y + item.height) > this.$design.height() || y < 0) ? item.y : y ;
+               let x = e.pageX - item.pageX + item.tempX ;
+               let y = e.pageY - item.pageY  + item.tempY ;
+               item.x =  ( (x + item.width) > this.$design.width() || x < 0) ? item.x : x ;
+               item.y = ( (y + item.height) > this.$design.height() || y < 0) ? item.y : y ;
             }
           }
         }
@@ -315,16 +325,6 @@
             let height = e.pageY - this.currentElement.pageY  + this.currentElement.tempHeight ;
             this.currentElement.width =  ( (width + this.currentElement.x ) > this.$design.width() || width < 50 ) ? this.currentElement.width : width ;
             this.currentElement.height = ( (height + this.currentElement.y ) > this.$design.height() || height < 50 ) ? this.currentElement.height : height ;
-          }
-          else{
-            /*if( this.currentElement.length ){
-              for( let item of this.currentElement ){
-                let x = e.pageX - item.pageX + item.tempX ;
-                let y = e.pageY - item.pageY  + item.tempY ;
-                item.x =  ( (x + item.width) > this.$design.width() || x < 0) ? item.x : x ;
-                item.y = ( (y + item.height) > this.$design.height() || y < 0) ? item.y : y ;
-              }
-            }*/
           }
         }
       });
