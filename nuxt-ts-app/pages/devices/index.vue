@@ -6,6 +6,7 @@
                     :columns="columns"
                     :search-model="searchModel"
                     :form-model="formModel"
+                    :form-view-model="formViewModel"
                     :params="params"
                     :addButton = "false"
                     @search-submit="searchSubmit"
@@ -46,6 +47,7 @@
       { field : 'factory' , label:'厂家：' , placeholder:'厂家' , type : 'select' , data : [] },
       { field : 'date' , label:'时间：' , placeholder:'时间' , type : 'date' , data : [] },
     ];
+    formViewModel : any = this.formModel;
     columns = [
       /* {type: 'selection',width: 60, align: 'center' },*/
       { title: '设备名',  key: 'name',  sortable: false },

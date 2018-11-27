@@ -1,4 +1,5 @@
 @import "mixins/index.scss";
+@import "animation.scss";
 @import "base/base.scss";
 @import "flex.scss";
 @import "iview-style.scss";
@@ -63,8 +64,6 @@ body,.ivu-menu-item,.ivu-menu{
   vertical-align: middle;
   font-size: 22px;
 }
-
-
 
 .page-enter-active, .page-leave-active {
   transition: opacity .5s;
@@ -155,6 +154,7 @@ body,.ivu-menu-item,.ivu-menu{
   background-position: center;
   position: absolute;
   &-con{
+    animation: login-animate .4s ease ;
     position: absolute;
     right: 160px;
     top: 10%;
@@ -179,4 +179,19 @@ body,.ivu-menu-item,.ivu-menu{
       color: #c3c3c3;
     }
   }
+  
+  @keyframes login-animate {
+    0%{
+      top: -50px;
+      opacity: 0;
+    }
+
+    100%{
+      top: 10%;
+      opacity: 1;
+    }
+  }
 }
+
+
+

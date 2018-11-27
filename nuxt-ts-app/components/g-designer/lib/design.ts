@@ -469,17 +469,8 @@ class DesignElement {
       this.$.remove();
     });
 
-    this.forbidInideDrag();
   }
 
-  /**
-   * 禁止内部元素拖动
-   */
-  forbidInideDrag(){
-    this.$.find('*').not('img').mousedown(function (e) {
-      e.stopPropagation();
-    });
-  }
 }
 
 

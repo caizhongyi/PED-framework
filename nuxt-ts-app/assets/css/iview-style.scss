@@ -12,9 +12,9 @@ html {
   height: 100%
 }
 
-.ivu-icon {
+/*.ivu-icon {
   font-size: 120%;
-}
+}*/
 
 .layout-con {
   height: 100%;
@@ -167,4 +167,10 @@ html {
 
 .ivu-select{
   min-width: 80px;
+}
+
+.ivu-table-body {
+  .ivu-btn + .ivu-btn{
+    margin-left: 5px;
+  }
 }

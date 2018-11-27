@@ -342,7 +342,12 @@ text-hide{
 }
 
 .icon{
-  @extend .inline-block
+  @extend .inline-block;
+  text-indent: -9999px;
+  overflow: hidden;
+  background-size: contain;
+  background-repeat:no-repeat;
+  background-position:center center;
 }
 
 .inline-group{
@@ -367,5 +372,20 @@ $-fs : 36px;
 @for $i from 1 through 6{
   h#{$i},.h#{$i}{
     font-size : ($-fs - $i * 4);
+  }
+}
+
+.image-view{
+  &.full{
+    background-size: contain;
+  }
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  img{
+    visibility: hidden;
+    max-width: 100%;
   }
 }

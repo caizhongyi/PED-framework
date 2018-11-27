@@ -7,284 +7,331 @@
                         <div class="g-designer-element-name"></div>
                     </span>
                 </i-col>
-                <i-col span="11" >
+                <i-col span="11">
                     <i-form inline="">
                         <i-form-item prop="行">
-                            <i-input type="text" id="row" v-model="row"   value="1" placeholder="行"></i-input>
+                            <i-input type="text" id="row" v-model="row" value="1" placeholder="行"></i-input>
                         </i-form-item>
                         <i-form-item prop="列">
-                            <i-input v-model="col" type="text" id="col"   value="1"  placeholder="列"></i-input>
+                            <i-input v-model="col" type="text" id="col" value="1" placeholder="列"></i-input>
                         </i-form-item>
-                        <i-form-item >
+                        <i-form-item>
                             <i-button type="primary" class="btn-batch" @click="batch()">批量创建</i-button>
                         </i-form-item>
-                     <!--   <i-form-item prop="">
-                            <i-input type="radio" v-model="type" name="type" value="1" checked> 方形 </i-input>
-                        </i-form-item>-->
+                        <!--   <i-form-item prop="">
+                               <i-input type="radio" v-model="type" name="type" value="1" checked> 方形 </i-input>
+                           </i-form-item>-->
                     </i-form>
                 </i-col>
                 <i-col span="5" class="text-right">
                     <i-button type="default" class="btn-clear" @click="clear()">清除</i-button>
-                    <i-button type="primary" class="btn-save"  @click="save()">保存</i-button>
+                    <i-button type="primary" class="btn-save" @click="save()">保存</i-button>
                 </i-col>
             </i-row>
         </i-card>
         <br>
-        <i-card class="g-designer-container">
+        <div style="position: relative"  @contextmenu.prevent=""  @mousedown="(e)=>{  selectElementMouseDown(e ) ;}" @mouseup="(e)=>{  selectElementMouseUp(e  ) ;}" @mousemove="(e)=>{  selectElementMouseMove(e ) ;}">
+            <i-card class="g-designer-container" >
+                <div class="g-designer-element"
+                     @contextmenu="(e)=>{ elementContextmenu ( e , item );}"
+                     :class="{ on : item.id == currentElement.id }"
+                     @mousedown="(e)=>{  elementMouseDown(e , item , 'move' ) ;}"
+                     v-for="(item,key) in value"
+                     :key="key"
+                     :style="{ cursor: 'move',  left: `${item.x}px` , top: `${item.y}px` , width: `${item.width}px` , height: `${item.height}px`}">
+                    <span
+                        class="g-designer-element-content g-designer-element-rotate"
+                        :style="{ 'background-image': `url(${item.background})` ,  transform: 'rotate('+ item.rotate +'deg)' , '-webkit-transform' : 'rotate('+ item.rotate +'deg)'}"></span><span
+                        class="g-designer-element-name" >{{ item.name }}</span>
+                    <span class="g-designer-element-remove" title="删除" @click="remove( item )"><i
+                        class="ivu-icon ivu-icon-ios-trash" ></i></span>
+                    <span class="g-designer-element-size" title="放缩" @mousedown="(e)=>{  elementMouseDown(e , item  , 'size'  ) ;}"></span>
 
-        </i-card>
+                    <div class="g-designer-element-tip clearfix" v-if=" item.hasTip ">
+                       <div class="pull-left">设备ID:'+ item.id +'</div>' +
+                       <div class="pull-right">
+                           <div v-if="item.status == 0" class="btn btn-primary" > 正常 </div>
+                           <div v-else="item.status == 0" class="btn btn-danger" > 异常 </div>
+                       </div>
+                    </div>
+                </div>
+            </i-card>
+            <div class="area-box" v-show="areaElement.active" :style="{ left: `${areaElement.x}px` , top: `${areaElement.y}px` , width: `${areaElement.width}px` , height: `${areaElement.height}px`}"></div>
+        </div>
     </div>
 
 </template>
 <script lang="ts">
   import { Component, Prop, Vue } from "nuxt-property-decorator";
   import $ from "jquery";
+  import _ from "underscore";
+  import uuid from "uuid/v1";
   import Design from "./lib/design.ts";
 
   @Component({
-    components: { }
+    components: {}
   })
-  export default class FloorDesign  extends Vue {
-    @Prop({ default: 'all' })
-    direction;
+  export default class GDesigner extends Vue {
+    @Prop({ default: "all" }) direction;
+    @Prop({
+      default: () => {
+        return [];
+      }
+    }) value;
+
+    $design : any ;
+    $areabox : any ;
+    currentElement : any = { };
+    currentElements : any = null;
+    areaElement : any = {
+      x : 0,
+      y : 0,
+      width : 0,
+      height : 0 ,
+    };
+
     design: any;
-    row : number = 1;
-    col : number = 1;
-    type : number = 1;
-    /*@Model()
-    visible:boolean = false;
+    row: number = 1;
+    col: number = 1;
+    type: number = 1;
 
-    @Watch('visible')
-    onChangeVisible( val ) {
-      this.$emit('input', val);
-    }*/
-
-    add(){
-      let data = { x: 0, y: 0, name: '房间' , background : 'https://icarusion.gitee.io/iview/e1cf12c07bf6458992569e67927d767e.png'}
-      this.design.add(data);
+    /*
+        {
+              x,
+              y,
+              name,
+              direction,
+              rotate,
+              type ,
+              hasTip ,
+              target ,
+              width,
+              height ,
+              background
+        }
+     */
+    add( data : any = {  x : 0 , y : 0 , name : '' , rotate  : 0  , type : 0 , hasTip : false , target : null , width: 100 , height: 100 , background: null }) {
+      data.id = data.id || uuid();
+      data.x = data.x || 0;
+      data.y = data.y || 0;
+      this.value.push( data );
       return this;
     }
 
-    clear(){
-      this.design.empty();
+    remove( data : any = {} ){
+      let val = _( this.value ).filter(( n )=>{
+        return data.id != n.id
+      })
+      this.$emit("input" , val );
       return this;
     }
-    save(){
+
+    elementContextmenu( e , item ){
+      item.rotate = item.rotate + 90;
+      this.value.push();
+    }
+
+    clear() {
+      this.value = [];
+      this.value.push();
+      //this.design.empty();
+      return this;
+    }
+
+    save() {
       this.design.save();
       return this;
     }
-    batch(){
-      switch ( this.type ) {
+
+    create( row =  1 , col = 1 , data = {  x : 0 , y : 0 , name : '' , rotate  : 0  ,  width: 100 , height: 100  }  ){
+      let width = data.width ;
+      let height = data.height;
+      for( let i = 0 ; i < row ; i ++ ){
+        for( let j = 0 ; j < col ; j ++ ){
+          let d = {...data};
+          d.x = (j * (width + 1 )) ;
+          d.y = (i * ( height + 1)) ;
+          this.add( d );
+        }
+      }
+      return this;
+    }
+
+    batch() {
+      switch (this.type) {
         case 1:
-          this.design.createTemplateList( this.row  , this.col  );
+          this.create(this.row, this.col);
           break;
       }
       return this;
     }
-    floor(number) {
-      switch (number) {
-        case 1 :
-          this.design.empty().create([{"x": 154, "y": 50, "name": "房间 " }, {"x": 372, "y": 54, "name": "房间 "}, {
-            "x": 262,
-            "y": 52,
-            "name": "房间 "
-          }, {"x": 480, "y": 55, "name": "房间 "}])
-          break;
-        case 2 :
-          this.design.empty().create([{"x": 246, "y": 155, "name": "房间 ", "direction": "北", "rotate": 180}, {
-            "x": 583,
-            "y": 292,
-            "name": "房间 ",
-            "direction": "北",
-            "rotate": 180
-          }, {"x": 351, "y": 154, "name": "房间 ", "direction": "西", "rotate": 90}, {
-            "x": 685,
-            "y": 52,
-            "name": "房间 ",
-            "direction": "南",
-            "rotate": 360
-          }, {"x": 140, "y": 156, "name": "楼道 ", "direction": "东", "rotate": 270}, {
-            "x": 576,
-            "y": 55,
-            "name": "楼道 ",
-            "direction": "北",
-            "rotate": 180
-          }, {"x": 918, "y": 80, "name": "楼道 "}, {"x": 1030, "y": 82, "name": "楼梯 "}, {
-            "x": 691,
-            "y": 294,
-            "name": "房间 ",
-            "direction": "东",
-            "rotate": 270
-          }, {"x": 362, "y": 287, "name": "房间 ", "direction": "东", "rotate": 270}, {
-            "x": 798,
-            "y": 294,
-            "name": "房间 ",
-            "direction": "西",
-            "rotate": 90
-          }, {"x": 49, "y": 418, "name": "房间 ", "direction": "东", "rotate": 270}, {
-            "x": 262,
-            "y": 52,
-            "name": "楼梯 ",
-            "direction": "南",
-            "rotate": 360
-          }, {"x": 154, "y": 50, "name": "房间 "}, {"x": 372, "y": 54, "name": "房间 "}, {
-            "x": 480,
-            "y": 55,
-            "name": "房间 "
-          }, {"x": 246, "y": 155, "name": "房间 ", "direction": "北", "rotate": 180}, {
-            "x": 583,
-            "y": 292,
-            "name": "房间 ",
-            "direction": "北",
-            "rotate": 180
-          }, {"x": 351, "y": 154, "name": "房间 ", "direction": "西", "rotate": 90}, {
-            "x": 685,
-            "y": 52,
-            "name": "房间 ",
-            "direction": "南",
-            "rotate": 360
-          }, {"x": 140, "y": 156, "name": "楼道 ", "direction": "东", "rotate": 270}, {
-            "x": 576,
-            "y": 55,
-            "name": "楼道 ",
-            "direction": "北",
-            "rotate": 180
-          }, {"x": 918, "y": 80, "name": "楼道 "}, {"x": 1030, "y": 82, "name": "楼梯 "}, {
-            "x": 691,
-            "y": 294,
-            "name": "房间 ",
-            "direction": "东",
-            "rotate": 270
-          }, {"x": 362, "y": 287, "name": "房间 ", "direction": "东", "rotate": 270}, {
-            "x": 798,
-            "y": 294,
-            "name": "房间 ",
-            "direction": "西",
-            "rotate": 90
-          }, {"x": 49, "y": 418, "name": "房间 ", "direction": "东", "rotate": 270}, {
-            "x": 154,
-            "y": 50,
-            "name": "房间 "
-          }, {"x": 372, "y": 54, "name": "房间 "}, {"x": 480, "y": 55, "name": "房间 "}, {
-            "x": 246,
-            "y": 155,
-            "name": "房间 ",
-            "direction": "北",
-            "rotate": 180
-          }, {"x": 583, "y": 292, "name": "房间 ", "direction": "北", "rotate": 180}, {
-            "x": 351,
-            "y": 154,
-            "name": "房间 ",
-            "direction": "西",
-            "rotate": 90
-          }, {"x": 685, "y": 52, "name": "房间 ", "direction": "南", "rotate": 360}, {
-            "x": 140,
-            "y": 156,
-            "name": "楼道 ",
-            "direction": "东",
-            "rotate": 270
-          }, {"x": 576, "y": 55, "name": "楼道 ", "direction": "北", "rotate": 180}, {
-            "x": 918,
-            "y": 80,
-            "name": "楼道 "
-          }, {"x": 1030, "y": 82, "name": "楼梯 "}, {
-            "x": 691,
-            "y": 294,
-            "name": "房间 ",
-            "direction": "东",
-            "rotate": 270
-          }, {"x": 362, "y": 287, "name": "房间 ", "direction": "东", "rotate": 270}, {
-            "x": 798,
-            "y": 294,
-            "name": "房间 ",
-            "direction": "西",
-            "rotate": 90
-          }, {"x": 49, "y": 418, "name": "房间 ", "direction": "东", "rotate": 270}, {
-            "x": 154,
-            "y": 50,
-            "name": "房间 "
-          }, {"x": 372, "y": 54, "name": "房间 "}, {"x": 480, "y": 55, "name": "房间 "}, {
-            "x": 246,
-            "y": 155,
-            "name": "房间 ",
-            "direction": "北",
-            "rotate": 180
-          }, {"x": 583, "y": 292, "name": "房间 ", "direction": "北", "rotate": 180}, {
-            "x": 351,
-            "y": 154,
-            "name": "房间 ",
-            "direction": "西",
-            "rotate": 90
-          }, {"x": 685, "y": 52, "name": "房间 ", "direction": "南", "rotate": 360}, {
-            "x": 140,
-            "y": 156,
-            "name": "楼道 ",
-            "direction": "东",
-            "rotate": 270
-          }, {"x": 576, "y": 55, "name": "楼道 ", "direction": "北", "rotate": 180}, {
-            "x": 918,
-            "y": 80,
-            "name": "楼道 "
-          }, {"x": 1030, "y": 82, "name": "楼梯 "}, {
-            "x": 691,
-            "y": 294,
-            "name": "房间 ",
-            "direction": "东",
-            "rotate": 270
-          }, {"x": 362, "y": 287, "name": "房间 ", "direction": "东", "rotate": 270}, {
-            "x": 798,
-            "y": 294,
-            "name": "房间 ",
-            "direction": "西",
-            "rotate": 90
-          }, {"x": 49, "y": 418, "name": "房间 ", "direction": "东", "rotate": 270}, {
-            "x": 154,
-            "y": 50,
-            "name": "房间 "
-          }, {"x": 45, "y": 55, "name": "房间 "}, {"x": 480, "y": 55, "name": "房间 "}, {
-            "x": 246,
-            "y": 155,
-            "name": "房间 ",
-            "direction": "北",
-            "rotate": 180
-          }, {"x": 583, "y": 292, "name": "房间 ", "direction": "北", "rotate": 180}, {
-            "x": 351,
-            "y": 154,
-            "name": "房间 ",
-            "direction": "西",
-            "rotate": 90
-          }, {"x": 685, "y": 52, "name": "房间 ", "direction": "南", "rotate": 360}, {
-            "x": 140,
-            "y": 156,
-            "name": "楼道 ",
-            "direction": "东",
-            "rotate": 270
-          }, {"x": 576, "y": 55, "name": "楼道 ", "direction": "北", "rotate": 180}, {
-            "x": 918,
-            "y": 80,
-            "name": "楼道 "
-          }, {"x": 1030, "y": 82, "name": "楼梯 "}, {
-            "x": 691,
-            "y": 294,
-            "name": "房间 ",
-            "direction": "东",
-            "rotate": 270
-          }, {"x": 362, "y": 287, "name": "房间 ", "direction": "东", "rotate": 270}, {
-            "x": 798,
-            "y": 294,
-            "name": "房间 ",
-            "direction": "西",
-            "rotate": 90
-          }, {"x": 45, "y": 295, "name": "房间 ", "direction": "东", "rotate": 270}])
-          break;
-      }
+
+    isActive( elements : Array<any> = [] , id  ){
+        for( let item in elements ){
+           if( item['id'] == id ) return true ;
+        }
+        return false;
+    }
+
+    selectElementMouseDown( e  ){
+        if( !$(e.target).hasClass('g-designer-element')  ){
+            //this.currentElements = null;
+            this.areaElement.active = true ;
+            this.areaElement.x = e.pageX  - this.$design.offset().left ;
+            this.areaElement.y = e.pageY  - this.$design.offset().top ;
+            this.areaElement.tempX = this.areaElement.x;
+            this.areaElement.tempY = this.areaElement.y;
+            this.areaElement.pageX = e.pageX;
+            this.areaElement.pageY = e.pageY;
+            this.areaElement.$areabox = this.$areabox;
+            this.areaElement.tempWidth = this.areaElement.width;
+            this.areaElement.tempHeight = this.areaElement.height;
+        }
+        return this;
+    }
+    selectElementMouseUp( e  ){
+
       return this;
     }
+    selectElementMouseMove( e  ){
+
+      return this;
+    }
+    getInElement( area ) {
+      // let layers = [];
+      return _(this.value).filter(( n )=>{
+        if (
+          n.x + n.width > area.x
+          &&
+          n.x < area.x + area.width
+          &&
+          n.y + n.height > area.y
+          &&
+          n.y < area.y + area.height
+        ) {
+          console.log(true)
+          n.on = true ;
+          return true;
+        }
+        else {
+          console.log(false)
+          n.on = false ;
+          return false;
+        }
+      })
+    }
+
+  /*  selectElement( e , item  ){
+      this.currentElements = this.currentElements || [];
+      let temp = item ;
+      temp = item ;
+      temp.pageX = e.pageX;
+      temp.pageY = e.pageY;
+      temp.tempWidth = item.width;
+      temp.tempHeight = item.height;
+      temp.tempX = item.x;
+      temp.tempY = item.y;
+      this.currentElements.push( temp );
+      return this;
+    }*/
+
+    elementMouseDown(e , item , command ){
+      e.stopPropagation();
+      this.currentElement = item ;
+      this.currentElement.on = true;
+      this.currentElement.pageX = e.pageX;
+      this.currentElement.pageY = e.pageY;
+      this.currentElement.tempWidth = item.width;
+      this.currentElement.tempHeight = item.height;
+      this.currentElement.tempX = item.x;
+      this.currentElement.tempY = item.y;
+      this.currentElement.command = command;
+      return this;
+    }
+
+    selectArea( e ){
+      if( this.areaElement.active ){
+        let offset = { left : this.areaElement.pageX , top : this.areaElement.pageY };
+
+        if (e.pageX < offset.left ) {
+          this.areaElement.x = this.areaElement.tempX + e.pageX - this.areaElement.pageX;
+          this.areaElement.width = this.areaElement.tempWidth + Math.abs(e.pageX - this.areaElement.pageX);
+        }
+
+        if (e.pageY < offset.top ) {
+          this.areaElement.y = this.areaElement.tempY + e.pageY - this.areaElement.pageY;
+          this.areaElement.height = this.areaElement.tempHeight + Math.abs(e.pageY - this.areaElement.pageY);
+        }
+
+        if( e.pageY >= offset.top  || e.pageX > offset.left){
+          this.areaElement.width = this.areaElement.tempWidth + Math.abs(e.pageX - this.areaElement.pageX);
+          this.areaElement.height = this.areaElement.tempHeight + Math.abs(e.pageY - this.areaElement.pageY);
+        }
+
+        this.currentElements = this.getInElement( this.areaElement );
+        console.log(this.currentElements)
+        // this.areaElement.width = e.pageX  - this.$design.offset().x ;
+        // this.areaElement.height = e.pageY  - this.$design.offset().y ;
+      }
+    }
+
     mounted() {
-      this.design = new Design('.g-designer') ;
+      //this.design = new Design(".g-designer");
+
+      this.$design = $('.g-designer-container');
+      this.$areabox = $('.area-box', this.$el );
+
+      for(let item of this.value ){
+         item.id = item.id ? item.id : uuid();
+      }
+
+      $(document)
+        .on("mouseup.gResizing", (e)=> {
+        this.currentElement = {};
+        this.areaElement.active = false;
+        this.areaElement.width = 0;
+        this.areaElement.height = 0;
+      }).on("mousemove.gResizing", (e)=> {
+        //this.selectArea(e)
+        if( this.currentElements ){
+          if( this.currentElements.length ){
+            for( let item of this.currentElements ){
+              let x = e.pageX - item.pageX + item.tempX ;
+              let y = e.pageY - item.pageY  + item.tempY ;
+              item.x =  ( (x + item.width) > this.$design.width() || x < 0) ? item.x : x ;
+              item.y = ( (y + item.height) > this.$design.height() || y < 0) ? item.y : y ;
+            }
+          }
+        }
+        else if( this.currentElement.id ){
+          if( this.currentElement.command == 'move'){
+            let x = e.pageX - this.currentElement.pageX + this.currentElement.tempX ;
+            let y = e.pageY - this.currentElement.pageY  + this.currentElement.tempY ;
+            this.currentElement.x =  ( (x + this.currentElement.width) > this.$design.width() || x < 0) ? this.currentElement.x : x ;
+            this.currentElement.y = ( (y + this.currentElement.height) > this.$design.height() || y < 0) ? this.currentElement.y : y ;
+          }
+          else  if( this.currentElement.command == 'size'){
+            let width = e.pageX - this.currentElement.pageX + this.currentElement.tempWidth ;
+            let height = e.pageY - this.currentElement.pageY  + this.currentElement.tempHeight ;
+            this.currentElement.width =  ( (width + this.currentElement.x ) > this.$design.width() || width < 50 ) ? this.currentElement.width : width ;
+            this.currentElement.height = ( (height + this.currentElement.y ) > this.$design.height() || height < 50 ) ? this.currentElement.height : height ;
+          }
+          else{
+            /*if( this.currentElement.length ){
+              for( let item of this.currentElement ){
+                let x = e.pageX - item.pageX + item.tempX ;
+                let y = e.pageY - item.pageY  + item.tempY ;
+                item.x =  ( (x + item.width) > this.$design.width() || x < 0) ? item.x : x ;
+                item.y = ( (y + item.height) > this.$design.height() || y < 0) ? item.y : y ;
+              }
+            }*/
+          }
+        }
+      });
+
     }
   }
 </script>
-<style  lang="scss" >
+<style lang="scss">
     @import "index.scss";
 </style>

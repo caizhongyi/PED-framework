@@ -38,12 +38,17 @@
                     method="get"
                     :columns="columns"
                     :form-model="formModel"
+                    :form-view-model="formViewModel"
                     :search-model="searchModel"
                     :search-label-width="80"
                     :params="params"
                     @search-submit="searchSubmit"
                     @edit-submit="editSubmit"
-                    @edit-cancel="editCancel"></page-table> <!-- 自定义组件 ~/components/page-table.vue -->
+                    @edit-cancel="editCancel">
+            <template slot="modal-footer">
+                <i-button type="default" :loading="buttonLoading">解锁</i-button>
+            </template>
+        </page-table> <!-- 自定义组件 ~/components/page-table.vue -->
         <ajax ref="ajax"></ajax><!-- 自定义组件 ~/components/ajax -->
         <Modal
                 v-model="modal1"
@@ -62,6 +67,7 @@
   import { State, Getter, Action, Mutation, namespace } from "vuex-class"  // Vue store 全局定义，例如用户信息等全局都需要用的
   import PageTable from "~/components/page-table";  // 自定义组件目录
   import Ajax from "~/components/ajax";  // 自定义组件目录
+  import uuid from "uuid/v1";  // 自定义组件目录
   import DyncForm from "~/components/dync-form/index";
 
   declare var jQuery;
@@ -72,6 +78,12 @@
     }
   })
   export default class Table extends Vue {    //  typescript 创建类继成 Vue
+    @Prop({ default :　1  }) settings  : object ;  // 只能单项绑定（组件内不能对其值更改）
+    @Model() model  : any ; // 当作为组件引用时 v-model 值， 双项绑定（组件内可改变其值）
+
+    @State user :any; // 全局 store 中的变量
+    @Mutation stateMutation :any; // 全局  store 中的方法
+
 
     formData:any = [
       { field : 'name' , placeholder:'名称', type : 'input' },
@@ -92,30 +104,13 @@
     lastName : any  = 'zhongyi' ;
     modal1: boolean = false;
     current: any = {};
-    @Prop({ default :　1  }) settings  : object ;  // 只能单项绑定（组件内不能对其值更改）
-    @Model() model  : any ; // 当作为组件引用时 v-model 值， 双项绑定（组件内可改变其值）
-
-    @State user :any; // 全局 store 中的变量
-    @Mutation stateMutation :any; // 全局  store 中的方法
+    buttonLoading = false;
 
     @Watch('value') // 相当于Vue 中的 watch bb变量
     onChangeModel( value ){   // 函数名自定义
       console.log( value )
     }
 
-    get name(){
-      return this.firstName +  this.lastName ;  // 想当于vue computed
-    }
-    async submit(){
-      let table:any = this.$refs.table;   // this.$refs.table  标签的ref table , typescript是强类型为了避免麻烦直接定义为any类型;
-      table.change({ current : parseInt(this.form.user), ...this.form });
-      //  let res = await this.get({ current : parseInt(this.form.user), ...this.form });
-
-    }
-    /*  set name( value ){
-        this._name = value;
-        return 'set:' +  this._name  ;
-      }*/
 
     //变量定义
 
@@ -123,7 +118,7 @@
       { 　field : 'Name' , type : 'input',  label: "名称" },
       {   field : 'Age' , type : 'input',  label: "值" },
     ]
-
+    formViewModel = this.formModel;
     columns = [
       {
         type: 'selection',
@@ -157,6 +152,7 @@
           return h('div', [
             table.getEditControl(h, params),
             table.getRemoveControl(h, params),
+            table.getViewControl(h, params),
           ]);
         }
       }
@@ -179,15 +175,32 @@
       let ajax:any = this.$refs.ajax;
       let res = await  ajax.get('page-data.json' , params);  // await 异步调用  es6写法
     }
+
+
+    get name(){
+      return this.firstName +  this.lastName ;  // 想当于vue computed
+    }
+    async submit(){
+      let table:any = this.$refs.table;   // this.$refs.table  标签的ref table , typescript是强类型为了避免麻烦直接定义为any类型;
+      table.change({ current : parseInt(this.form.user), ...this.form });
+      //  let res = await this.get({ current : parseInt(this.form.user), ...this.form });
+
+    }
+    /*  set name( value ){
+        this._name = value;
+        return 'set:' +  this._name  ;
+      }*/
     submitSearch(data){
       console.log(data)
     }
-    add(){
-      let table:any = this.$refs.table;
-      table.add();
+   /* add( data ){
+      setTimeout(()=>{
+        this.table.data.push(data)
+        this.table.modal = false;
+      },1000)
       return this;
     }
-
+ */
     ok(){
       alert('ok')
       return true;
@@ -198,20 +211,22 @@
     }
 
     show (index = 0 ) {  //函数定义  index = 0 为默认参数值
-      let table:any = this.$refs.table;
-      this.current = table.data[index];
+      this.current = this.table.data[index];
       this.modal1 = true;
     }
     searchSubmit( data ){
       console.log(data)
     }
-    //提交修改
+    //提交 新增或修改
     editSubmit(data){
       setTimeout(()=>{
-        this.table.data.push(data);
+        console.log(data);
+        if( !data.id ){
+          data.id = uuid();
+          this.table.data.push(data);
+        }
         this.table.modal = false;
       },1000)
-      console.log(data);
     }
     //取消修改
     editCancel(data){
