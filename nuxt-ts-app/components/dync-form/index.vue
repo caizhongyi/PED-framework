@@ -3,7 +3,7 @@
         <Form ref="form" label-position="right" :model="value" :inline="inline" :label-width="labelWidth"
               :rules="ruleValidate">
             <slot name="header" :data="value"></slot>
-            <dync-form-item :model="model" v-model="value" :rule-validate="ruleValidate" :label-width="labelWidth"></dync-form-item>
+            <dync-form-item :model="model" :root="this" v-model="value" :rule-validate="ruleValidate" :label-width="labelWidth" ></dync-form-item>
             <slot :data="value"></slot>
             <FormItem  v-if="submitButton && !inline">
                 <Button type="primary" @click="submit('form')" :icon="submitButton.icon">{{ submitButton.text }}</Button>
@@ -14,7 +14,7 @@
         </Form>
 
         <Modal title="图片浏览" v-model="modalVisible" >
-            <img :src="'https://o5wwk8baw.qnssl.com/' + modalImageName + '/large'" style="width: 100%" v-if="modalImageName">
+            <img :src="modalImageName" style="width: 100%" v-if="modalImageName">
         </Modal>
     </div>
 </template>
@@ -33,7 +33,6 @@
   })
   export default class DyncForm extends Vue {
 
-    form : any ;
     @Prop( { default : ()=>{ return {} } } ) value: any ;
     @Prop() inline: any;
     @Prop() model: any;
@@ -43,6 +42,7 @@
     @Prop({ default :()=>{ return { text : '提交' , icon : ''}}}) submitButton: SubmitButton;
 
    // @Prop() rules : any ;
+    form : any ;
 
     ruleValidate: any = {};
     modalVisible = false;

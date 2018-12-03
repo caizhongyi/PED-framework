@@ -16,6 +16,7 @@
     "lib-flexible": "^0.3.2",
     "moment": "^2.22.2",
     "nestable": "^0.2.0",
+    "nuxt": "^2.2.0",
     "nuxt-property-decorator": "^1.2.0",
     "postcss-px2rem": "^0.3.0",
     "qs": "^6.5.2",
@@ -33,7 +34,7 @@
     "nuxt": {}
   },
   "scripts": {
-    "dev": "nuxt",
+    "dev": "cross-env __ENV=development  nuxt ",
     "dev:release": "cross-env __ENV=release  nuxt",
     "build": "nuxt build",
     "build:test": "cross-env __ENV=release nuxt build",
@@ -61,7 +62,6 @@
     "mocha": "^5.2.0",
     "node-sass": "^4.9.3",
     "npm": "^6.4.1",
-    "nuxt": "^2.2.0",
     "postcss-nested": "^4.1.0",
     "prettier": "^1.12.1",
     "sass": "^1.13.0",

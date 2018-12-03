@@ -32,6 +32,7 @@ html{
 
 html, body {
   height: 100%;
+  min-width: 1366px;
 }
 
 
@@ -138,6 +139,18 @@ body,.ivu-menu-item,.ivu-menu{
   margin-bottom: 24px;
 }
 
+.ivu-tag{
+  line-height: normal;
+}
+
+.ivu-btn{
+  span{
+    display: inline-block;
+    a{
+      color: #fff;
+    }
+  }
+}
 .list-unstyled{
   &,li{
     margin: 0 ;
@@ -145,7 +158,10 @@ body,.ivu-menu-item,.ivu-menu{
     list-style: none;
   }
 }
-
+.ivu-tree{
+  max-height: 300px;
+  overflow-y: auto;
+}
 .login{
   width: 100%;
   height: 100%;
@@ -179,7 +195,7 @@ body,.ivu-menu-item,.ivu-menu{
       color: #c3c3c3;
     }
   }
-  
+
   @keyframes login-animate {
     0%{
       top: -50px;
@@ -193,5 +209,7 @@ body,.ivu-menu-item,.ivu-menu{
   }
 }
 
-
+.img-box-img{
+  cursor: pointer;
+}
 

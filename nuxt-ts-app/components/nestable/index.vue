@@ -4,11 +4,12 @@
             <i-button type="default" icon="md-add"  data-action="expand-all" @click="expandAll">展开</i-button>
             <i-button type="default" icon="md-remove"  data-action="collapse-all" @click="collapseAll">缩起</i-button>
             <i-button type="primary" icon="md-add" @click="add">新增</i-button>
+            <i-button type="primary" icon="ios-open-outline" @click="saveOrder">保存排序</i-button>
             <slot></slot>
         </menu>
 
         <div class="dd dd-small-handle" >
-            <nestable-item v-model="value" :root="root" ></nestable-item>
+            <nestable-item v-model="value" :root="this" ></nestable-item>
         </div>
 
         <Modal
@@ -17,7 +18,7 @@
                 :loading="true"
                 @on-ok="ok"
                 @on-cancel="cancel">
-            <dync-form  ref="form" :model="formModel" @success="submit" :label-width="70"  :submit-button="false"></dync-form>
+            <dync-form  ref="form" v-model="formData" :model="formModel" @success="submit" :label-width="70"  :submit-button="false"></dync-form>
         </Modal>
 
     </div>
@@ -39,7 +40,7 @@
 
     modal: any = false ;
     form: any;
-
+    formData :any = {};
     /* 目前支持字段
     *  :data-id="item.id"
             :data-name="item.name"
@@ -53,12 +54,19 @@
 
     @Prop({ default : ()=>{ return [
         {
-          field: "name",
+          field: "title",
           label: "名称",
           type: "input",
           required: true,
           rule: [{ required: true, message: "请输入名称", trigger: "blur" }],
         },
+      /*  {
+          field: "name",
+          label: "名称",
+          type: "input",
+          required: true,
+          rule: [{ required: true, message: "请输入名称", trigger: "blur" }],
+        },*/
         {
           field: "url",
           label: "链接地址",
@@ -70,7 +78,7 @@
           type: "input"
         },
         {
-          field: "shown",
+          field: "isshow",
           label: "shown",
           type: "radio",
           data : [{ text : '显示' , value : 1  },{ text : '不显示' , value : 0  }]
@@ -81,13 +89,16 @@
           type: "input",
         },
         {
-          field: "order",
-          label: "order",
+          field: "orderlist",
+          label: "orderlist",
           type: "input",
         }
       ];}}) formModel : any ;
-    root : any  = this ;
 
+    saveOrder(){
+        this.$emit('save-order' , this.$nestable.nestable('serialize') );
+        return this;
+    }
     ok(){
       this.form.submit();
       return this;
@@ -103,23 +114,34 @@
     }
 
     submit(){
-      this.$emit('input', this.value );
-      this.$emit('submit', this.form.data , this.value );
+      //this.$emit('input', this.value );
+      this.$emit('submit', this.form.value );
       return this;
     }
     fail(){}
 
     edit( item ){
       this.modal = true;
-      this.form.data = item;
+      this.formData = item;
       return this;
     }
+
+    removeNode( node , item ){
+      for(let i = 0  ; i < node.length ; i++ ){
+        if( node[i].id == item.id ){
+          node.splice( i , 1 );
+        }
+        else{
+          if(  node[i].children ) this.removeNode(  node[i].children , item );
+        }
+      }
+      return node;
+    }
+
     remove( item ){
-      let data = _( this.value ).filter(function( n ) {
-          return n.id != item.id ;
-      })
-      this.$emit('input', data );
-      this.$emit('remove', item , data );
+      let data = this.removeNode( this.value , item );
+      this.$emit('input',  data );
+      this.$emit('remove', item );
       return this;
     }
     expandAll(){
@@ -131,14 +153,14 @@
       return this;
     }
     mounted() {
-      let _this = this;
       this.$nestable = $( '.dd' , this.$el ).nestable({
         group: 1,
         dragClass : 'dd-dragel dd-small-handle'
       })
       .on('change', ( e , n )=>{
-        _this.$emit('input', _this.$nestable.nestable('serialize') );
-        _this.$emit('change' , _this.value );
+       // console.log( this.$nestable.nestable('serialize'));
+       //this.$emit('input', this.$nestable.nestable('serialize') );
+        this.$emit('change' , this.$nestable.nestable('serialize') );
       })
       this.form = this.$refs.form;
     }

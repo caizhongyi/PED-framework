@@ -12,7 +12,7 @@
                 <i-button type="primary" icon="md-add" v-if="addButton" @click="add">新增</i-button>
                 <Button type="primary"  @click="exportData" v-if="expButton" icon="ios-download-outline">导出数据</Button>
                 <slot></slot>
-                <Button v-if="columns && columns[0] && columns[0].type == 'selection'" icon="md-beaker" @click="removeAll">删除所有</Button>
+                <Button v-if="columns && columns[0] && columns[0].type == 'selection'" icon="md-trash" @click="removeAll">删除所有</Button>
                 &nbsp;
             </i-col>
             <i-col span="12" class="text-right"><Page :total="total" :current="page" :page-size="pageSize" show-elevator show-total @on-change="change"/></i-col>
@@ -184,7 +184,7 @@
         props: {
           type: 'error',
           size: 'small',
-          icon: 'md-beaker',
+          icon: 'md-trash',
         },
         on: {
           click: () => {

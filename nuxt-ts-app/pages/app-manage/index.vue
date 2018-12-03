@@ -6,7 +6,7 @@
         <Row>
             <Col span="6" v-for="(item,index) in appData" :key="index">
                 <div class="img-box">
-                    <div class="img-box-img" :style="{backgroundImage:'url(' + item.backgroundImage + ')'}" alt=""></div>
+                    <div class="img-box-img" @click="appDetail(item)" :style="{backgroundImage:'url(' + item.backgroundImage + ')'}" alt=""></div>
                     <div class="img-box-detail">
                         {{ item.name }}
                         <Button type="error" size="small" @click="deleteApp(index)">删除</Button>
@@ -16,6 +16,11 @@
         </Row>
         <Modal :width="500" title="新增应用" v-model="showAppData"  @on-ok="submit" @on-cancel="fail">
             <dync-form :model="form" :label-width="80" :submit-button="false" ref="forms">
+                <template slot slot-scope="props"> </template>
+            </dync-form>
+        </Modal>
+        <Modal :width="500" title="应用详情" v-model="showAppDetailData"  @on-ok="detailSubmit" @on-cancel="detailFail">
+            <dync-form :model="formDetail" v-model="itemData" :label-width="80" :submit-button="false" ref="formDetails">
                 <template slot slot-scope="props"> </template>
             </dync-form>
         </Modal>
@@ -59,15 +64,69 @@
         rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }]
       }
     ];
-
+    formDetail:any=[
+      {
+        field: "name",
+        label: "应用名",
+        type: "input",
+        disabled: true,
+        required: true,
+      },
+      {
+        field: "type",
+        label: "应用类型",
+        value: '小区',
+        type: "input",
+        disabled: true,
+      },
+      {
+        field: "app-id",
+        label: "APPID",
+        type: "input",
+        disabled: true,
+        // placeholder: '自动生成',
+      },
+      {
+        field: "app-secret",
+        label: "APPSECRET",
+        type: "input",
+        disabled: true,
+        // placeholder: '自动生成',
+      },
+      {
+        field: "domain-name",
+        label: "应用域名",
+        type: "input",
+        // placeholder: '访问地址',
+        required: true,
+        disabled: true,
+        // rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }],
+      },
+      {
+        field: "device-type",
+        label: "设备",
+        type: "input",
+        // placeholder: '请选择设备',
+        required: true,
+        disabled: true,
+        // multiple: true,
+        // rule: [{ required: true, message: "请选择设备", trigger: "blur" }],
+      }
+    ];
 
     showAppData = false;
+    showAppDetailData = false;
+    itemData:any = '';
 
     deleteApp(index){
       this.appData.splice(index,1);
     }
     addApp(){
       this.showAppData = true;
+    }
+    appDetail(item){
+      this.itemData = item;
+      this.showAppDetailData = true;
     }
     submit(){
       let f :any = this.$refs.forms;
@@ -77,6 +136,12 @@
       f.reset();
     }
     fail(){
+
+    }
+    detailSubmit(){
+
+    }
+    detailFail(){
 
     }
     reset(){

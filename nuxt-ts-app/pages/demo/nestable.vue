@@ -13,7 +13,7 @@
                        @drop="dropHandler">
         </vue-drag-tree></no-ssr>
 
-        <nestable ref="nestable" v-model="data" @remove="remove" @submit="submit" @change="change"></nestable>
+        <nestable ref="nestable" v-model="data" @remove="remove" @save-order="saveOrder"  @submit="submit" @change="change"></nestable>
     </div>
 </template>
 
@@ -32,26 +32,25 @@
     data = [
       {
         name: 'Node 0-0',
+        title : 'Node 0-0',
         id: 0,
         children: [
           {
             name: 'Node 1-1',
             id: 3,
+            title: 'Node 1-1',
             children: [
               {
                 name: 'Node 2-1',
+                title: 'Node 2-1',
                 id: 4,
-                children: []
-              },
-              {
-                name: 'Node 2-2',
-                id: 10,
                 children: []
               }
               ]
           },
           {
             name: 'Node 1-2',
+            title: 'Node 1-2',
             id: 13,
             children: []
           }
@@ -59,22 +58,41 @@
       },
       {
         name: 'Node 0-1',
+        title: 'Node 0-1',
         id: 14,
-        children: []
+        children: [
+          {
+            name: 'Node 1-1',
+            title: 'Node 1-1',
+            id: 15,
+            children: []
+          }
+        ]
       }
       ]
     nestable:any;
-    submit( item , data ){
+
+
+    saveOrder( data ){
+      console.log(data);
+    }
+
+    submit( data ){
+      if( data.id ){
+        console.log('修改' ,data )
+      }
+      else{
+        console.log('新增', data )
+      }
       setTimeout(()=>{
         this.nestable.modal = false;
       },2000)
-      console.log(this.data)
     }
-    remove( item , data ){
-      console.log(this.data)
+    remove( data ){
+      console.log( data)
     }
     change( data ){
-      console.log(this.data)
+      console.log( data )
     }
     onEdit(){}
     onDetail(){}

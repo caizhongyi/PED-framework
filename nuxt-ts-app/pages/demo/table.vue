@@ -217,7 +217,8 @@
     searchSubmit( data ){
       console.log(data)
     }
-    //提交 新增或修改
+    //弹出窗提交
+    // 新增和修改都调用此接口， 判断是新增还是修改通过有没有id来判断
     editSubmit(data){
       setTimeout(()=>{
         console.log(data);

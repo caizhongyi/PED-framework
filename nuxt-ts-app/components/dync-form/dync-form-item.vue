@@ -42,7 +42,7 @@
                         <template v-if="subItem.status === 'finished'">
                             <img :src="subItem.url" alt="subItem.name"/>
                             <div class="upload-list-cover">
-                                <Icon type="ios-eye-outline" @click.native="view(subItem.name)"></Icon>
+                                <Icon type="ios-eye-outline" @click.native="view(subItem.url)"></Icon>
                                 <Icon type="ios-trash-outline" @click.native="item.remove(subItem , item )"></Icon>
                             </div>
                         </template>
@@ -76,7 +76,7 @@
                 <InputNumber :v-if="item.visible || true " v-else-if="item.type == 'cascader'" :data="item.data" v-model="value[item.field]"></InputNumber>
             </FormItem>
             <i-card v-if="item.children" :style="{ 'margin-left': `${labelWidth}px`}">
-                <dync-form-item :model="item.children" v-model="value" :ruleValidate="ruleValidate"></dync-form-item>
+                <dync-form-item :model="item.children" v-model="value" :ruleValidate="ruleValidate" :root="root"></dync-form-item>
             </i-card>
         </template>
     </span>
@@ -97,6 +97,7 @@
     @Prop({ default : ()=>{ return  {} }}) value;
     @Prop() ruleValidate;
     @Prop() labelWidth;
+    @Prop() root;
 
     uploads:any = [];
     trees:any = [];
@@ -125,6 +126,12 @@
         }
       }
       return data;
+    }
+
+    view( name ){
+      this.root.modalVisible = true;
+      this.root.modalImageName = name;
+      return this;
     }
 
     mounted() {  // Vue 的 mounted 初始化回调

@@ -1,4 +1,6 @@
 import axios from "~/plugins/axios"
+import cookie from "js-cookie"
+
 const  resetName = ( menu , name? )=>{
   for(let item of menu ){
     item['sourceName'] = item.name ;
@@ -13,19 +15,23 @@ const  resetName = ( menu , name? )=>{
 export const state = () => ({
   people: [],
   menu: [],
+  userToken: '',
 })
 
 export const mutations = {
   setPeople( state:any, people:any) {
-    state.people = people
+    state.people = people;
     return this;
   },
   setMenu( state:any, menu:any) {
-    state.menu = menu
+    state.menu = menu;
     return this;
   },
-  getMenu( state:any ) {
-    return   state.menu ;
+  setUserToken( state:any, token:any) {
+    state.userToken = token;
+    if(token) cookie.set('usertoken' , token );
+    else cookie.remove('usertoken' );
+    return this;
   },
 }
 
@@ -33,7 +39,7 @@ export const getters = {
 }
 
 export const actions = {
-  async nuxtServerInit({ commit }, { app }) {
+  async nuxtServerInit({ commit }, { app , req , res }) {
     let menu:any = await app.$axios.$get( "./menu.json?v2" );
 
     let demoMenu:any =  {
@@ -50,6 +56,7 @@ export const actions = {
     };
     menu = [ ...menu, ...demoMenu ];
     resetName( menu );
-    commit("setMenu", menu )
+    commit("setMenu", menu );
+
   }
 }

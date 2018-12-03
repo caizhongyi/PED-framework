@@ -1,26 +1,26 @@
 
 <template>
-    <div class="login">
-        <div class="login-con">
-            <Card icon="log-in" title="欢迎登录"  :bordered="false">
-                <div class="form-con">
-                    <login-form @on-success-valid="handleSubmit"></login-form>
-                    <p class="login-tip">输入任意用户名和密码即可</p>
-                </div>
-            </Card>
+    <div>
+        <div class="login">
+            <div class="login-con">
+                <Card icon="log-in" title="欢迎登录"  :bordered="false">
+                    <div class="form-con">
+                        <login-form ref="login" @on-success-valid="handleSubmit" :loading="loading"></login-form>
+                        <p class="login-tip">输入任意用户名和密码即可</p>
+                    </div>
+                </Card>
+            </div>
         </div>
-        <Spin size="large" fix v-if="spinShow"></Spin>
+        <ajax ref="ajax" :loading="false"></ajax>
     </div>
 </template>
 
 <script lang="ts">
   import LoginForm from "~/components/login-form";
+  import { State, Mutation, Action, Getter } from "vuex-class";
+  import axios from "~/plugins/axios";
   import { Component, Vue } from "nuxt-property-decorator";
-  import { State } from "vuex-class";
-
-/*  import '~/assets/js/jigsaw-random-code/jigsaw.js';
-
-  declare var jigsaw;*/
+  import  cookie from "js-cookie";
 
   @Component({
     components: {
@@ -28,34 +28,48 @@
     }
   })
   export default class Login extends Vue {
+
+    @State people;
+    @Mutation setUserToken;
+
     scrollToTop = true;
-    spinShow = false;
+    loading = false;
+    ajax : any ;
+
     layout() {
       return "empty";
     }
 
-    @State people;
 
     /* get name (): boolean {
        return this.title + this.text
      }*/
     mounted() {
+
     }
 
-    handleSubmit(e) {
-      let _this = this;
-      this.spinShow = true;
+    async handleSubmit(e) {
+      this.ajax  = this.$refs.ajax;
+      this.loading = true;
+      let query : any = this.$route.query ;
+      let login :any = this.$refs.login;
 
-      setTimeout(()=>{
-        _this.spinShow = false;
-
-        if( _this.$route.params.ref ){
-          _this.$router.push(_this.$route.params.ref);
+      this.loading = true;
+      let res : any = await this.ajax.post('/api/account/login',{
+        username : login.form.userName ,
+        userpwd : login.form.password
+      });
+      if( res.code == 200 ){
+        this.setUserToken(res.data);
+        if( query.ref ){
+          this.$router.push(query.ref);
         }
         else{
-          _this.$router.push("/");
+          this.$router.push("/home");
         }
-      },1000)
+      }
+      this.loading = false;
+
     }
   }
 

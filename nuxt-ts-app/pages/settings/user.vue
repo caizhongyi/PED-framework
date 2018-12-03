@@ -1,102 +1,550 @@
 <template>
-    <dync-form ref="form"  :model="formModel" v-model="data" :label-width="80" @success="submit" @fail="fail">
-        <template slot slot-scope="props">
-        </template>
-    </dync-form>
+    <div >
+        <page-table ref="table"
+                    url="/user-data.json"
+                    :exp="{ filename : 'filename '}"
+                    method="get"
+                    :columns="columns"
+                    :form-view-model="formViewModel"
+                    :form-model="formModel"
+                    :search-model="searchModel"
+                    :params="params"
+                    :form-label-width="100"
+                    @search-submit="searchSubmit"
+                    @edit-submit="editSubmit"
+                    @edit-cancel="editCancel">
+            <template slot="modal-footer">
+                <i-button type="default" :loading="buttonLoading">账号解锁</i-button>
+            </template>
+        </page-table> <!-- 自定义组件 ~/components/page-table.vue -->
+
+    </div>
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue, Watch, Model } from "nuxt-property-decorator";
+  import { Component, Prop, Vue, Watch, Model} from "nuxt-property-decorator"
   //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
-  import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
+  import { State, Getter, Action, Mutation, namespace } from "vuex-class"  // Vue store 全局定义，例如用户信息等全局都需要用的
+  import PageTable from "~/components/page-table";  // 自定义组件目录
+  import Ajax from "~/components/ajax";  // 自定义组件目录
+  import uuid from "uuid/v1";  // 自定义组件目录
+  import DyncForm from "~/components/dync-form/index";
 
+  declare var jQuery;
   //组件声名
   @Component({
-    components: {}
+    components: {
+      PageTable, Ajax,DyncForm  //自定义组件
+    }
   })
-
   export default class User extends Vue {    //  typescript 创建类继成 Vue
 
-    data = {
-      name : '1222',
-      gender : 'male',
-      upload : [
-        {
-          "name": "a42bdcc1178e62b4694c830f028db5c0",
-          "url": "https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar"
-        },
-        {
-          "name": "bc7521e033abdd1e92222d733590f104",
-          "url": "https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar"
-        }
-      ]
-    }
-    formModel: any = [
-      {
-        field: "name",
-        label: "用户名",
-        type: "input",
-        required: true,
-        rule: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-      },
-      {
-        field: "password",
-        label: "密码",
-        type: "password",
-        required: true,
-        rule: [{ required: true, message: "请输入密码", trigger: "blur" }],
-      },
-      {
-        field: "role",
-        label: "角色权限",
-        type: "checkbox",
-        required: true,
-        data: [{ text: "Male", value: "male" }, { text: "Female", value: "female" }],
-        rule: [
-          { required: true, type: 'array', min: 1, message: '请选择角色权限', trigger: 'change' },
-          //{ type: 'array', max: 2, message: 'Choose two hobbies at best', trigger: 'change' }
-        ],
-      },
-      {
-        field: "gender",
-        label: "姓别",
-        type: "radio",
-        data: [{ text: "Male", value: "male" }, { text: "Female", value: "female" }]
-      },
-      {
-        field: "upload", label: "上传", type: "upload", action: "", remove: (file, item) => {
-          item.removeFile(file);
-          this.$Message.info("delelte");
-        }, success: (res, file) => {
-          file.url = "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
-          file.name = "7eb99afb9d5f317c912f08b5212fd69a";
-          this.data['upload'].push(file);
-          this.$Message.info("success");
-        }
-      },
-      {
-        field: "city",
-        label: "城市",
-        value: 'beijing',
-        type: "select",
-        data: [{ text: ">New York", value: "beijing" }, { text: "London", value: "shanghai" }]
-      },
-      { field: "desc", label: "描述", value: '描述', type: "textarea", autosize: { minRows: 2, maxRows: 5 }, placeholder: "Desc"  },
+    searchModel : any = [
+      { field : 'userName' , label:'' ,placeholder:'输入名称进行查找',  type : 'input' },
     ];
-    form : any ;
+    table:any;
+    value: any = 2; // 变量声明 ，any是无类型。 可以 object Array function boolean等类型
+    params = { current : 1 };
+    // form = {
+      // user : ''
+    // };
+    // firstName : any  = 'cai' ; //typescript中支持 private、public、protected
+    // lastName : any  = 'zhongyi' ;
+    modal1: boolean = false;
+    current: any = {};
+    buttonLoading = false;
+    @Prop({ default :　1  }) settings  : object ;  // 只能单项绑定（组件内不能对其值更改）
+    @Model() model  : any ; // 当作为组件引用时 v-model 值， 双项绑定（组件内可改变其值）
 
-    submit( data ){
-      console.log( data )
+    @State user :any; // 全局 store 中的变量
+    @Mutation stateMutation :any; // 全局  store 中的方法
+
+    @Watch('value') // 相当于Vue 中的 watch bb变量
+
+    onChangeModel( value ){   // 函数名自定义
+      console.log( value )
     }
-    fail(){}
+    //
+    // get name(){
+    //   return this.firstName +  this.lastName ;  // 想当于vue computed
+    // }
+    // async submit(){
+    //   let table:any = this.$refs.table;   // this.$refs.table  标签的ref table , typescript是强类型为了避免麻烦直接定义为any类型;
+    //   table.change({ current : parseInt(this.form.user), ...this.form });
+    //   //  let res = await this.get({ current : parseInt(this.form.user), ...this.form });
+    //
+    // }
+    /*  set name( value ){
+        this._name = value;
+        return 'set:' +  this._name  ;
+      }*/
+
+    //变量定义
+
+    formModel = [
+      { 　field : 'userName' , type : 'input',  label: "用户名", required: true },
+      { 　field : 'password' , type : 'password',  label: "新密码", required: true },
+      { 　field : 'confirm-password' , type : 'password',  label: "确认密码", required: true },
+      {
+        field: "roles",
+        label: "角色",
+        type: "select",
+        multiple: true,
+        required: true,
+        data: [
+          { text: "超级管理员", value: "超级管理员" },
+          { text: "设备管理_垃圾箱", value: "设备管理_垃圾箱" },
+          { text: "设备管理_签到", value: "设备管理_签到" }
+        ]
+      },
+      {
+        field: "address",
+        label: "归属区域",
+        required: true,
+        type: "tree",
+        data: [
+          {
+            id: 0,
+            title: "中国电信学院北京校区",
+            expand: true,
+            children: [
+              {
+                title: "学生公寓",
+                id: 0,
+                expand: false,
+                children: [
+                  {
+                    id: 0,
+                    title: " 一号楼宿舍",
+                    expand: false,
+                    children: [
+                      {
+                        id: 0,
+                        title: '1层'
+                      },
+                      {
+                        id: 1,
+                        title: '2层'
+                      },
+                      {
+                        id: 2,
+                        title: '3层'
+                      },
+                      {
+                        id: 3,
+                        title: '4层'
+                      },
+                      {
+                        id: 4,
+                        title: '5层'
+                      }
+                    ]
+                  },
+                  {
+                    id: 1,
+                    title: "二号楼宿舍",
+                    expand: false,
+                    children: [
+                      {
+                        id: 0,
+                        title: '1层'
+                      },
+                      {
+                        id: 1,
+                        title: '2层'
+                      },
+                      {
+                        id: 2,
+                        title: '3层'
+                      },
+                      {
+                        id: 3,
+                        title: '4层'
+                      },
+                      {
+                        id: 4,
+                        title: '5层'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 1,
+                title: "中国电信学院上海校区",
+                expand: false,
+                children: [
+                  {
+                    id: 0,
+                    title: "教学区",
+                    expand: false,
+                    children: [
+                      {
+                        id: 0,
+                        title: '电信南研楼',
+                        expand: false,
+                        children: [
+                          {
+                            id: 0,
+                            title: '1层'
+                          },
+                          {
+                            id: 1,
+                            title: '2层'
+                          },
+                          {
+                            id: 2,
+                            title: '3层'
+                          }
+                        ]
+                      },
+                      {
+                        id: 1,
+                        title: '上海校区停车场'
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            id: 1,
+            title: '北京科技职业学院'
+          }
+        ]
+      },
+      {   field : 'phone' , type : 'input',  label: "电话", required: true },
+      {   field : 'email' , type : 'input',  label: "邮箱", required: true },
+      {
+        field: "status",
+        label: "状态",
+        type: "radio",
+        data: [{ text: "启用", value: "启用" }, { text: "禁用", value: "禁用" }]
+      },
+    ]
+    formViewModel = [
+      { 　field : 'userName' , type : 'input',  label: "用户名", required: true },
+      {
+        field: "address",
+        label: "归属区域",
+        required: true,
+        type: "tree",
+        data: [
+          {
+            id: 0,
+            title: "中国电信学院北京校区",
+            expand: true,
+            children: [
+              {
+                title: "学生公寓",
+                id: 0,
+                expand: false,
+                children: [
+                  {
+                    id: 0,
+                    title: " 一号楼宿舍",
+                    expand: false,
+                    children: [
+                      {
+                        id: 0,
+                        title: '1层'
+                      },
+                      {
+                        id: 1,
+                        title: '2层'
+                      },
+                      {
+                        id: 2,
+                        title: '3层'
+                      },
+                      {
+                        id: 3,
+                        title: '4层'
+                      },
+                      {
+                        id: 4,
+                        title: '5层'
+                      }
+                    ]
+                  },
+                  {
+                    id: 1,
+                    title: "二号楼宿舍",
+                    expand: false,
+                    children: [
+                      {
+                        id: 0,
+                        title: '1层'
+                      },
+                      {
+                        id: 1,
+                        title: '2层'
+                      },
+                      {
+                        id: 2,
+                        title: '3层'
+                      },
+                      {
+                        id: 3,
+                        title: '4层'
+                      },
+                      {
+                        id: 4,
+                        title: '5层'
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                id: 1,
+                title: "中国电信学院上海校区",
+                expand: false,
+                children: [
+                  {
+                    id: 0,
+                    title: "教学区",
+                    expand: false,
+                    children: [
+                      {
+                        id: 0,
+                        title: '电信南研楼',
+                        expand: false,
+                        children: [
+                          {
+                            id: 0,
+                            title: '1层'
+                          },
+                          {
+                            id: 1,
+                            title: '2层'
+                          },
+                          {
+                            id: 2,
+                            title: '3层'
+                          }
+                        ]
+                      },
+                      {
+                        id: 1,
+                        title: '上海校区停车场'
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            id: 1,
+            title: '北京科技职业学院'
+          }
+        ]
+      },
+      {   field : 'phone' , type : 'input',  label: "电话", required: true },
+      {   field : 'email' , type : 'input',  label: "邮箱", required: true },
+      {
+        field: "status",
+        label: "状态",
+        type: "radio",
+        data: [{ text: "启用", value: "启用" }, { text: "禁用", value: "禁用" }]
+      },
+      {   field : 'last-ip' , type : 'input',  label: "最后登录IP" },
+      {   field : 'last-time' , type : 'input',  label: "最后登录时间" },
+    ]
+
+    columns = [
+      {
+        type: 'selection',
+        width: 60,
+        align: 'center'
+      },
+      {
+        title: '用户名',
+        key: 'userName',
+        sortable: true
+      },
+      {
+        title: '用户组',
+        key: 'roles',
+        render: (h, params) => {
+          console.log('params11' ,params.row.roles.length);
+          let arr:any =[];
+          for( var i = 0 ; i<params.row.roles.length; i++){
+             arr.push(h('Tag',{
+              props: {
+                color: "success"
+              }
+            }, params.row.roles[i]));
+          }
+          return h('div', arr)
+        }
+      },
+      {
+        title: '注册时间',
+        key: 'time',
+      },
+      {
+        title: '邮箱',
+        key: 'email'
+      },
+      {
+        title: '联系电话',
+        key: 'phone'
+      },
+      {
+        title: '状态',
+        key: 'status'
+      },
+      {
+        title: '操作', key: 'action', width: 250, align: 'center',
+        render: (h, params) => {
+          let table:any = this.$refs.table;
+          return h('div', [
+            table.getViewControl(h, params),
+            table.getEditControl(h, params),
+            table.getRemoveControl(h, params),
+          ]);
+        }
+      }
+      // {
+      //   title: '操作',
+      //   key: 'action',
+      //   width: 250,
+      //   align: 'center',
+      //   render: (h, params) => {
+      //     return h('div', [
+      //       h('Button', {
+      //         props: {
+      //           type: 'primary',
+      //           size: 'small'
+      //         },
+      //         style: {
+      //           marginRight: '5px'
+      //         },
+      //         on: {
+      //           click: () => {
+      //             let table:any = this.$refs.table;
+      //             table.edit( params.index );
+      //             //this.show(params.index)
+      //           }
+      //         }
+      //       }, '查看'),
+      //       h('Button', {
+      //         props: {
+      //           type: 'primary',
+      //           size: 'small'
+      //         },
+      //         style: {
+      //           marginRight: '5px'
+      //         },
+      //         on: {
+      //           click: () => {
+      //             let table:any = this.$refs.table;
+      //             table.edit( params.index );
+      //             //this.show(params.index)
+      //           }
+      //         }
+      //       }, '编辑'),
+      //       h('Button', {
+      //         props: {
+      //           type: 'error',
+      //           size: 'small'
+      //         },
+      //         on: {
+      //           click: () => {
+      //             let table:any = this.$refs.table;
+      //             table.delete( params.index );
+      //            // this.remove(params.index)
+      //           }
+      //         }
+      //       }, '删除')
+      //     ]);
+      //   }
+      // }
+    ]
+    //过虑器 可以在filters目录下创全局/过虑器
+    filters() {
+      return {
+        status( val ){
+          return val == 1 ? '正常' : '异常'
+        }
+      }
+    }
+
+    exportData(){
+      let table:any = this.$refs.table;   // this.$refs.table  标签的ref table , typescript是强类型为了避免麻烦直接定义为any类型;
+      table.exportData();
+    }
+
+    async get( params =  { current: 1 } ){   // async 异步声明
+      let ajax:any = this.$refs.ajax;
+      let res = await  ajax.get('user-data.json' , params);  // await 异步调用  es6写法
+    }
+    submitSearch(data){
+      console.log(data)
+    }
+
+    show (index = 0 ) {  //函数定义  index = 0 为默认参数值
+      let table:any = this.$refs.table;
+      this.current = table.data[index];
+      this.modal1 = true;
+    }
+    searchSubmit( data ){
+      console.log(data)
+    }
+    //提交修改
+    editSubmit(data){
+      setTimeout(()=>{
+        if(!data.id){
+          data.id = uuid();
+          this.table.data.push(data);
+        }
+        this.table.modal = false;
+      },1000)
+      console.log(data);
+    }
+    //取消修改
+    editCancel(data){
+      console.log(data);
+    }
+
+    remove (index) {
+      let table:any = this.$refs.table;
+      table.data.splice(index, 1);
+    }
+
+    // 页面 head 中文件内容
+    head() {
+      return {
+        title: "page",
+        meta: [
+          {
+            hid: "description",
+            name: "description",
+            content: "Nuxt.js project"
+          },
+          {
+            hid: "keyword",
+            name: "keyword",
+            content: "Nuxt.js project"
+          }
+        ]
+      };
+    }
 
     mounted() {  // Vue 的 mounted 初始化回调
-        this.form = this.$refs.form;
-       // this.form.data =
+      let _this = this;
+      // jQuery('.class').netstable();
+      this.table = this.$refs.table;
+
     }
   }
 </script>
 
 <style lang="scss" scoped>
-
+    .viewport{
+        font-size:1rem;
+    }
 </style>

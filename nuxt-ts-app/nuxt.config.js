@@ -16,7 +16,7 @@ let publicPath = '/' ;
 let hostname = "localhost" ,  hostPort = 3000 ;
 let mode = 'history';
 let proxy = {
-  target :`${hostname}:${hostPort}`,
+  target : 'http://apms.com/index.php',
   pathRewrite : { "^/api/": "?_url=api/" }
 };
 
@@ -24,7 +24,11 @@ let proxy = {
 switch (process.env.__ENV) {
   //本地
   case  "development" :
-    break;
+    // proxy.target = 'http://apms.com/index.php';//本地配置
+      proxy.target = 'http://180.106.148.81:18082/testapms/index.php';//本地配置
+      //process.env.BASE_URL =  'http://180.106.148.81:18082/testapms/';
+      //mode = 'hash';
+      break;
   //测试
   case  "release" :
     proxy = 'http://180.106.148.81:18082/testapms/index.php';
@@ -88,7 +92,7 @@ module.exports = {
     ],
     script: [
       //{ src: baseUrl + 'node_modules/jquery/dist/jquery.js' , type: 'text/javascript', charset: 'utf-8' },
-      //{ src: baseUrl + 'node_modules/nestable/jquery.nestable.js' , type: 'text/javascript', charset: 'utf-8'},
+      { src: 'https://api.map.baidu.com/api?v=2.0&ak=9Mmf1Qqx0h9HPWbzPjxHDPw8GfKW6kxG' , type: 'text/javascript', charset: 'utf-8'},
       //{ innerHTML: require('./flexible.js') + ';console.log(11)' , type: 'text/javascript', charset: 'utf-8'},
       //{ src:'https://res.wx.qq.com/open/js/jweixin-1.2.0.js' },  //微信开发
       // { src: '/js/flexible-pc.js' }, // rem自适应
