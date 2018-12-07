@@ -60,8 +60,8 @@
       return {
         remember: false,
         form: {
-          userName: "super_admin",
-          password: ""
+          userName: "superadmin",
+          password: "1qazse4rfv"
         }
       };
     },
@@ -79,16 +79,12 @@
       if ( password ) {
         this.form.password = password;
       }
-      if ( rememberPassword ) {
-        this.remember = Boolean(rememberPassword);
-      }
+      this.remember = rememberPassword == 'true' ?  true : false;
     },
     methods: {
-
       handleSubmit() {
+        localStorage.setItem("rememberPassword", this.remember);
         this.$refs.loginForm.validate((valid) => {
-          localStorage.setItem("rememberPassword", this.remember);
-
           if (this.remember) {
             localStorage.setItem("password", this.form.password );
           }

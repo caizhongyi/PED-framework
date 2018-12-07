@@ -1,0 +1,11 @@
+{
+  "code" : 200,
+  "data" : {},
+  "paging" : {
+    "total" : 100,
+    "data" : [
+      {"id": "0" , "userName" : "test_rm" , "roles"  : ["超级管理员"]  , "time" : "2018-11-13", "email" : "234211@qq.com" , "phone" : "13922123829", "status" : "启用"},
+      {"id": "1" , "userName" : "test_rm" , "roles"  : ["超级管理员"]  , "time" : "2018-11-12", "email" : "234211@qq.com" , "phone" : "13922123829", "status" : "启用"}
+    ]
+  }
+}

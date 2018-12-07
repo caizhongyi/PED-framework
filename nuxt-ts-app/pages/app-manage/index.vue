@@ -1,8 +1,8 @@
 <template>
     <div>
-        <Row>
+        <!--<Row>
             <Button type="primary" class="pull-right" @click="addApp()">新增应用</Button>
-        </Row>
+        </Row>-->
         <Row>
             <Col span="6" v-for="(item,index) in appData" :key="index">
                 <div class="img-box">
@@ -11,6 +11,11 @@
                         {{ item.name }}
                         <Button type="error" size="small" @click="deleteApp(index)">删除</Button>
                     </div>
+                </div>
+            </Col>
+            <Col span="6" >
+                <div class="img-box img-box-add" @click="addApp()" title="新增应用" >
+                    <span><i-icon type="md-add"></i-icon></span>
                 </div>
             </Col>
         </Row>

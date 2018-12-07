@@ -33,6 +33,7 @@
 
         </i-row>-->
         <page-table ref="table"
+                    v-model="data"
                     url="/page-data.json"
                     :exp="{ filename : 'filename '}"
                     method="get"
@@ -42,6 +43,8 @@
                     :search-model="searchModel"
                     :search-label-width="80"
                     :params="params"
+                    @remove="remove"
+                    @remove-all="removeAll"
                     @search-submit="searchSubmit"
                     @edit-submit="editSubmit"
                     @edit-cancel="editCancel">
@@ -111,7 +114,7 @@
       console.log( value )
     }
 
-
+    data : any = [];
     //变量定义
 
     formModel = [
@@ -217,16 +220,23 @@
     searchSubmit( data ){
       console.log(data)
     }
-    //弹出窗提交
-    // 新增和修改都调用此接口， 判断是新增还是修改通过有没有id来判断
-    editSubmit(data){
+    /*
+    * 弹出窗提交
+    * 新增和修改都调用此接口， 判断是新增还是修改通过有没有id来判断
+    * data 修改的值
+    * next 执行修改
+    * restore 不执修改
+    * */
+    editSubmit( data , next , restore ){
       setTimeout(()=>{
-        console.log(data);
-        if( !data.id ){
+        if( data.id == null ){
           data.id = uuid();
-          this.table.data.push(data);
+          next();
         }
-        this.table.modal = false;
+        else{
+          next( data.id );
+        }
+        //restore()
       },1000)
     }
     //取消修改
@@ -234,11 +244,20 @@
       console.log(data);
     }
 
-    remove (index) {
-      let table:any = this.$refs.table;
-      table.data.splice(index, 1);
+    remove ( data , next , restore ) {
+      setTimeout(()=>{
+        next();
+      },1000)
+
+      //restore()
     }
 
+    removeAll ( data , next  ,restore) {
+      setTimeout(()=>{
+        next();
+      },1000)
+      //restore()
+    }
     // 页面 head 中文件内容
     head() {
       return {

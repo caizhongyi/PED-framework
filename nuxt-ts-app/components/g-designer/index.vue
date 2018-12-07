@@ -132,14 +132,13 @@
     }
 
     clear() {
-      this.value = [];
+      this.$emit('input', []);
       this.value.push();
-      //this.design.empty();
       return this;
     }
 
     save() {
-      this.design.save();
+      this.$emit("save" , this.value );
       return this;
     }
 

@@ -14,6 +14,7 @@
 <script lang="ts">
   import { Component, Vue, Watch } from "nuxt-property-decorator";
   //import vueSeamless from "vue-seamless-scroll";
+  import filters from "~/filters";
 
   @Component({
     components: {
@@ -54,7 +55,7 @@
       };
     }
     mounted() {
-
+      console.log(filters.formatDate( new Date() , 'YYYY-mm-dd hh:MM:ss'))
     }
   }
 </script>

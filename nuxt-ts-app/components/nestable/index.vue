@@ -52,78 +52,67 @@
             :data-order="item.order"
     * */
 
-    @Prop({ default : ()=>{ return [
-        {
-          field: "title",
-          label: "名称",
-          type: "input",
-          required: true,
-          rule: [{ required: true, message: "请输入名称", trigger: "blur" }],
-        },
-      /*  {
-          field: "name",
-          label: "名称",
-          type: "input",
-          required: true,
-          rule: [{ required: true, message: "请输入名称", trigger: "blur" }],
-        },*/
-        {
-          field: "url",
-          label: "链接地址",
-          type: "input"
-        },
-        {
-          field: "icon",
-          label: "icon",
-          type: "input"
-        },
-        {
-          field: "isshow",
-          label: "shown",
-          type: "radio",
-          data : [{ text : '显示' , value : 1  },{ text : '不显示' , value : 0  }]
-        },
-        {
-          field: "desc",
-          label: "desc",
-          type: "input",
-        },
-        {
-          field: "orderlist",
-          label: "orderlist",
-          type: "input",
-        }
-      ];}}) formModel : any ;
+    @Prop({ default : ()=>{ return [];}}) formModel : any ;
 
     saveOrder(){
         this.$emit('save-order' , this.$nestable.nestable('serialize') );
         return this;
     }
+
     ok(){
       this.form.submit();
       return this;
     }
+
     cancel(){
       return this;
     }
 
     add(){
-      this.form.data = {};
+      this.formData = {};
       this.modal = true;
       return this;
     }
 
     submit(){
-      //this.$emit('input', this.value );
-      this.$emit('submit', this.form.value );
+      let next = ( id )=>{
+        if( id != null ){
+          this.form.value.id = id ;
+          this.value.push( this.form.value );
+        }
+        else{
+          let data = this.editNode( this.value , this.form.value  );
+          this.$emit('input', data );
+          this.value.push();
+        }
+        this.modal = false;
+      }
+
+      let restore = ()=>{
+        this.modal = false;
+      }
+
+      this.$emit('submit', this.form.value  , next  , restore );
       return this;
     }
     fail(){}
 
-    edit( item ){
+    editModal( item ){
       this.modal = true;
-      this.formData = item;
+      this.formData = Object.assign({}, item);
       return this;
+    }
+
+    editNode( node , item ){
+      for(let i = 0  ; i < node.length ; i++ ){
+        if( node[i].id == item.id ){
+          node[i] = item ;
+        }
+        else{
+          if(  node[i].children ) this.removeNode(  node[i].children , item );
+        }
+      }
+      return node;
     }
 
     removeNode( node , item ){
@@ -138,12 +127,22 @@
       return node;
     }
 
-    remove( item ){
-      let data = this.removeNode( this.value , item );
-      this.$emit('input',  data );
-      this.$emit('remove', item );
+    remove( item , index  ){
+      //Object.assign({}, this.value )
+      let next = ()=>{
+        this.$Modal.remove();
+        let data = this.removeNode( this.value , item );
+        this.$emit('input' , data );
+        this.value.push();
+      }
+
+      let restore = ()=>{
+        this.$Modal.remove();
+      }
+      this.$emit('remove', item , next , restore );
       return this;
     }
+
     expandAll(){
       this.$nestable.nestable('expandAll');
       return this;
@@ -161,7 +160,7 @@
        // console.log( this.$nestable.nestable('serialize'));
        //this.$emit('input', this.$nestable.nestable('serialize') );
         this.$emit('change' , this.$nestable.nestable('serialize') );
-      })
+      });
       this.form = this.$refs.form;
     }
   }

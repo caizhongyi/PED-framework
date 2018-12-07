@@ -1,7 +1,7 @@
 <template>
     <div >
         <page-table ref="table"
-                    url="/role-data.json"
+                    url="/api/account/role"
                     :exp="{ filename : 'filename '}"
                     method="get"
                     :columns="columns"
@@ -213,7 +213,7 @@
 
     async get( params =  { current: 1 } ){   // async 异步声明
       let ajax:any = this.$refs.ajax;
-      let res = await  ajax.get('role-data.json' , params);  // await 异步调用  es6写法
+      let res = await  ajax.get('/api/account/role' , params);  // await 异步调用  es6写法
     }
     submitSearch(data){
       console.log(data)

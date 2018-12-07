@@ -156,23 +156,29 @@
              }
            ],*/
           formatError: (file) => {
-            this.$Modal.error({
+            this.$Message.error({
               title: '提示',
               content: '请上传jpg,png格式的图片',
+              duration: 5,
+              closable: true
             });
           },
           maxSize(file) {
-            this.$Modal.error({
+            this.$Message.error({
               title: '提示',
               content: '上传的文件大小不能超过2M',
+              duration: 5,
+              closable: true
             });
           },
           beforeUpload() {
             const check = this.uploadList.length < 5;
             if (!check) {
-              this.$Modal.error({
+              this.$Message.error({
                 title: '提示',
                 content: '上传的文件个数不能超过5张',
+                duration: 5,
+                closable: true
               });
             }
             return check;

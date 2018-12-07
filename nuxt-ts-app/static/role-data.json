@@ -1,0 +1,12 @@
+{
+  "code" : 200,
+  "data" : {},
+  "paging" : {
+    "total" : 100,
+    "data" : [
+      {"id": "0" , "role"  : "超级管理员"  , "description" : "超级管理员"},
+      {"id": "1" , "role"  : "校园首页"  , "description" : "校园首页"},
+      {"id": "2" , "role"  : "小区物业首页权限"  , "description" : "小区物业首页权限"}
+    ]
+  }
+}

@@ -11,7 +11,7 @@
                 </Card>
             </div>
         </div>
-        <ajax ref="ajax" :loading="false"></ajax>
+        <ajax ref="ajax" :loading="false" @error="ajaxError"></ajax>
     </div>
 </template>
 
@@ -40,12 +40,8 @@
       return "empty";
     }
 
-
-    /* get name (): boolean {
-       return this.title + this.text
-     }*/
-    mounted() {
-
+    ajaxError(){
+      this.loading = false;
     }
 
     async handleSubmit(e) {
@@ -59,6 +55,7 @@
         username : login.form.userName ,
         userpwd : login.form.password
       });
+
       if( res.code == 200 ){
         this.setUserToken(res.data);
         if( query.ref ){
@@ -71,6 +68,14 @@
       this.loading = false;
 
     }
+
+    /* get name (): boolean {
+       return this.title + this.text
+     }*/
+    mounted() {
+
+    }
+
   }
 
 </script>

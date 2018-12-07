@@ -2,7 +2,7 @@
     <div>
         <dync-form ref="searchForm" v-if="searchModel.length" :model="searchModel" v-model="searchFormData" :label-width="searchLabelWidth" :inline="true" @success="searchSubmit" :submit-button="{ icon : 'ios-search' , text : '查询' }"></dync-form>
         <!-- data 值必须包含id -->
-        <Table ref="table" :columns="columns" :data="data" :loading="loading">
+        <Table ref="table" :columns="columns" :data="value" :loading="loading">
             <!--<div slot="header"></div>-->
             <!--<div slot="footer"> </div>-->
         </Table>
@@ -18,16 +18,16 @@
             <i-col span="12" class="text-right"><Page :total="total" :current="page" :page-size="pageSize" show-elevator show-total @on-change="change"/></i-col>
         </i-row>
 
-        <Modal :title="modalTitle" :loading="true"  v-model="modal" @on-ok="ok" @on-cancel="cancel">
-            <dync-form ref="form" :model="formModel" :label-width="formLabelWidth" v-model="formData" @success="formSubmit" @fail="formSubmitFail" :submit-button="false"></dync-form>
+        <Modal :title="modalTitle" :loading="true"  v-model="modal" @on-ok="modalSubmit" @on-cancel="modalCancel">
+            <dync-form ref="form" :model="formModel" :label-width="formLabelWidth" v-model="formData"  :submit-button="false"></dync-form>
             <div slot="footer" v-if="modalFooter">
-                <i-button type="default" @click="cancel">取消</i-button>
+                <i-button type="text" @click="modalCancel">取消</i-button>
                 <slot name="modal-footer"></slot>
-                <i-button type="primary" @click="ok" :loading="okLoading">确定</i-button>
+                <i-button type="primary" @click="modalSubmit" :loading="okLoading">确定</i-button>
             </div>
         </Modal>
 
-        <Modal title="浏览" :loading="true"  v-model="viewModalVisible" >
+        <Modal title="浏览" :loading="false"  v-model="viewModalVisible" >
             <i-form  :label-width="formLabelWidth">
                 <i-form-item  :label="item.label"  v-for="(item,key) in formViewModel" :key="key" :v-if="item.visible || true ">
                     <span v-if="item.type == 'upload'" >
@@ -49,7 +49,7 @@
           <img :src="modalImage" v-if="modalImage"/>
         </Modal>
 
-        <ajax ref="ajax" loading="false"></ajax>
+        <ajax ref="ajax" :loading="false"></ajax>
     </div>
 </template>
 <script lang="ts">
@@ -76,13 +76,12 @@
     @Prop() url: string ;
     @Prop( { default: ()=>{ return { page : 1 , total: 0 } } }) params : any ;
     @Prop( { default: ()=>{ return {} }}) modalFooter : any ;
-
+    @Prop( { default : ()=>{ return [] ;} }) value: any ;
 
     table : any ;
     form : any ;
     modalTitle = '修改';
     spinShow = false;
-    data: any = [];
     total : any = 0 ;
     page = 1 ;
     pageSize = 10 ;
@@ -110,13 +109,17 @@
       this.loading = true;
       let res:any = await ajax.get( url , data );
       this.loading = false;
-      let paging:any = res.paging || {} ;
-      this.data = paging.data || [] ;
-      for( let item of this.data ){
+      let paging: any = res.paging || {} ;
+      let d =  paging.data || [] ;
+      for( let item of d ){
         if( !item.id ){
           item.id = uuid();
         }
       }
+
+      this.$emit('input', d );
+      this.value.push();
+
       this.page = paging.page ?　paging.page : this.page;
       this.total = paging.total ?　paging.total : this.total;
       return this;
@@ -127,10 +130,11 @@
         this.modalImage = item.url;
         return this;
     }
+
     //修改表单
     edit( index :any  ){
       this.add();
-      this.formData = this.table.data[index];
+      this.formData = Object.assign({},this.table.data[index] );
       return this;
     }
 
@@ -148,7 +152,6 @@
       })
     }
 
-
     getEditControl( h , params ){
       return h('Button', {
         props: {
@@ -157,8 +160,10 @@
           size: 'small',
         },
         on: {
-          click: () => {
+          click: ( e ) => {
             this.edit( params.index );
+            this.$emit('edit-click' , e  );
+
             //this.show(params.index)
           }
         }
@@ -172,7 +177,8 @@
           icon : 'md-open',
         },
         on: {
-          click: () => {
+          click: ( e ) => {
+             this.$emit('view-click' , e  );
              this.formData = this.table.data[ params.index ];
              this.viewModalVisible = true;
           }
@@ -187,7 +193,8 @@
           icon: 'md-trash',
         },
         on: {
-          click: () => {
+          click: ( e ) => {
+            this.$emit('remove-click' , e  );
             this.remove( params.index );
             // this.remove(params.index)
           }
@@ -225,12 +232,20 @@
     //删除表单
     remove( index :any  ){
       let removeItem =  this.table.data[index];
+
       this.$Modal.confirm({
         title : '提示',
         content : '是否删除？',
+        loading: true,
         onOk:()=>{
-          this.table.data.splice(index, 1);
-          this.$emit('remove', removeItem );
+          let next = ()=>{
+            this.$Modal.remove();
+            this.table.data.splice(index, 1);
+          }
+          let restore = ()=>{
+            this.$Modal.remove();
+          }
+          this.$emit('remove', removeItem  , next  , restore );
         }
       })
       return this;
@@ -242,28 +257,27 @@
       this.$Modal.confirm({
         title : '提示',
         content : '是否删除？',
+        loading: true ,
         onOk:()=>{
-          if( selection && selection.length > 0){
-            this.data = _(this.data).filter(( n ,i )=>{
-              for(let item of selection ){
-                if( item.id == n.id ) return false;
-              }
-              return true
-            })
-            this.data.push();
+          let next = ()=>{
+            this.$Modal.remove();
+            if( selection && selection.length > 0){
+              let data = (this.value).filter(( n ,i )=>{
+                for(let item of selection ){
+                  if( item.id == n.id ) return false;
+                }
+                return true
+              })
+              this.$emit('input', data );
+              this.value.push();
+            }
           }
-          this.$emit('removeAll' , selection )
+          let restore = ()=>{
+            this.$Modal.remove();
+          }
+          this.$emit('remove-all' , selection  , next ,restore )
         }
       })
-      return this;
-    }
-
-    formSubmit( data ){
-      this.formData = data;
-      return this;
-    }
-
-    formSubmitFail( data ){
       return this;
     }
 
@@ -287,15 +301,38 @@
     }
 
     //edit-sumbit 提交回调
-    ok(){
+    modalSubmit(){
       this.okLoading = true ;
       this.modalTitle = this.form.id ? this.modalTitle : '新增';
-      this.$emit('edit-submit', this.form.value );
+
+      let next = ( id )=>{
+        if( id == null ){
+          this.value.push( this.formData );
+          this.$emit('input', this.value );
+        }
+        else{
+          let data = _( this.value ).map(( n )=>{
+            if( n.id == id ){
+              n = this.formData;
+            }
+            return n ;
+          })
+          this.$emit('input', data );
+          this.value.push();
+        }
+        this.modal = false;
+      }
+
+      let restore = ()=>{
+        this.modal = false;
+      }
+      this.$emit('edit-submit', this.formData  , next , restore );
       return this;
     }
     //edit-cancel 提交回调
-    cancel(){
-      this.$emit('edit-cancel', this.form.value );
+    modalCancel(){
+      this.modal = false;
+      this.$emit('edit-cancel', this.formData  );
       return this;
     }
 

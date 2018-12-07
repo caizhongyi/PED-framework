@@ -40,6 +40,14 @@
      }*/
     mounted() {
       this.ajax = this.$refs.ajax;
+
+     /* this.$Modal.confirm({
+        content :'aa',
+        loading:true,
+        onOk :()=>{
+          this.$Message.error('请检查表单是否输入正确!');
+        }
+      })*/
       // let res : any = await this.ajax.post('/api/account/check',{});
       // console.log(res);
       // this.setPeople([1,2]);

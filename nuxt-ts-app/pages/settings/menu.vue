@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nestable ref="nestable" v-model="data" @remove="remove" @submit="submit" @change="change"></nestable>
+        <nestable ref="nestable" v-model="data" @remove="remove" @submit="submit" @change="change" :form-model="formModel"></nestable>
         <ajax :loading="ajaxLoading" ref="ajax"></ajax>
     </div>
 </template>
@@ -77,20 +77,89 @@
         ]
         nestable: any;
 
-        submit(item, data) {
+        formModel = [ {
+            field: "title",
+            label: "名称",
+            type: "input",
+            required: true,
+            rule: [{ required: true, message: "请输入名称", trigger: "blur" }],
+        },
+            /*  {
+             field: "name",
+             label: "名称",
+             type: "input",
+             required: true,
+             rule: [{ required: true, message: "请输入名称", trigger: "blur" }],
+             },*/
+            {
+                field: "url",
+                label: "链接地址",
+                type: "input"
+            },
+            {
+                field: "settings",
+                label: "icon",
+                type: "input"
+            },
+            {
+                field: "isshow",
+                label: "shown",
+                type: "radio",
+                data : [{ text : '显示' , value : "1"  },{ text : '不显示' , value : "0"  }]
+            },
+            {
+                field: "description",
+                label: "desc",
+                type: "input",
+            },
+            {
+                field: "listorder",
+                label: "orderlist",
+                type: "input",
+            }];
+
+        submit(item) {
+            console.log(item);
+            this.edit(item);
             setTimeout(() => {
                 this.nestable.modal = false;
-            }, 2000)
-            console.log(this.data)
+            this.get();
+            this.nestable = this.$refs.nestable;
+        }, 1000);
+
         }
 
-        remove(item, data) {
-            console.log(this.data)
+        async edit(params) {   // async 异步声明
+            console.log(params);
+            let ajax: any = this.$refs.ajax;
+            let res = await ajax.post('/api/menu/edit',params);  // await 异步调用  es6写法
+            console.log(res);
+        }
+
+        //删除
+        remove(item, next ) {
+            this.delete({is_ajax:1,id:item.id} , next);
+        }
+
+        async delete( params , next ) {   // async 异步声明
+            console.log(params);
+            let ajax: any = this.$refs.ajax;
+            let res = await ajax.post('/api/menu/delete',params);  // await 异步调用  es6写法
+            console.log(res);
+            if ( res.code == '200' ){
+                next();
+            } else {
+                this.$Modal.remove();
+                setTimeout(()=>{
+                    this.$Modal.error({ title : '提示', content: '有下级菜单', loading : false })
+                },500)
+            }
         }
 
         change(data) {
             console.log(this.data)
         }
+
 
         onEdit() {
         }
@@ -149,8 +218,9 @@
         }
 
         async get(params = {is_ajax: 1}) {   // async 异步声明
+            console.log(params);
             let ajax: any = this.$refs.ajax;
-            let res = await ajax.get('/api/menu/list', params);  // await 异步调用  es6写法
+            let res = await ajax.post('/api/menu/list', params);  // await 异步调用  es6写法
             console.log(res);
             this.data=res.data;
         }

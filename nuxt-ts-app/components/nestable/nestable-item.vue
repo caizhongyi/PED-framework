@@ -6,7 +6,7 @@
             :data-name="item.name"
             :data-title="item.title"
             :data-parentid="item.parentid"
-            :data-settings="item.settings"
+            :data-settings="typeof item.settings == 'object' ? JSON.stringify(item.settings) : item.settings"
             :data-listorder="item.listorder"
             :data-url="item.url"
             :data-description="item.description"
@@ -20,8 +20,8 @@
             <div class="dd-content clearfix">
                 <div class="pull-left">{{ item.title }} [ <router-link :to="item.url ? item.url : '/'"> {{  item.url  }}</router-link> ] {{  item.desc  }}</div>
                 <div class="pull-right">
-                    <a href="javascript:;" @click="edit(item)"><i class="fa fa-edit"></i></a>
-                    <a href="javascript:;"  @click="remove(item)"><i class="fa fa-trash" ></i></a>
+                    <a href="javascript:;" @click="edit(item , key )"><i class="fa fa-edit"></i></a>
+                    <a href="javascript:;"  @click="remove(item , key )"><i class="fa fa-trash" ></i></a>
                 </div>
             </div>
             <nestable-item v-if="item.children && item.children.length" v-model="item.children" :root="root"></nestable-item>
@@ -43,16 +43,17 @@
     @Prop() value :any ;
     @Prop() root :any ;
 
-    edit( item ){
-      this.root.edit(item);
+    edit( item , index ){
+      this.root.editModal( item , index );
       return this;
     }
-    remove( item ){
+    remove( item , index ){
       this.$Modal.confirm({
         title : '提示',
         content : '是否删除 ？',
+        loading: true,
         onOk:()=>{
-          this.root.remove(item);
+          this.root.remove( item , index );
         },
         onCancel:()=>{},
       })

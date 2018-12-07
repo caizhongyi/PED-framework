@@ -1,0 +1,131 @@
+
+.identify{
+  position: relative;
+  &-block{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 60px;
+    height: 100px;
+  }
+  &-background{
+    width: 100%;
+    height: 100px;
+    border:1px solid #ddd;
+  }
+  &-refresh{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 34px;
+    height: 34px;
+    cursor: pointer;
+    background: url(http://cstaticdun.126.net//2.6.3/images/icon_light.f13cff3.png) 0 -437px;
+    background-size: 34px 471px;
+  }
+  &-slider-bar  {
+    position: absolute;
+    top: 15px;
+    left: 13px;
+    width: 14px;
+    height: 10px;
+    background: url(http://cstaticdun.126.net//2.6.3/images/icon_light.f13cff3.png) 0 -26px;
+    background-size: 34px 471px;
+  }
+
+  &-slider-mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 40px;
+   // border: 0 solid #1991FA;
+   // background: #D1E9FE;
+    border-bottom-left-radius: 20px;
+    border-top-left-radius: 20px;
+  }
+
+  &-slider{
+    position: relative;
+    text-align: center;
+    border-radius: 20px;
+    height: 40px;
+    margin-top: 15px;
+    line-height: 35px;
+    background: #f7f9fa;
+    color: #45494c;
+    border: 1px solid #e4e7eb;
+    &-bar  {
+      position: absolute;
+      top: -1px;
+      left: 0;
+      margin-left: -5px;
+      border-radius: 100%;
+      width: 40px;
+      height: 100%;
+      background: #fff;
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      transition: background .2s linear;
+      font-size: 18px;
+      &:hover {
+        background: #1991FA;
+        color: #fff;
+        .icon-slider {
+          background-position: 0 -13px;
+        }
+      }
+    }
+
+    &.active{
+      .identify-slider{
+        height: 38px;
+        top: -1px;
+      //  border: 1px solid #1991FA;
+      }
+      .identify-slider-mask{
+        height: 38px;
+        border-width: 1px;
+      }
+      .identify-slider-text{
+        display: none;
+      }
+    }
+    &.success{
+      .random-code-slider{
+        top: -1px;
+        border: 1px solid #52CCBA;
+        background-color: #52CCBA !important;
+      }
+      .identify-slider-mask{
+        border: 1px solid #52CCBA;
+        background-color: #D2F4EF;
+      }
+      .identify-slider-bar{
+        background-position: 0 0 !important;
+      }
+      .identify-slider-text{
+        display: none;
+      }
+    }
+    &.fail{
+      .identify-slider{
+        top: -1px;
+        border: 1px solid #f57a7a;
+        background-color: #f57a7a !important;
+      }
+      .identify-slider-mask{
+        border: 1px solid #f57a7a;
+        background-color: #fce1e1;
+      }
+      .identify-slider-bar{
+        background-position: 0 -83px !important;
+      }
+      .identify-slider-text{
+        display: none;
+      }
+    }
+  }
+}
+
+
+

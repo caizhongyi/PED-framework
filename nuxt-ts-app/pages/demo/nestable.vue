@@ -13,7 +13,7 @@
                        @drop="dropHandler">
         </vue-drag-tree></no-ssr>
 
-        <nestable ref="nestable" v-model="data" @remove="remove" @save-order="saveOrder"  @submit="submit" @change="change"></nestable>
+        <nestable ref="nestable" v-model="data" @remove="remove" @save-order="saveOrder"  @submit="submit" @change="change" :form-model="formModel"></nestable>
     </div>
 </template>
 
@@ -22,6 +22,7 @@
   //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
   import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
   import Nestable from "~/components/nestable"
+  import uuid from "uuid/v1"
   //组件声名
   @Component({
     components: {
@@ -31,7 +32,6 @@
   export default class  extends Vue {    //  typescript 创建类继成 Vue
     data = [
       {
-        name: 'Node 0-0',
         title : 'Node 0-0',
         id: 0,
         children: [
@@ -72,24 +72,76 @@
       ]
     nestable:any;
 
+    formModel = [ {
+      field: "title",
+      label: "名称",
+      type: "input",
+      required: true,
+      rule: [{ required: true, message: "请输入名称", trigger: "blur" }],
+    },
+      /*  {
+          field: "name",
+          label: "名称",
+          type: "input",
+          required: true,
+          rule: [{ required: true, message: "请输入名称", trigger: "blur" }],
+        },*/
+      {
+        field: "url",
+        label: "链接地址",
+        type: "input"
+      },
+      {
+        field: "icon",
+        label: "icon",
+        type: "input"
+      },
+      {
+        field: "isshow",
+        label: "shown",
+        type: "radio",
+        data : [{ text : '显示' , value : 1  },{ text : '不显示' , value : 0  }]
+      },
+      {
+        field: "desc",
+        label: "desc",
+        type: "input",
+      },
+      {
+        field: "orderlist",
+        label: "orderlist",
+        type: "input",
+      }];
 
     saveOrder( data ){
       console.log(data);
     }
 
-    submit( data ){
-      if( data.id ){
+    submit( data , next  , restore ){
+      if( data.id != null){
+        setTimeout(()=>{
+          next();
+        },2000)
         console.log('修改' ,data )
       }
       else{
-        console.log('新增', data )
+        setTimeout(()=>{
+          next( uuid() );
+        },2000)
+        console.log('删除' ,data )
       }
       setTimeout(()=>{
-        this.nestable.modal = false;
+        restore();
       },2000)
     }
-    remove( data ){
+    remove( data , next  , restore ){
       console.log( data)
+     // restore();
+      setTimeout(()=>{
+        next();
+      },2000)
+
+      //restore(); 还原不作操作
     }
     change( data ){
       console.log( data )
