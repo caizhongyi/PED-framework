@@ -27,44 +27,50 @@
     data = [];
 
     checkChange( nodes ){
-      console.log( util.getTreeChecked(  nodes , [] , ['id'] ))
+      console.log( util.getTreeChecked(  nodes , [] , ['id','title'] ))
     }
 
     click(){
-      let choicesAll = this.tree.getCheckedNodes();
-      console.log( util.getTreeChecked(  choicesAll , [] , ['id'] ))
+     // let choicesAll = this.tree.getCheckedNodes();
+      let choicesAll = this.tree.getCheckedAndIndeterminateNodes();
+      console.log( util.getTreeChecked(  choicesAll , [] , ['id','title'] ))
     }
     mounted() {  // Vue 的 mounted 初始化回调
       this.tree = this.$refs.tree;
       let treeData :any  = [
         {
           id: 0,
-          title: "parent 1",
+          title: "node 1",
           expand: true,
           children: [
             {
-              title: "parent 1-1",
+              title: "node 2",
               id: 1,
               parentId: 0 ,
               expand: false,
               children: [
                 {
-                  title: "leaf 1-1-1"
+                  id: 5,
+                  title: "node 3"
                 },
                 {
-                  title: "leaf 1-1-2"
+                  id: 6,
+                  title: "node 4"
                 }
               ]
             },
             {
               id: 2,
-              title: "parent 1-2",
+              title: "node 5",
+              parentId: 0 ,
               expand: false,
               children: [
                 {
-                  title: "leaf 1-2-1"
+                  title: "node 6",
+                  id: 3,
                 },
                 {
+                  id: 4,
                   title: "leaf 1-2-1"
                 }
               ]
@@ -76,13 +82,6 @@
         checked : true ,
         expand:true,
         id : 1,
-        indeterminate : false,
-        nodeKey : 0,
-        title : "parent 1",
-      },{
-        checked : true ,
-        expand:true,
-        id : 0,
         indeterminate : false,
         nodeKey : 0,
         title : "parent 1",
