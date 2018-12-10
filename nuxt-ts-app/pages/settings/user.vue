@@ -1,5 +1,6 @@
 <template>
     <div>
+
         <page-table ref="table"
                     v-model="data"
                     url="/api/account/list"
@@ -17,8 +18,8 @@
             <template slot="modal-footer">
                 <i-button type="default" :loading="buttonLoading">账号解锁</i-button>
             </template>
+            <ajax :loading="ajaxLoading" ref="ajax"></ajax>
         </page-table> <!-- 自定义组件 ~/components/page-table.vue -->
-
     </div>
 </template>
 
@@ -40,13 +41,13 @@
         }
     })
     export default class User extends Vue {    //  typescript 创建类继成 Vue
-
         searchModel : any = [
-            { field : 'userName' , label:'' ,placeholder:'输入名称进行查找',  type : 'input' },
+            { field : 'username' , label:'' ,placeholder:'输入名称进行查找',  type : 'input' },
         ];
         table:any;
         data:any=[];
         value: any = 2; // 变量声明 ，any是无类型。 可以 object Array function boolean等类型
+        ajaxLoading:any=true;
         params = { current : 1 };
         // form = {
         // user : ''
@@ -85,11 +86,11 @@
         //变量定义
 
         formModel = [
-            { 　field : 'userName' , type : 'input',  label: "用户名", required: true },
+            { 　field : 'username' , type : 'input',  label: "用户名", required: true },
             { 　field : 'password' , type : 'password',  label: "新密码", required: true },
             { 　field : 'confirm-password' , type : 'password',  label: "确认密码", required: true },
             {
-                field: "roles",
+                field: "roleids",
                 label: "角色",
                 type: "select",
                 multiple: true,
@@ -217,7 +218,7 @@
                     }
                 ]
             },
-            {   field : 'phone' , type : 'input',  label: "电话", required: true },
+            {   field : 'mobile' , type : 'input',  label: "电话", required: true },
             {   field : 'email' , type : 'input',  label: "邮箱", required: true },
             {
                 field: "status",
@@ -227,7 +228,7 @@
             },
         ]
         formViewModel = [
-            { 　field : 'userName' , type : 'input',  label: "用户名", required: true },
+            { 　field : 'username' , type : 'input',  label: "用户名", required: true },
             {
                 field: "address",
                 label: "归属区域",
@@ -345,7 +346,7 @@
                     }
                 ]
             },
-            {   field : 'phone' , type : 'input',  label: "电话", required: true },
+            {   field : 'mobile' , type : 'input',  label: "电话", required: true },
             {   field : 'email' , type : 'input',  label: "邮箱", required: true },
             {
                 field: "status",
@@ -372,18 +373,19 @@
                 title: '用户组',
                 key: 'roles',
                 render: (h, params) => {
-                    let roles = [];
+                    let table: any = this.$refs.table;
                     if (typeof params.row.roles === 'string') {
-                        roles = params.row.roles.split(',');
+                        params.row.roles = params.row.roles.split(',');
+                        table.value[params.index].roles= params.row.roles;
                     }
                     let arr: any = [];
-                    for (var i = 0; i < roles.length; i++) {
+                    for (var i = 0; i < params.row.roles.length; i++) {
                         let props = {
                             color: "success"
                         };
                         arr.push(h('Tag', {
                             props: props
-                        }, roles[i]));
+                        }, params.row.roles[i]));
                     }
                     return h('div', arr)
                 }
@@ -392,8 +394,8 @@
                 title: '注册时间',
                 key: 'create_time',
                 render: (h, params) => {
-                    // var time = filters.formatDate(new Date())
-                    // return h('div', time)
+                    var time = filters.formatDate(new Date())
+                    return h('div', time)
                 }
             },
             {
@@ -418,7 +420,21 @@
                     let table: any = this.$refs.table;
                     return h('div', [
                         table.getViewControl(h, params),
-                        table.getEditControl(h, params),
+                        // table.getEditControl(h, params),
+                        h('Button', {
+                            props: {
+                                type: 'primary',
+                                icon : 'md-eye',
+                                size: 'small',
+                            },
+                            on: {
+                                 click: () => {
+                                    this.getRole( ()=>{
+                                        table.edit( params.index );
+                                    });
+                                }
+                            }
+                        }, '修改'),
                         table.getRemoveControl(h, params),
                     ]);
                 }
@@ -493,9 +509,16 @@
             table.exportData();
         }
 
-        async get( params =  { current: 1 } ){   // async 异步声明
+        async getRole(callback){   // async 异步声明
             let ajax:any = this.$refs.ajax;
-            let res = await  ajax.get('user-data.json' , params);  // await 异步调用  es6写法
+            let res = await  ajax.get('/api/role/list' , { current: 1 });  // await 异步调用  es6写法
+            let data:any=[
+                { text: "超级管理员1", value: "1" },
+                { text: "设备管理_垃圾箱2", value: "3" },
+                { text: "设备管理_签到3", value: "超级管理员" }
+            ]
+            this.formModel[3]['data']= data;
+            callback&&callback();
         }
         submitSearch(data){
             console.log(data)

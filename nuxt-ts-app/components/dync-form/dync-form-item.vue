@@ -62,7 +62,7 @@
                              :before-upload="item.beforeUpload"
                              multiple
                              type="drag"
-                             :action="item.action || ''"
+                             :action="item.action || '/api/gallery/upload&_format=json'"
                              v-if="!item.disabled"
                              style="display: inline-block;width:58px;">
                     <div style="width: 58px;height:58px;line-height: 58px;">
@@ -115,17 +115,24 @@
         return data;
     }
 
-    getTreeChecked( data:Array<any> = [] , checkedData:Array<any> = [] ){
-      data = [];
-      for( let item of checkedData){
-        let clone : any = { ...item };
-        data.push(clone);
-        if( clone.children ){
-          this.getTreeChecked( data , item.children );
+    getTreeChecked( data : Array<any> = [] , checkedData: Array<any> = [] , prop : Array<any> = []) {
+      for (let item of data) {
+        let clone: any = {} ;
+        if( prop && prop.length ){
+          for(let o of prop ){
+            clone[o] = item[o];
+          }
+        }
+        else{
+          clone = { ...item };
+        }
+        checkedData.push(clone);
+        if (clone.children) {
+          this.getTreeChecked(item.children , checkedData );
           delete clone.children;
         }
       }
-      return data;
+      return checkedData;
     }
 
     view( name ){
@@ -208,7 +215,7 @@
         }
         else if( item.type == 'tree'){
             item['checkChange'] = ( val )=>{
-              this.value[item.field] =  this.getTreeChecked( [] , val);
+              this.value[item.field] =  this.getTreeChecked( val , [] , [] );
             }
         }
         // let { field , value  } = item;

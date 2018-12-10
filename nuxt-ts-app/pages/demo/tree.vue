@@ -1,13 +1,15 @@
 <template>
-   <!--:load-data="[]"-->
-    <Tree ref="tree"
-          :data="data"
-          @on-check-change="checkChange"
-          multiple
-          empty-text="暂无数据"
-          show-checkbox
-          v-model="model"
-    ></Tree>
+   <div>
+       <Tree ref="tree"
+             :data="data"
+             @on-check-change="checkChange"
+             multiple
+             empty-text="暂无数据"
+             show-checkbox
+             v-model="model"
+       ></Tree>
+       <Button @click="click">GET</Button>
+   </div>
 </template>
 
 <script lang="ts">
@@ -23,10 +25,14 @@
     model = [];
     tree :any ;
     data = [];
+
     checkChange( nodes ){
-      let choicesAll = this.tree.getCheckedNodes(); //方法的运用 getSelectedNodes也是如此用法
-      console.log( util.getTreeChecked( [], nodes ))
-      console.log( this.tree )
+      console.log( util.getTreeChecked(  nodes , [] , ['id'] ))
+    }
+
+    click(){
+      let choicesAll = this.tree.getCheckedNodes();
+      console.log( util.getTreeChecked(  choicesAll , [] , ['id'] ))
     }
     mounted() {  // Vue 的 mounted 初始化回调
       this.tree = this.$refs.tree;
@@ -70,6 +76,13 @@
         checked : true ,
         expand:true,
         id : 1,
+        indeterminate : false,
+        nodeKey : 0,
+        title : "parent 1",
+      },{
+        checked : true ,
+        expand:true,
+        id : 0,
         indeterminate : false,
         nodeKey : 0,
         title : "parent 1",
