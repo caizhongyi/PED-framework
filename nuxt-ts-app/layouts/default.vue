@@ -14,7 +14,7 @@
                             <div class="layout-nav">
                                 <i-menu-item :name="`/${item.name == 'index' ? '' : item.name }`" v-for="(item,key) in menu" :key="key">
                                     <i-icon :type="item.icon"></i-icon>
-                                    {{ item.meta.title }}
+                                    {{ item.title }}
                                 </i-menu-item>
                             </div>
                         </i-menu>
@@ -45,30 +45,25 @@
                     </i-col>
                 </i-row>
             </i-header>
-
                 <i-layout class="ivu-layout-has-sider nt-main">
                     <i-sider v-if="siderVisible" hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed"
                              class="nt-sider layout">
+
                         <Menu ref="siderMenu" v-show="!collapsed" :active-name="menuActiveName" :open-names="openedNames"
                               :accordion="false" :theme="theme" @on-select="turnToPage">
-                            <template v-for="item in menuList">
-                                <!--<template v-if="item.children && item.children.length === 1">
-                                    <side-menu-item v-if="showChildren(item)" :key="`menu-${item.name}`"
-                                                    :name="getNameOrHref(item , false )"
-                                                    :parent-item="item"></side-menu-item>
-                                    <menu-item v-else :name="getNameOrHref(item, false)"
-                                               :key="`menu-${item.children[0].name}`">
-                                        <i-icon :type="item.children[0].icon || ''"/>
-                                        <span>{{ showTitle(item.children[0]) }}</span></menu-item>
-                                </template>-->
-                                <template>
-                                    <side-menu-item v-if="showChildren(item)" :key="`menu-${item.name}`"
-                                                    :name="getNameOrHref(item ,false )"
-                                                    :parent-item="item"></side-menu-item>
-                                    <menu-item v-else :name="getNameOrHref(item , false )" :key="`menu-${item.name}`">
-                                        <i-icon :type="item.icon || ''"/>
-                                        <span>{{ showTitle(item) }}</span></menu-item>
-                                </template>
+                            <template v-for="(item,key) in menuList" >
+                                <side-menu-item v-if="showChildren(item)"
+                                                :key="`menu-${item.name}`"
+                                                :name="getNameOrHref(item ,false )"
+                                                :parent-item="item"
+                                ></side-menu-item>
+                                <menu-item v-else
+                                           :name="getNameOrHref(item , false )"
+                                           :key="`menu-${item.name}`"
+                                >
+                                    <i-icon :type="item.icon || ''"/>
+                                    <span>{{ showTitle(item) }}</span>
+                                </menu-item>
                             </template>
                         </Menu>
                         <div class="menu-collapsed" v-show="collapsed" :list="menuList">
@@ -78,7 +73,7 @@
                                                 icon-size="large" :parent-item="item"
                                                 :key="`drop-menu-${item.name}`"></collapsed-menu>
                                 <Tooltip transfer v-else
-                                         :content="(item.meta && item.meta.title) || (item.children && item.children[0] && item.children[0].meta.title)"
+                                         :content="(item.meta && item.title) || (item.children && item.children[0] && item.children[0].title)"
                                          placement="right" :key="`drop-menu-${item.name}`">
                                     <a @click="turnToPage(getNameOrHref(item, false))" class="drop-menu-a"
                                        :style="{textAlign: 'center'}">
@@ -88,6 +83,7 @@
                             </template>
                         </div>
                     </i-sider>
+
                     <i-layout class="nt-wrapper layout">
                         <i-breadcrumb class="nt-breadcrumb" v-if="breadcrumbVisible">
                             <i-breadcrumb-item v-for="(item,key) in breadCrumbList" :key="key"> {{ item.title }} </i-breadcrumb-item>
@@ -173,7 +169,7 @@
         return currentRouteList[index] == n.sourceName;
       });
       if( menuItem && menuItem.length ){
-        this.breadCrumbList.push({ name: menuItem[0].name, title: menuItem[0]["meta"].title });
+        this.breadCrumbList.push({ name: menuItem[0].name, title: menuItem[0].title });
         !this.headMenuActiveName && (this.headMenuActiveName = (`/${menuItem[0].name}`));
         this.headMenuActiveName  = this.headMenuActiveName == '/index' ? '/' : this.headMenuActiveName ;
         this.getMenuTitle( currentRouteList , ++index , menuItem[0].children )
@@ -199,8 +195,7 @@
       filterList = filterList && filterList[0] ? filterList[0] : null ;
       if( !filterList ) return this;
 
-      this.menuList = filterList.children;
-
+      this.menuList = filterList.children || [];
       return this;
     }
 

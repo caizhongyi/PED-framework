@@ -3,8 +3,8 @@ import capitalize from "capitalize-first-letter"
 import Ajax from "~/components/ajax/index"
 import AjaxButton from "~/components/ajax/ajax-button"
 import PageTable from "~/components/page-table"
-import DyncForm from "~/components/dync-form"
-import Nestable from "~/components/nestable"
+import DyncForm from "~/components/dync-form/index"
+import Nestable from "~/components/nestable/index"
 
 //全局加载 components
 Vue.component("Ajax" , Ajax );

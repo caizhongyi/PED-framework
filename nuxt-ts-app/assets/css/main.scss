@@ -5,28 +5,27 @@
 @import "iview-style.scss";
 @import "nestable.scss";
 
-
-$screen-width : 1366px !default;
-$font-size : 14px !default;//变量的值可以根据自己需求定义著作权归作者所有。
-$default-color : #444 !default;
-$is-mobile : true !default;
-$line-height : 1.7 !default;
-$family : "microsoft yahei" !default;
-$placeholder : #999 !default;
+$screen-width: 1366px !default;
+$font-size: 14px !default; //变量的值可以根据自己需求定义著作权归作者所有。
+$default-color: #444 !default;
+$is-mobile: true !default;
+$line-height: 1.7 !default;
+$family: "microsoft yahei" !default;
+$placeholder: #999 !default;
 $btn-padding: 14px 7px !default;
 $space-xs: 5px !default;
 $space-md: 10px !default;
 $space-lg: 20px !default;
 $line-weight: 1px !default;
-$path : '../images/' !default;
-$types : (default:#fff , link:transparent , primary:#428BCA , info:#5BC0DE ,  muted:#999, success:#5CB85C, warning: #F0AD4E , danger: #D9534F , dark:  #000, light: #c4caa5) !default;
-$sizes : ( xs: 80%, sm: 90% , md: 100%, lg: 110%, xlg: 130%, xxlg: 160% , xxxlg: 200%) !default;
+$path: '../images/' !default;
+$types: (default:#fff, link:transparent, primary:#428BCA, info:#5BC0DE, muted:#999, success:#5CB85C, warning: #F0AD4E, danger: #D9534F, dark: #000, light: #c4caa5) !default;
+$sizes: (xs: 80%, sm: 90%, md: 100%, lg: 110%, xlg: 130%, xxlg: 160%, xxxlg: 200%) !default;
 
-a , a:hover{
+a, a:hover {
   text-decoration: none;
 }
 
-html{
+html {
   font-size: $font-size;
 }
 
@@ -35,8 +34,7 @@ html, body {
   min-width: 1366px;
 }
 
-
-body,.ivu-menu-item,.ivu-menu{
+body, .ivu-menu-item, .ivu-menu {
   font-size: 14px;
 }
 
@@ -52,7 +50,6 @@ body,.ivu-menu-item,.ivu-menu{
 .nt-wrapper {
   padding: 20px;
 }
-
 
 .collapsed-menu span {
   width: 0px;
@@ -73,7 +70,6 @@ body,.ivu-menu-item,.ivu-menu{
 .page-enter, .page-leave-to {
   opacity: 0;
 }
-
 
 .upload-list {
   display: inline-block;
@@ -116,80 +112,84 @@ body,.ivu-menu-item,.ivu-menu{
   margin: 0 2px;
 }
 
-.img-box{
+.img-box {
   margin: 10px;
   border: 1px solid #d5d5d5;
   padding: 5px;
-  &-img{
+  &-img {
     width: 100%;
     height: 200px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: 100%;
   }
-  &-detail{
+  &-detail {
     text-align: center;
     margin-top: 10px;
-    button{
+    button {
       margin-left: 10px;
     }
   }
 }
-.ivu-card-bordered{
+
+.ivu-card-bordered {
   margin-bottom: 24px;
 }
 
-.ivu-tag{
+.ivu-tag {
   line-height: normal;
 }
 
-.ivu-btn{
-  span{
+.ivu-btn {
+  span {
     display: inline-block;
-    a{
+    a {
       color: #fff;
     }
   }
 }
-.list-unstyled{
-  &,li{
-    margin: 0 ;
+
+.list-unstyled {
+  &, li {
+    margin: 0;
     padding: 0;
     list-style: none;
   }
 }
-.ivu-tree{
+
+.ivu-tree {
   max-height: 300px;
   overflow-y: auto;
 }
-.login{
+
+.login {
   width: 100%;
   height: 100%;
   background-image: url('../../assets/images/login-bg.jpg');
   background-size: cover;
   background-position: center;
   position: absolute;
-  &-con{
-    animation: login-animate .4s ease ;
+  &-con {
+    animation: login-animate .4s ease;
     position: absolute;
     right: 160px;
     top: 10%;
     transform: translateY(0);
     width: 400px;
-    .ivu-card-head p{
+    .ivu-card-head p {
       font-size: 25px;
       font-weight: 300;
       text-align: center;
       padding: 5px;
       height: auto;
     }
-    .ivu-card-body{
+    .ivu-card-body {
       padding: 20px 30px;
     }
-    .form-con{
+    .form-con {
       padding: 10px 0 0;
     }
-    .login-tip{
+    .login-tip {
       font-size: 12px;
       text-align: center;
       color: #c3c3c3;
@@ -197,19 +197,51 @@ body,.ivu-menu-item,.ivu-menu{
   }
 
   @keyframes login-animate {
-    0%{
+    0% {
       top: -50px;
       opacity: 0;
     }
 
-    100%{
+    100% {
       top: 10%;
       opacity: 1;
     }
   }
 }
 
-.img-box-img{
+.img-box-img {
   cursor: pointer;
 }
 
+.img-box-add {
+  text-align: center;
+  font-size: 40px;
+  height: 245px;
+  line-height: 200px;
+  cursor: pointer;
+}
+
+.table-bordered {
+  td, th {
+    border: 1px solid #ddd;
+  }
+}
+
+.table {
+  font-family: Consolas, Menlo, Courier, monospace;
+  font-size: 12px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  empty-cells: show;
+  border: 1px solid #e9e9e9;
+  width: 100%;
+  td, th {
+    padding: 5px 10px;
+  }
+  th{
+    background: #f7f7f7;
+    white-space: nowrap;
+    color: #5c6b77;
+    font-weight: 600;
+  }
+}

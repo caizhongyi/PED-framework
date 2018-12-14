@@ -1,25 +1,25 @@
 [
-  { "name": "index", "icon": "md-home",  "meta": { "title": "首页" }, "children": [] },
-  { "name": "home", "icon": "md-home",  "meta": { "title": "首页" }, "children": [
-    { "name": "index", "icon": "md-list-box", "meta": { "title": "首页" }, "children": [] }
+  { "name": "index", "icon": "md-home",  "title": "首页" , "children": [] },
+  { "name": "home", "icon": "md-home", "title": "首页" , "children": [
+    { "name": "index", "icon": "md-list-box",  "title": "首页"  , "children": [] }
   ] },
-  { "name": "devices", "icon": "md-list-box",  "meta": { "title": "设备管理" }, "children": [
-    { "name": "index", "icon": "md-list-box", "meta": { "title": "设备管理" }, "children": [] },
-    { "name": "setting", "icon": "md-list-box", "meta": { "title": "设备配置" }, "children": [] },
-    { "name": "factory", "icon": "md-list-box", "meta": { "title": "产家管理" }, "children": [] }
+  { "name": "devices", "icon": "md-list-box",  "title": "设备管理", "children": [
+    { "name": "index", "icon": "md-list-box", "title": "设备管理" ,  "children": [] },
+    { "name": "setting", "icon": "md-list-box", "title": "设备配置", "children": [] },
+    { "name": "factory", "icon": "md-list-box", "title": "产家管理", "children": [] }
   ]},
-  { "name": "container", "icon": "md-list-box",  "meta": { "title": "容器管理" }, "children": [
-    { "name": "index", "icon": "md-list-box", "meta": { "title": "应用工单" }, "children": [] },
-    { "name": "data", "icon": "md-list-box", "meta": { "title": "数据工单" }, "children": [] }
+  { "name": "container", "icon": "md-list-box",  "title": "容器管理", "children": [
+    { "name": "index", "icon": "md-list-box", "title": "应用工单", "children": [] },
+    { "name": "data", "icon": "md-list-box",  "title": "数据工单", "children": [] }
   ]},
-  { "name": "app-manage", "icon": "md-list-box",  "meta": { "title": "应用管理" }, "children": [
-    { "name": "index", "icon": "md-list-box", "meta": { "title": "我的应用" }, "children": [] },
-    { "name": "app-add", "icon": "md-list-box", "meta": { "title": "新增应用" }, "children": [] }
+  { "name": "app-manage", "icon": "md-list-box",  "title": "应用管理", "children": [
+    { "name": "index", "icon": "md-list-box", "title": "我的应用", "children": [] },
+    { "name": "app-add", "icon": "md-list-box", "title": "新增应用", "children": [] }
   ]},
-  { "name": "settings", "icon": "md-list-box", "meta": { "title": "系统设置" }, "children": [
-    { "name": "index", "icon": "md-list-box", "meta": { "title": "系统设置" }, "children": [] },
-    { "name": "menu", "icon": "md-list-box", "meta": { "title": "菜单管理" }, "children": [] },
-    { "name": "role", "icon": "md-list-box", "meta": { "title": "角色管理" }, "children": [] },
-    { "name": "user", "icon": "md-list-box", "meta": { "title": "帐号管理" }, "children": [] }
+  { "name": "settings", "icon": "md-list-box", "title": "系统设置", "children": [
+    { "name": "index", "icon": "md-list-box", "title": "系统设置", "children": [] },
+    { "name": "menu", "icon": "md-list-box","title": "菜单管理", "children": [] },
+    { "name": "role", "icon": "md-list-box", "title": "角色管理", "children": [] },
+    { "name": "user", "icon": "md-list-box", "title": "帐号管理", "children": [] }
   ]}
 ]

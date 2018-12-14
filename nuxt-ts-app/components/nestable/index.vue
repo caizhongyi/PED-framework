@@ -18,7 +18,7 @@
                 :loading="true"
                 @on-ok="ok"
                 @on-cancel="cancel">
-            <dync-form  ref="form" v-model="formData" :model="formModel" @success="submit" :label-width="70"  :submit-button="false"></dync-form>
+            <dync-form  ref="form" v-model="formData" :model="formModel" @success="submit"   :submit-button="false"></dync-form>
         </Modal>
 
     </div>
@@ -37,6 +37,14 @@
     $nestable : any ;
     @Prop() value : any ;
     @Prop({ default : true }) optionButton : any ;
+    @Prop({ default : ()=>{
+       return {
+         url : '',
+         settings : 'md-list-box',
+         listorder : '0',
+         isshow : '1',
+       }
+      } }) defaultFormData : any ;
 
     modal: any = false ;
     form: any;
@@ -52,7 +60,46 @@
             :data-order="item.order"
     * */
 
-    @Prop({ default : ()=>{ return [];}}) formModel : any ;
+    @Prop({ default : ()=>{ return [ {
+        field: "title",
+        label: "名称",
+        type: "input",
+        required: true,
+        rule: [{ required: true, message: "请输入名称", trigger: "blur" }],
+      },
+        /*  {
+         field: "name",
+         label: "名称",
+         type: "input",
+         required: true,
+         rule: [{ required: true, message: "请输入名称", trigger: "blur" }],
+         },*/
+        {
+          field: "url",
+          label: "链接地址",
+          type: "input"
+        },
+        {
+          field: "settings",
+          label: "图标",
+          type: "input"
+        },
+        {
+          field: "isshow",
+          label: "是否显示",
+          type: "radio",
+          data : [{ text : '显示' , value : "1"  },{ text : '不显示' , value : "0"  }]
+        },
+        {
+          field: "description",
+          label: "描述",
+          type: "input",
+        },
+        {
+          field: "listorder",
+          label: "排序",
+          type: "input",
+        }];}}) formModel : any ;
 
     saveOrder(){
         this.$emit('save-order' , this.$nestable.nestable('serialize') );
@@ -69,7 +116,7 @@
     }
 
     add(){
-      this.formData = {};
+      this.formData = this.defaultFormData;
       this.modal = true;
       return this;
     }

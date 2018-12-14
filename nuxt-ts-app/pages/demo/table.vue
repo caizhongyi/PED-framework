@@ -43,6 +43,7 @@
                     :search-model="searchModel"
                     :search-label-width="80"
                     :params="params"
+                    :default-form-data="defaultFormData"
                     @remove="remove"
                     @remove-all="removeAll"
                     @search-submit="searchSubmit"
@@ -86,7 +87,10 @@
 
     @State user :any; // 全局 store 中的变量
     @Mutation stateMutation :any; // 全局  store 中的方法
+    //表单默认值
+    defaultFormData: any = {
 
+    };
 
     formData:any = [
       { field : 'name' , placeholder:'名称', type : 'input' },
@@ -231,7 +235,8 @@
       setTimeout(()=>{
         if( data.id == null ){
           data.id = uuid();
-          next();
+          this.table.reload();
+          restore();
         }
         else{
           next( data.id );

@@ -179,6 +179,9 @@ let res = await ajax.post()
 示例
 /demo/table.vue
 ``` 
+
+4.表单上传必须要赋默认值
+
 # underscore
 处理数据库，例如删除，过滤，查找等等
 
@@ -221,7 +224,7 @@ b，后端访问地址：http://180.106.148.81:18082/testapms/index.php?_url=api
 
 2，拷贝dist到后端的根目录front中
 
-3，提交git，并在网络出口001下的iot/spms目录操作：
+3，提交git，并在网络出口001下的iot/apms目录操作：
 
     （保持svn跳板机登录下执行）git pull
     docker build -t hub.local:9080/iot/apms:test  .

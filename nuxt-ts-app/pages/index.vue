@@ -32,7 +32,7 @@
     loadingVisible = false;
 
     layout() {
-      return "default-no-slider";
+    //  return "default-no-slider";
     }
 
     /* get name (): boolean {

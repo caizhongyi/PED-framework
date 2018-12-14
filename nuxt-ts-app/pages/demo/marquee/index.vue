@@ -55,7 +55,7 @@
       };
     }
     mounted() {
-      console.log(filters.formatDate( new Date() , 'YYYY-mm-dd hh:MM:ss'))
+      console.log(filters.formatDate( new Date() , 'YYYY-MM-DD hh:mm:ss'))
     }
   }
 </script>

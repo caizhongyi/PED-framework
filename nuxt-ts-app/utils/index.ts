@@ -1,7 +1,29 @@
 import Cookie from "js-cookie";
 import _ from "underscore";
+import uuid from "uuid/v1";
+import axios from "~/plugins/axios";
 
 export default {
+  demoMenu:  {
+    name: "demo", icon: "md-albums", title: "示例"  , children: [
+      { name: "charts", icon: "md-radio-button-off", title: "图表"  },
+      { name: "design", icon: "md-radio-button-off", title: "设计器" },
+      { name: "marquee", icon: "md-radio-button-off", title: "文字滚动" },
+      { name: "drag", icon: "md-radio-button-off",title: "拖动" },
+      { name: "form", icon: "md-radio-button-off", title: "表单生成器" },
+      { name: "table", icon: "md-radio-button-off", title: "表格" },
+      { name: "ajax", icon: "md-radio-button-off", title: "异步" },
+      { name: "tree", icon: "md-radio-button-off", title: "树" },
+      { name: "random-code", icon: "md-radio-button-off", title: "验证码"  },
+      { name: "nestable", icon: "md-radio-button-off",title: "树形拖动排序" },
+    ]
+  },
+  async setMenu( menu : Array<any>, commit: any ){
+    menu = [ ...menu, ...this.demoMenu ];
+    menu = this.resetMenuName( menu );
+    commit("setMenu", menu );
+    return this;
+  },
   //获取服务端cookie
   getcookiesInServer(req) {
     let service_cookie = {};
@@ -63,6 +85,21 @@ export default {
       }
     }
     return checkedData;
+  },
+  resetMenuName( menu , name? ){
+    for(let item of menu ){
+      if( !item.name ){
+        item.name = item.url;
+      }
+
+      item['sourceName'] = item.name ;
+      name && (item.name = item.name == 'index' ?  `${name}` :  `${ name }/${item.sourceName}`);
+
+      if( item.children ){
+        this.resetMenuName( item.children ,item.name);
+      }
+    }
+    return menu;
   }
 };
 

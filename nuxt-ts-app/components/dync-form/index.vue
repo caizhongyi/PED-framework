@@ -1,6 +1,6 @@
 ﻿<template>
     <div>
-        <Form ref="form" label-position="right" :model="value" :inline="inline" :label-width="labelWidth"
+        <Form ref="form" :label-position="labelPosition" :model="value" :inline="inline" :label-width="labelWidth"
               :rules="ruleValidate">
             <slot name="header" :data="value"></slot>
             <dync-form-item :model="model" :root="this" v-model="value" :rule-validate="ruleValidate" :label-width="labelWidth" ></dync-form-item>
@@ -34,18 +34,17 @@
   export default class DyncForm extends Vue {
 
     @Prop( { default : ()=>{ return {} } } ) value: any ;
-    @Prop() inline: any;
-    @Prop() model: any;
-    @Prop() rules: any;
+    @Prop({ default : false }) inline: boolean;
+    @Prop({ default : ()=>{ return {} ;}}) model: any;
+    @Prop({ default : ()=>{ return {} ;}}) rules: any;
     @Prop() labelWidth: any;
-    @Prop() type: any;
+    @Prop({ default : 'top' }) labelPosition: string ;
     @Prop({ default :()=>{ return { text : '提交' , icon : ''}}}) submitButton: SubmitButton;
 
    // @Prop() rules : any ;
     form : any ;
-
     ruleValidate: any = {};
-    modalVisible = false;
+    modalVisible:boolean = false;
     modalImageName : any = '';
     /*ruleValidate = {
       name: [
@@ -118,6 +117,36 @@
     }*/
     mounted() {
       this.form = this.$refs.form;
+
+      for (let item of this.model) {
+        let value ;
+        switch (item.type) {
+          case 'radio' :
+            this.$set( this.value , item.field , item.data[0].value );
+            break;
+          case 'select' :
+            if( !this.value[item.field] || this.value[item.field].length == 0 ){
+              this.$set( this.value , item.field , [])
+              if( !item.multiple ){
+                let value = item.data &&　item.data.length ? [item.data[0].value]  : [];
+                this.$set( this.value , item.field , value )
+              }
+            }
+            break;
+          case 'upload' :
+          case 'dateRange' :
+          case 'datetimeRange' :
+          case 'checkbox' :
+          case 'tree' :
+            value =  this.value[item.field] ? this.value[item.field] : [];
+            this.$set( this.value , item.field , value )
+            break;
+          default :
+            value =  this.value[item.field] ? this.value[item.field] : '';
+            this.$set( this.value , item.field , value )
+            break;
+        }
+      }
     }
   }
 </script>

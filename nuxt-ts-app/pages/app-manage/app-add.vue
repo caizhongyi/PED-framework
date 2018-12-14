@@ -5,22 +5,20 @@
             <Step title="设备信息" content="添加设备应用设备信息"></Step>
         </Steps>
         <br>
-        <dync-form v-show="current==0" ref="dyncForm"  :model="form" :submit-button="{ text: '下一步' }" :label-width="80" @success="next" >
-            <!--<template slot="header">header</template>-->
-            <template slot slot-scope="props">
-            </template>
-            <!--<template slot="footer">footer</template>-->
+        <dync-form v-show="current==0" v-model="formData" ref="dyncForm" :model="form" :submit-button="{ text: '下一步' }"
+                   :label-width="80" @success="next">
         </dync-form>
-        <dync-form v-show="current==1" ref="formDevice"  :model="formDeviceModel" :submit-button="false" :label-width="80" >
+        <dync-form v-show="current==1" ref="formDevice" v-model="formData2" :model="formDeviceModel"
+                   :submit-button="false" :label-width="80">
             <template slot>
-                <FormItem  >
-                    <Button type="primary" @click="prev" >上一步</Button>
-                    <Button type="primary" @click="submit" >提交</Button>
-                    <Button @click="reset" >重置</Button>
+                <FormItem>
+                    <Button type="primary" @click="prev">上一步</Button>
+                    <Button type="primary" @click="submit">提交</Button>
+                    <Button @click="reset">重置</Button>
                 </FormItem>
             </template>
         </dync-form>
-
+        <ajax ref="ajax"></ajax>
     </div>
 </template>
 
@@ -35,46 +33,73 @@
     components: { DyncForm }
   })
   export default class  extends Vue {    //  typescript 创建类继成 Vue
-    current = 0 ;
-    formDevice:any;
+    current = 0;
+    formDevice: any;
+    dyncForm: any;
+    formData: any = {
+      //app_type : ["1"],
+      logo : []
+    };
+    formData2: any = {
+      type_id:[]
+    };
     form: any = [
       {
         field: "name",
         label: "应用名",
         type: "input",
-        placeholder: '智慧校园',
+        placeholder: "智慧校园",
         required: true,
-        rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }],
+        rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }]
       },
       {
-        field: "type",
+        field: "app_type",
         label: "应用类型",
-        value: '小区',
+        value: "小区",
         type: "select",
-        data: [{ text: "小区", value: "xiaoqu" }, { text: "校园", value: "xiaoyuan" }, { text: "园区", value: "yuanqu" }]
+        data: [{ text: "小区", value: "1" }, { text: "校园", value: "0" }, { text: "园区", value: "2" }]
       },
+//      {
+//        field: "app_id",
+//        label: "APPID",
+//        type: "input",
+//        disabled: true,
+//        placeholder: '自动生成',
+//      },
+//      {
+//        field: "app_secret",
+//        label: "APPSECRET",
+//        type: "input",
+//        disabled: true,
+//        placeholder: '自动生成',
+//      },
       {
-        field: "app-id",
-        label: "APPID",
-        type: "input",
-        disabled: true,
-        placeholder: '自动生成',
-      },
-      {
-        field: "app-secret",
-        label: "APPSECRET",
-        type: "input",
-        disabled: true,
-        placeholder: '自动生成',
-      },
-      {
-        field: "domain-name",
+        field: "app_website",
         label: "应用域名",
         type: "input",
-        placeholder: '访问地址',
+        placeholder: "访问地址",
         required: true,
-        rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }],
+        rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }]
       },
+      {
+        field: "desc",
+        label: "描述",
+        type: "input",
+        placeholder: "请输入"
+      },
+      {
+        field: "logo", label: "logo", type: "upload", action: "", remove: (item, file, next) => {
+          setTimeout(() => {
+            next( );
+          }, 1000);
+        }, success: (item, file, next) => {
+          setTimeout(() => {
+            next( );
+          }, 1000);
+        }
+      }
+
+//          }
       /*  {
           field: "database",
           label: "数据库信息",
@@ -123,38 +148,64 @@
         },*/
     ];
 
-    formDeviceModel :any = [
+    formDeviceModel: any = [
       {
-        field: "name",
+        field: "type_id",
         label: "设备",
         type: "select",
-        placeholder: '请选择设备',
+        placeholder: "请选择设备",
         required: true,
         multiple: true,
-        rule: [{ required: true, message: "请选择设备", trigger: "blur" }],
+        data: [],
+        rule: [{ required: true, type: "array", min: 1, message: "Choose at least one hobby", trigger: "change" }]
       }
-    ]
+    ];
 
-    next(){
-      this.current +=1;
+    next() {
+      this.current += 1;
     }
-    prev(){
-      this.current -=1;
+
+    prev() {
+      this.current -= 1;
     }
-    reset(){
+
+    reset() {
       this.formDevice.reset();
     }
-    submit( data ){
+
+    submit(data) {
       this.formDevice.submit();
-      console.log( data );
+      this.save({ ...this.dyncForm.value, ...this.formDevice.value });
+    }
+
+    async save(params) {
+      let ajax: any = this.$refs.ajax;
+      let res = await ajax.post("/api/app/add", params);  // await 异步调用  es6写法
+      if (res.code == "200") {
+        return this.$router.push("/app-manage");
+      } else {
+        return this.$router.push("/app-manage/app-add");
+      }
+
+    }
+
+    fail(data) {
       return this;
     }
-    fail( data ){
-      console.log( data );
-      return this;
+
+
+    async get(params = { is_ajax: 1 }) {   // async 异步声明
+      let ajax: any = this.$refs.ajax;
+      let res = await ajax.post("/api/app/deviceType", params);  // await 异步调用  es6写法
+      this.formDeviceModel["0"].data = res.data;
+//        this.appData = res.data;
     }
+
+
     mounted() {  // Vue 的 mounted 初始化回调
-        this.formDevice = this.$refs.formDevice;
+     // this.get();
+      this.formDevice = this.$refs.formDevice;
+      this.dyncForm = this.$refs.dyncForm;
     }
   }
 </script>

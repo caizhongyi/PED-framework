@@ -11,15 +11,14 @@
                     :form-model="formModel"
                     :search-model="searchModel"
                     :params="params"
-                    :form-label-width="100"
                     @search-submit="searchSubmit"
                     @edit-submit="editSubmit"
                     @edit-cancel="editCancel">
             <template slot="modal-footer">
                 <i-button type="default" :loading="buttonLoading">账号解锁</i-button>
             </template>
-            <ajax :loading="ajaxLoading" ref="ajax"></ajax>
         </page-table> <!-- 自定义组件 ~/components/page-table.vue -->
+        <ajax :loading="ajaxLoading" ref="ajax"></ajax>
     </div>
 </template>
 
@@ -533,8 +532,7 @@
             console.log(data)
         }
         //提交修改
-        editSubmit( data , next ){
-            console.log(data)
+        editSubmit( data , next , restore ){
             setTimeout(()=>{
                 if( data.id == null ){
                     data.id = uuid();
@@ -544,7 +542,7 @@
                     next()
                 }
             },1000)
-            console.log(data);
+           // restore() 什么都不做
         }
         //取消修改
         editCancel(data){

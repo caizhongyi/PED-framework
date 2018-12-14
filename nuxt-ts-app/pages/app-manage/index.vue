@@ -1,15 +1,15 @@
 <template>
     <div>
-        <!--<Row>
-            <Button type="primary" class="pull-right" @click="addApp()">新增应用</Button>
-        </Row>-->
+        <!--<Row>-->
+            <!--<Button type="primary" class="pull-right" @click="addApp()">新增应用</Button>-->
+        <!--</Row>-->
         <Row>
             <Col span="6" v-for="(item,index) in appData" :key="index">
                 <div class="img-box">
-                    <div class="img-box-img" @click="appDetail(item)" :style="{backgroundImage:'url(' + item.backgroundImage + ')'}" alt=""></div>
+                    <div class="img-box-img" @click="appDetail(item)" :style="{backgroundImage:'url(img/' + item.logo + '.png)'}" alt=""></div>
                     <div class="img-box-detail">
                         {{ item.name }}
-                        <Button type="error" size="small" @click="deleteApp(index)">删除</Button>
+                        <Button type="error" size="small" @click="deleteApp(item,index)">删除</Button>
                     </div>
                 </div>
             </Col>
@@ -29,6 +29,7 @@
                 <template slot slot-scope="props"> </template>
             </dync-form>
         </Modal>
+      <ajax  ref="ajax"></ajax>
     </div>
 </template>
 
@@ -43,12 +44,8 @@
   })
   export default class AppManage extends Vue {    //  typescript 创建类继成 Vue
     dyncForm:any;
-    appData = [
-      { backgroundImage: "img/51.png", name: "【小区】智慧小区1"},
-      { backgroundImage: "img/51.png", name: "【小区】智慧小区2"},
-      { backgroundImage: "img/51.png", name: "【小区】智慧小区3"},
-      { backgroundImage: "img/51.png", name: "【小区】智慧小区4"},
-      { backgroundImage: "img/51.png", name: "【小区】智慧小区5"},
+    appData:any = [
+
     ];
 
     form: any = [
@@ -78,28 +75,33 @@
         required: true,
       },
       {
-        field: "type",
+        field: "app_type",
         label: "应用类型",
-        value: '小区',
         type: "input",
         disabled: true,
       },
       {
-        field: "app-id",
+        field: "app_id",
         label: "APPID",
         type: "input",
         disabled: true,
         // placeholder: '自动生成',
       },
       {
-        field: "app-secret",
+        field: "app_secret",
         label: "APPSECRET",
         type: "input",
         disabled: true,
         // placeholder: '自动生成',
       },
       {
-        field: "domain-name",
+        field: "desc",
+        label: "描述",
+        type: "input",
+        disabled: true,
+      },
+      {
+        field: "app_website",
         label: "应用域名",
         type: "input",
         // placeholder: '访问地址',
@@ -108,24 +110,36 @@
         // rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }],
       },
       {
-        field: "device-type",
+        field: "device_list",
         label: "设备",
         type: "input",
-        // placeholder: '请选择设备',
         required: true,
         disabled: true,
-        // multiple: true,
-        // rule: [{ required: true, message: "请选择设备", trigger: "blur" }],
+
       }
     ];
 
     showAppData = false;
     showAppDetailData = false;
-    itemData:any = '';
+    itemData: any = {};
 
-    deleteApp(index){
+    deleteApp(item,index){
+      console.log(item);
+      this.delete({id:item.id});
       this.appData.splice(index,1);
     }
+      async delete( params ) {   // async 异步声明
+          console.log(params);
+          let ajax: any = this.$refs.ajax;
+          let res = await ajax.post('/api/app/delete',params);  // await 异步调用  es6写法
+          console.log(res);
+          if ( res.code == '200' ){
+              this.$Modal.success({title:'提示',content:'删除成功'})
+          }
+      }
+
+
+
     addApp(){
       this.showAppData = true;
     }
@@ -152,7 +166,17 @@
     reset(){
       this.dyncForm.reset();
     }
+
+    async get(params = {is_ajax: 1}) {   // async 异步声明
+      console.log(params);
+      let ajax: any = this.$refs.ajax;
+      let res = await ajax.post('/api/app/list', params);  // await 异步调用  es6写法
+      console.log(res);
+      this.appData = res.data;
+    }
+
     mounted() {  // Vue 的 mounted 初始化回调
+      this.get();
       this.dyncForm = this.$refs.forms;
     }
   }

@@ -13,34 +13,40 @@
                 <Button type="primary"  @click="exportData" v-if="expButton" icon="ios-download-outline">导出数据</Button>
                 <Button v-if="columns && columns[0] && columns[0].type == 'selection'" icon="md-trash" @click="removeAll">删除所有</Button>
                 <slot></slot>
+                &nbsp;
             </i-col>
             <i-col span="12" class="text-right"><Page :total="total" :current="page" :page-size="pageSize" show-elevator show-total @on-change="change"/></i-col>
         </i-row>
 
-        <Modal :title="modalTitle" :loading="true"  v-model="modal" @on-ok="modalSubmit" @on-cancel="modalCancel">
-            <dync-form ref="form" :model="formModel" :label-width="formLabelWidth" v-model="formData"  :submit-button="false"></dync-form>
+        <Modal :title="modalTitle" :loading="true"  v-model="modal.visible" @on-ok="modalSubmit" @on-cancel="modalCancel">
+            <dync-form ref="form" :model="formModel" :label-width="formLabelWidth" :inline="false" v-model="formData"  :submit-button="false"></dync-form>
             <div slot="footer" v-if="modalFooter">
                 <i-button type="text" @click="modalCancel">取消</i-button>
                 <slot name="modal-footer"></slot>
-                <i-button type="primary" @click="modalSubmit" :loading="okLoading">确定</i-button>
+                <i-button type="primary" @click="modalSubmit" :loading="modal.loading">确定</i-button>
             </div>
         </Modal>
 
         <Modal title="浏览" :loading="false"  v-model="viewModalVisible" >
-            <i-form  :label-width="formLabelWidth">
-                <i-form-item  :label="item.label"  v-for="(item,key) in formViewModel" :key="key" :v-if="item.visible || true ">
-                    <span v-if="item.type == 'upload'" >
+            <i-form  :label-width="formLabelWidth" >
+                <table class="table table-bordered">
+                    <tr v-for="(item,key) in formViewModel" :key="key" :v-if="item.visible || true ">
+                        <th>{{item.label}}</th>
+                        <td>
+                             <span v-if="item.type == 'upload'" >
                         <no-ssr><div class="upload-list" v-for="subItem in formData[item.field]">
-                        <template >
-                            <img :src="subItem.url" alt="subItem.name"/>
-                            <div class="upload-list-cover">
-                                <Icon type="ios-eye-outline" @click.native="viewImage(subItem)"></Icon>
-                            </div>
-                        </template>
-                     </div></no-ssr>
-                    </span>
-                    <span v-else >{{ formData[item.field] }}</span>
-                </i-form-item>
+                                <template >
+                                    <img :src="subItem.url" alt="subItem.name"/>
+                                    <div class="upload-list-cover">
+                                        <Icon type="ios-eye-outline" @click.native="viewImage(subItem)"></Icon>
+                                    </div>
+                                </template>
+                             </div></no-ssr>
+                            </span>
+                            <span v-else >{{ formData[item.field] }}</span>
+                        </td>
+                    </tr>
+                </table>
             </i-form>
         </Modal>
 
@@ -63,19 +69,20 @@
   })
   export default class PageTable extends Vue {
 
-    @Prop( { default : ()=>{ return [] ;} }) formModel: any ;
-    @Prop( { default : ()=>{ return [] ;} }) formViewModel: any ;
-    @Prop( { default : 80 }) formLabelWidth: any ;
-    @Prop({ default : ()=>{ return [] ;} } ) searchModel :any ;
-    @Prop( { default : 0 }) searchLabelWidth: any ;
-    @Prop({ default : ()=>{ return [] ;} }) columns: any ;
-    @Prop({ default : false }) expButton: any ;
-    @Prop({ default : true }) addButton: any ;
+    @Prop( { default : ()=>{ return [] ;} }) formModel: any ;   //表单模型
+    @Prop( { default : ()=>{ return [] ;} }) formViewModel: any ; //表单查看模型
+    @Prop( { default : null }) formLabelWidth: any ; //文字宽度
+    @Prop({ default : ()=>{ return [] ;} } ) searchModel :any ; //查询表单模型
+    @Prop( { default : 0 }) searchLabelWidth: any ;  //查询表单文字宽度
+    @Prop({ default : ()=>{ return [] ;} }) columns: any ; //单文列头
+    @Prop({ default : false }) expButton: any ; //导出按钮
+    @Prop({ default : true }) addButton: any ; //增加按钮
     @Prop({ default : 'post' }) method: string ;
     @Prop() url: string ;
     @Prop( { default: ()=>{ return { page : 1 , total: 0 } } }) params : any ;
-    @Prop( { default: ()=>{ return {} }}) modalFooter : any ;
+    @Prop( { default: ()=>{ return {} }}) modalFooter : any ; //弹出窗口底部
     @Prop( { default : ()=>{ return [] ;} }) value: any ;
+    @Prop( { default : ()=>{ return {};} }) defaultFormData: any ;
 
     table : any ;
     form : any ;
@@ -84,7 +91,10 @@
     total : any = 0 ;
     page = 1 ;
     pageSize = 10 ;
-    modal = false;
+    modal = {
+      visible : false,
+      loading : false
+    };
     formData: object = {};
     searchFormData: object = {};
     loading = false;
@@ -93,11 +103,10 @@
     imageModalVisible: any = false;
     viewModalVisible: any = false;
     modalImage: any = '';
-    okLoading = false ;
 
     @Watch('modal')
     onChangeModal( val ){
-      this.okLoading = val == false ? false : this.okLoading ;
+      this.modal.loading = val == false ? false :  this.modal.loading ;
     }
 
     async getData( url , data ){
@@ -168,6 +177,7 @@
         }
       }, '修改');
     }
+
     getViewControl( h , params ){
       return h('Button', {
         props: {
@@ -184,6 +194,7 @@
         }
       }, '查看');
     }
+
     getRemoveControl( h , params ){
       return h('Button', {
         props: {
@@ -223,8 +234,8 @@
     }
     //新增表单
     add(){
-      this.modal = true ;
-      this.formData = {};
+      this.modal.visible = true ;
+      this.formData = this.defaultFormData;
       return this;
     }
 
@@ -243,6 +254,7 @@
           }
           let restore = ()=>{
             this.$Modal.remove();
+            this.modal.loading = false ;
           }
           this.$emit('remove', removeItem  , next  , restore );
         }
@@ -273,6 +285,7 @@
           }
           let restore = ()=>{
             this.$Modal.remove();
+            this.modal.loading = false ;
           }
           this.$emit('remove-all' , selection  , next ,restore )
         }
@@ -299,10 +312,14 @@
       return this;
     }
 
+    reload(){
+      return this.change( 0 );
+    }
+
     //edit-sumbit 提交回调
     modalSubmit(){
-      this.okLoading = true ;
-      this.modalTitle = this.form.id ? this.modalTitle : '新增';
+      this.modal.loading = true ;
+      this.modalTitle = this.form.id ? this.modalTitle : '添加';
 
       let next = ( id )=>{
         if( id == null ){
@@ -319,18 +336,20 @@
           this.$emit('input', data );
           this.value.push();
         }
-        this.modal = false;
+        this.modal.visible = false;
+        this.modal.loading = false ;
       }
 
       let restore = ()=>{
-        this.modal = false;
+        this.modal.visible = false;
+        this.modal.loading = false ;
       }
       this.$emit('edit-submit', this.formData  , next , restore );
       return this;
     }
     //edit-cancel 提交回调
     modalCancel(){
-      this.modal = false;
+      this.modal.visible = false;
       this.$emit('edit-cancel', this.formData  );
       return this;
     }

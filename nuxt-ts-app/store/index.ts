@@ -1,16 +1,6 @@
 import axios from "~/plugins/axios"
 import cookie from "js-cookie"
-
-const  resetName = ( menu , name? )=>{
-  for(let item of menu ){
-    item['sourceName'] = item.name ;
-    name && (item.name = item.name == 'index' ?  `${name}` :  `${ name }/${item.sourceName}`);
-    if( item.children ){
-      resetName( item.children ,item.name);
-    }
-  }
-  return this;
-}
+import utils from "~/utils"
 
 export const state = () => ({
   people: [],
@@ -39,26 +29,14 @@ export const getters = {
 }
 
 export const actions = {
-  async nuxtServerInit({ commit }, { app , req , res }) {
-    let menu:any = await app.$axios.$get( "./menu.json?v2" );
+  async nuxtServerInit({ commit , state }, { app , req , res }) {
 
-    let demoMenu:any =  {
-      name: "demo", icon: "md-albums", meta: { title: "示例" }, children: [
-        { name: "charts", icon: "md-radio-button-off", meta: { title: "图表" } },
-        { name: "design", icon: "md-radio-button-off", meta: { title: "设计器" } },
-        { name: "marquee", icon: "md-radio-button-off", meta: { title: "文字滚动" } },
-        { name: "drag", icon: "md-radio-button-off", meta: { title: "拖动" } },
-        { name: "form", icon: "md-radio-button-off", meta: { title: "表单生成器" } },
-        { name: "table", icon: "md-radio-button-off", meta: { title: "表格" } },
-        { name: "ajax", icon: "md-radio-button-off", meta: { title: "异步" } },
-        { name: "tree", icon: "md-radio-button-off", meta: { title: "树" } },
-        { name: "random-code", icon: "md-radio-button-off", meta: { title: "验证码" } },
-        { name: "nestable", icon: "md-radio-button-off", meta: { title: "树形拖动排序" } },
-      ]
-    };
-    menu = [ ...menu, ...demoMenu ];
-    resetName( menu );
-    commit("setMenu", menu );
+    if( !state.menu || state.menu.length == 0 ){
+      let menu:any = await app.$axios.$post("/api/menu/list" );
+      utils.setMenu( menu.data , commit );
+      //let menu:any = await app.$axios.$get("./menu.json" );
+      //utils.setMenu( menu , commit );
+    }
 
   }
 }

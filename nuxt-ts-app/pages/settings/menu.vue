@@ -21,7 +21,6 @@
     export default class Menu extends Vue {    //  typescript 创建类继成 Vue
         ajaxLoading = false;
         data = [
-
             {
                 name: '地图',
                 id: 3,
@@ -98,23 +97,23 @@
             },
             {
                 field: "settings",
-                label: "icon",
+                label: "图标",
                 type: "input"
             },
             {
                 field: "isshow",
-                label: "shown",
+                label: "是否显示",
                 type: "radio",
                 data : [{ text : '显示' , value : "1"  },{ text : '不显示' , value : "0"  }]
             },
             {
                 field: "description",
-                label: "desc",
+                label: "描述",
                 type: "input",
             },
             {
                 field: "listorder",
-                label: "orderlist",
+                label: "排序",
                 type: "input",
             }];
 

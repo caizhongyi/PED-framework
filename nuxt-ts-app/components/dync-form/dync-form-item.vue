@@ -54,18 +54,18 @@
                       v-model="value[item.field]"
                 ></Tree>
                 <div :v-if="item.visible || true " v-else-if="item.type == 'upload'">
-                    <no-ssr><div class="upload-list" v-for="subItem in value[item.field]">
+                    <div class="upload-list" v-for="subItem in value[item.field]">
                         <template v-if="subItem.status === 'finished'">
                             <img :src="subItem.url" alt="subItem.name"/>
                             <div class="upload-list-cover">
                                 <Icon type="ios-eye-outline" @click.native="view(subItem.url)"></Icon>
-                                <Icon type="ios-trash-outline" @click.native="item.remove(subItem , item )"></Icon>
+                                <Icon type="ios-trash-outline" @click.native="item.removeCallback( subItem , item )"></Icon>
                             </div>
                         </template>
                         <template v-else>
                             <Progress v-if="subItem.showProgress" :percent="subItem.percentage" hide-info></Progress>
                         </template>
-                     </div></no-ssr>
+                     </div>
                      <Upload
                              ref="upload"
                              :show-upload-list="false"
@@ -125,7 +125,10 @@
     }) model;
     @Prop({
       default: () => {
-        return {};
+        let value = {};
+
+
+        return value;
       }
     }) value;
     @Prop() ruleValidate;
@@ -150,69 +153,72 @@
         if (item.rule) {
           this.ruleValidate[item.field] = item.rule;
         }
-        let uploadSettings = {
-          uploader: {},
-          uploadList: [],
-          /* defaultList: [
-             {
-               "name": "a42bdcc1178e62b4694c830f028db5c0",
-               "url": "https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar"
-             },
-             {
-               "name": "bc7521e033abdd1e92222d733590f104",
-               "url": "https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar"
-             }
-           ],*/
-          formatError: (file) => {
-            this.$Message.error({
-              title: "提示",
-              content: "请上传jpg,png格式的图片",
-              duration: 5,
-              closable: true
-            });
-          },
-          maxSize(file) {
-            this.$Message.error({
-              title: "提示",
-              content: "上传的文件大小不能超过2M",
-              duration: 5,
-              closable: true
-            });
-          },
-          beforeUpload() {
-            const check = this.uploadList.length < 5;
+
+        if (item.type == "upload") {
+          this.value[item.field] = this.value[item.field] || [];
+          item["removeFile"] = ( value ,  file ) => {
+            let fileList = value[item.field]; //uploader.fileList;
+            fileList.splice(fileList.indexOf(file), 1);
+            fileList.push();
+          };
+
+          item['removeCallback'] = ( file , item )=>{
+            let next = ()=>{
+              item.removeFile( this.value , file );
+              this.$Message.info("删除成功");
+            }
+            if( item["remove"] ){
+                item["remove"]( item, file, next);
+            }
+          }
+
+          item["successCallback"] = ( res, file ) => {
+            /*file.url = "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
+            file.name = "7eb99afb9d5f317c912f08b5212fd69a";*/
+            file = { ...file  , ...res  };
+            let next = () =>{
+              this.value[item.field].push(file);
+              this.$Message.info("添加成功");
+            }
+
+            if( item.success ){
+              item.success( res, file , next );
+            }
+            return this;
+          }
+
+          item['beforeUpload'] = ()=> {
+            const len = (item.length || 5);
+            const check : any =  this.value[item.field].length < len
             if (!check) {
               this.$Message.error({
                 title: "提示",
-                content: "上传的文件个数不能超过5张",
+                content: `上传的文件个数不能超过${len}张`,
                 duration: 5,
                 closable: true
               });
             }
             return check;
           }
-        };
-        if (item.type == "upload") {
-          this.value[item.field] = this.value[item.field] || [];
-          item["removeFile"] = (file) => {
-            let fileList = this.value[item.field]; //uploader.fileList;
-            fileList.splice(fileList.indexOf(file), 1);
-            fileList.push();
-          };
 
-          if (!item["remove"]) {
-            item["remove"] = (file) => {
-              item["removeFile"] && item["removeFile"](file, item);
-            };
+          item.maxSize = (file)=> {
+            this.$Message.error({
+              title: "提示",
+              content: "上传的文件大小不能超过2M",
+              duration: 5,
+              closable: true
+            });
           }
 
-          item["successCallback"] = (res, file) => {
-            /*file.url = "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
-            file.name = "7eb99afb9d5f317c912f08b5212fd69a";*/
-            item.success && item.success(res, file);
-            this.value[item.field].push();
-          },
-            item = { ...uploadSettings, ...item };
+          item.formatError = (file) => {
+            this.$Message.error({
+              title: "提示",
+              content: "请上传jpg,png格式的图片",
+              duration: 5,
+              closable: true
+            });
+          }
+
         }
         else if (item.type == "tree") {
           let tree = this.trees[treeIndex];
