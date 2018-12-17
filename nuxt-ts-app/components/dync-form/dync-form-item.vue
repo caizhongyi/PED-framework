@@ -151,9 +151,9 @@
       let treeIndex = 0;
       for (let item of this.model) {
         if (item.rule) {
-          this.ruleValidate[item.field] = item.rule;
+          //this.$set( this.ruleValidate , item.field , item.rule );
+          this.ruleValidate[ item.field ] = item.rule;
         }
-
         if (item.type == "upload") {
           this.value[item.field] = this.value[item.field] || [];
           item["removeFile"] = ( value ,  file ) => {
@@ -229,8 +229,7 @@
           this.value[item.field] = utils.getTreeChecked(tree.getCheckedAndIndeterminateNodes(), [], item.prop || []);
           treeIndex++;
         }
-        // let { field , value  } = item;
-        //this.data[field] = value;
+
       }
     }
   }

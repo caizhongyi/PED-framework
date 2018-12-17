@@ -77,7 +77,7 @@
       label: "名称",
       type: "input",
       required: true,
-      rule: [{ required: true, message: "请输入名称", trigger: "blur" }],
+      rule: [{ required: true, message: "请输入名称" }],
     },
       /*  {
           field: "name",

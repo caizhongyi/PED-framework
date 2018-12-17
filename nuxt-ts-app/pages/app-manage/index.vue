@@ -6,7 +6,7 @@
         <Row>
             <Col span="6" v-for="(item,index) in appData" :key="index">
                 <div class="img-box">
-                    <div class="img-box-img" @click="appDetail(item)" :style="{backgroundImage:'url(img/' + item.logo + '.png)'}" alt=""></div>
+                    <div class="img-box-img" @click="appDetail(item)" :style="{backgroundImage:'url(' + item.logo_url + ')'}" alt=""></div>
                     <div class="img-box-detail">
                         {{ item.name }}
                         <Button type="error" size="small" @click="deleteApp(item,index)">删除</Button>
@@ -25,7 +25,7 @@
             </dync-form>
         </Modal>
         <Modal :width="500" title="应用详情" v-model="showAppDetailData"  @on-ok="detailSubmit" @on-cancel="detailFail">
-            <dync-form :model="formDetail" v-model="itemData" :label-width="80" :submit-button="false" ref="formDetails">
+            <dync-form :model="formDetail" v-model="itemData"  :submit-button="false" ref="formDetails">
                 <template slot slot-scope="props"> </template>
             </dync-form>
         </Modal>
@@ -55,7 +55,7 @@
         value: '',
         type: "input",
         required: true,
-        rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }]
+        rule: [{ required: true, message: "The name cannot be empty" }]
       },
       {
         field: "backgroundImage",
@@ -63,7 +63,7 @@
         value: '',
         type: "input",
         required: true,
-        rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }]
+        rule: [{ required: true, message: "The name cannot be empty" }]
       }
     ];
     formDetail:any=[
@@ -71,8 +71,9 @@
         field: "name",
         label: "应用名",
         type: "input",
-        disabled: true,
+//        disabled: true,
         required: true,
+        rule: [{ required: true, message: "应用名未填写", trigger: "blur" }],
       },
       {
         field: "app_type",
@@ -98,7 +99,7 @@
         field: "desc",
         label: "描述",
         type: "input",
-        disabled: true,
+//        disabled: true,
       },
       {
         field: "app_website",
@@ -106,50 +107,116 @@
         type: "input",
         // placeholder: '访问地址',
         required: true,
-        disabled: true,
-        // rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }],
+//        disabled: true,
+         rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }],
       },
       {
         field: "device_list",
-        label: "设备",
-        type: "input",
+        label: "已选设备",
+        type: "select",
         required: true,
+        multiple: true,
         disabled: true,
+        data : [],
+        rule: [ { required: true, type: "array", min: 1, message: "Choose at least one hobby", trigger: "change" },],
+      },
+      {
+        field: "device_list_others",
+        label: "可选设备",
+        type: "select",
+//        required: true,
+        multiple: true,
+        data : [],
+//        rule: [ { required: true, type: "array", min: 1, message: "Choose at least one hobby", trigger: "change" },],
+      },
+//      {
+//        field: "device_list",
+//        label: "设备",
+//        type: "input",
+////        required: true,
+////        disabled: true,
+//      },
+      {
+        field: "api_push_url",
+        label: "数据推送接口地址",
+        type: "input",
+//        disabled: true,
+      },
+      {
+        field: "host",
+        label: "数据库地址",
+        type: "input",
+//        disabled: true,
+      },
+      {
+        field: "username",
+        label: "用户名",
+        type: "input",
+//        disabled: true,
+      },
+      {
+        field: "password",
+        label: "密码",
+        type: "input",
+//        disabled: true,
+      },
+      {
+        field: "dbname",
+        label: "数据库名",
+        type: "input",
+//        disabled: true,
+      },
+      {
+        field: "prefix",
+        label: "表前缀",
+        type: "input",
+//        disabled: true,
+      },
 
-      }
     ];
 
     showAppData = false;
     showAppDetailData = false;
-    itemData: any = {};
+    itemData:any = {};
 
     deleteApp(item,index){
-      console.log(item);
       this.delete({id:item.id});
       this.appData.splice(index,1);
     }
-      async delete( params ) {   // async 异步声明
-          console.log(params);
-          let ajax: any = this.$refs.ajax;
-          let res = await ajax.post('/api/app/delete',params);  // await 异步调用  es6写法
-          console.log(res);
-          if ( res.code == '200' ){
-              this.$Modal.success({title:'提示',content:'删除成功'})
-          }
-      }
+    async delete( params ) {   // async 异步声明
+        let ajax: any = this.$refs.ajax;
+        let res = await ajax.post('/api/app/delete',params);  // await 异步调用  es6写法
+        console.log(res);
+        if ( res.code == '200' ){
+            this.$Modal.success({title:'提示',content:'删除成功'})
+        }
+    }
 
 
 
     addApp(){
-      this.showAppData = true;
+//      this.showAppData = true;
+      return this.$router.push('/app-manage/app-add');
     }
+    //详情
     appDetail(item){
       this.itemData = item;
+      item.ajax =1;
+      this.getDevice(item)
       this.showAppDetailData = true;
     }
+    //设备列表
+    async getDevice(params) {   // async 异步声明
+      let ajax: any = this.$refs.ajax;
+      let res = await ajax.post('/api/app/deviceType', params);  // await 异步调用  es6写法
+      this.formDetail['6'].data = res.data.allList ;
+      this.formDetail['7'].data = res.data.otherList ;
+    }
+
+
     submit(){
       let f :any = this.$refs.forms;
-      console.log(f.data);
+//      console.log(f.data);
       let a:any = {...f.data};
       this.appData.push(a);
       f.reset();
@@ -157,9 +224,25 @@
     fail(){
 
     }
+    //修改保存
     detailSubmit(){
+      console.log(this.itemData);
+      this.edit(this.itemData);
+//      this.get();
+      setTimeout(() => {
 
+      this.get();
+
+    }, 1000);
+//
     }
+    async edit(params) {   // async 异步声明
+      let ajax: any = this.$refs.ajax;
+      let res = await ajax.post('/api/app/edit', params);  // await 异步调用  es6写法
+      console.log(res);
+//      this.appData = res.data;
+    }
+
     detailFail(){
 
     }
@@ -168,7 +251,6 @@
     }
 
     async get(params = {is_ajax: 1}) {   // async 异步声明
-      console.log(params);
       let ajax: any = this.$refs.ajax;
       let res = await ajax.post('/api/app/list', params);  // await 异步调用  es6写法
       console.log(res);

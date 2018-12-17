@@ -5,16 +5,18 @@
             <Step title="设备信息" content="添加设备应用设备信息"></Step>
         </Steps>
         <br>
-        <dync-form v-show="current==0" v-model="formData" ref="dyncForm" :model="form" :submit-button="{ text: '下一步' }"
-                   :label-width="80" @success="next">
+        <dync-form v-show="current==0" v-model="formData" ref="dyncForm"  :model="form" :submit-button="{ text: '下一步' }" @success="next" >
+            <!--<template slot="header">header</template>-->
+            <!--<template slot slot-scope="props">-->
+            <!--</template>-->
+            <!--<template slot="footer">footer</template>-->
         </dync-form>
-        <dync-form v-show="current==1" ref="formDevice" v-model="formData2" :model="formDeviceModel"
-                   :submit-button="false" :label-width="80">
+        <dync-form v-show="current==1" ref="formDevice" v-model="formData2"  :model="formDeviceModel" :submit-button="false" :label-width="80" @success="save"  >
             <template slot>
                 <FormItem>
-                    <Button type="primary" @click="prev">上一步</Button>
-                    <Button type="primary" @click="submit">提交</Button>
-                    <Button @click="reset">重置</Button>
+                    <Button type="primary" @click="prev" >上一步</Button>
+                    <Button type="primary" @click="submit" >提交</Button>
+                    <Button @click="reset" >重置</Button>
                 </FormItem>
             </template>
         </dync-form>
@@ -33,12 +35,11 @@
     components: { DyncForm }
   })
   export default class  extends Vue {    //  typescript 创建类继成 Vue
-    current = 0;
-    formDevice: any;
-    dyncForm: any;
+    current = 0 ;
+    formDevice:any;
+    dyncForm : any;
     formData: any = {
-      //app_type : ["1"],
-      logo : []
+      upload  : []
     };
     formData2: any = {
       type_id:[]
@@ -50,14 +51,14 @@
         type: "input",
         placeholder: "智慧校园",
         required: true,
-        rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }]
+        rule: [{ required: true, message: "应用名未填写", }],
       },
       {
         field: "app_type",
         label: "应用类型",
-        value: "小区",
+        placeholder: '请选择',
         type: "select",
-        data: [{ text: "小区", value: "1" }, { text: "校园", value: "0" }, { text: "园区", value: "2" }]
+        data: [{ text: "校园", value: "0" }, { text: "小区", value: "1" }, { text: "园区", value: "2" }]
       },
 //      {
 //        field: "app_id",
@@ -77,18 +78,71 @@
         field: "app_website",
         label: "应用域名",
         type: "input",
-        placeholder: "访问地址",
+        placeholder: '访问地址',
         required: true,
-        rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }]
+        rule: [{ required: true, message: "应用域名未填写", }],
       },
+        {
+            field: "desc",
+            label: "描述",
+            type: "input",
+            placeholder: "请输入",
+        },
       {
-        field: "desc",
-        label: "描述",
+        field: "api_push_url",
+        label: "数据推送接口地址",
         type: "input",
-        placeholder: "请输入"
+        placeholder: '请输入',
+      },
+//      {
+//        field: "database",
+//        label: "数据库信息",
+//        type: "label",
+//        children : []}
+
+        {
+          field: "host",
+          label: "数据库地址",
+          value: '',
+          type: "input",
+          placeholder: '地址加端口号',
+          required: true,
+          rule: [{ required: true, message: "地址未填写", }]
+        }, {
+          field: "username",
+          label: "用户名",
+          value: '',
+          placeholder: '用户名',
+          type: "input",
+          required: true,
+          rule: [{ required: true, message: "用户名未填写", }]
+        },{
+          field: "password",
+          label: "密码",
+          value: '',
+          placeholder: '密码',
+          type: "input",
+          required: true,
+          rule: [{ required: true, message: "密码未填写", }]
+        }, {
+          field: "dbname",
+          label: "数据库名",
+          value: '',
+          placeholder: '数据库名',
+          type: "input",
+          required: true,
+          rule: [{ required: true, message: "数据库名未填写", }]
+        }, {
+          field: "prefix",
+          label: "表前缀",
+          value: '',
+          placeholder: '表前缀',
+          type: "input",
+          required: true,
+          rule: [{ required: true, message: "表前缀未填写",}]
       },
       {
-        field: "logo", label: "logo", type: "upload", action: "", remove: (item, file, next) => {
+        field: "upload", label: "封面", length:1, type: "upload", action: "", remove: (item, file, next) => {
           setTimeout(() => {
             next( );
           }, 1000);
@@ -98,57 +152,9 @@
           }, 1000);
         }
       }
-
-//          }
-      /*  {
-          field: "database",
-          label: "数据库信息",
-          type: "label",
-          children : [{
-            field: "address",
-            label: "地址",
-            value: '',
-            type: "input",
-            placeholder: '地址加端口号',
-            required: true,
-            rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }]
-          }, {
-            field: "user",
-            label: "用户名",
-            value: '',
-            placeholder: '用户名',
-            type: "input",
-            required: true,
-            rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }]
-          },{
-            field: "password",
-            label: "密码",
-            value: '',
-            placeholder: '密码',
-            type: "input",
-            required: true,
-            rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }]
-          }, {
-            field: "database-name",
-            label: "数据库名",
-            value: '',
-            placeholder: '数据库名',
-            type: "input",
-            required: true,
-            rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }]
-          }, {
-            field: "prefix",
-            label: "表前缀",
-            value: '',
-            placeholder: '表前缀',
-            type: "input",
-            required: true,
-            rule: [{ required: true, message: "The name cannot be empty", trigger: "blur" }]
-          }]
-        },*/
     ];
 
-    formDeviceModel: any = [
+    formDeviceModel :any = [
       {
         field: "type_id",
         label: "设备",
@@ -156,56 +162,55 @@
         placeholder: "请选择设备",
         required: true,
         multiple: true,
-        data: [],
-        rule: [{ required: true, type: "array", min: 1, message: "Choose at least one hobby", trigger: "change" }]
+        data : [],
+        rule: [ { required: true, type: "array", min: 1, message: "Choose at least one hobby", trigger: "blur" },],
       }
     ];
 
-    next() {
-      this.current += 1;
-    }
 
-    prev() {
-      this.current -= 1;
+    next(){
+      this.current +=1;
     }
-
-    reset() {
+    prev(){
+      this.current -=1;
+    }
+    reset(){
       this.formDevice.reset();
     }
+    submit( data ){
+        this.formDevice.submit();
 
-    submit(data) {
-      this.formDevice.submit();
-      this.save({ ...this.dyncForm.value, ...this.formDevice.value });
+        //this.save({...this.dyncForm.value,...this.formDevice.value});
     }
 
-    async save(params) {
-      let ajax: any = this.$refs.ajax;
-      let res = await ajax.post("/api/app/add", params);  // await 异步调用  es6写法
-      if (res.code == "200") {
-        return this.$router.push("/app-manage");
-      } else {
-        return this.$router.push("/app-manage/app-add");
-      }
-
+    async save(params){
+          let ajax: any = this.$refs.ajax;
+          let res = await ajax.post('/api/app/add', params);  // await 异步调用  es6写法
+          if ( res.code == '200' ){
+              return this.$router.push('/app-manage');
+          } else {
+              return this.$router.push('/app-manage/app-add');
+          }
     }
-
-    fail(data) {
+    fail( data ){
       return this;
     }
 
 
-    async get(params = { is_ajax: 1 }) {   // async 异步声明
-      let ajax: any = this.$refs.ajax;
-      let res = await ajax.post("/api/app/deviceType", params);  // await 异步调用  es6写法
-      this.formDeviceModel["0"].data = res.data;
+
+    async get(params = {is_ajax: 1}) {   // async 异步声明
+        let ajax: any = this.$refs.ajax;
+        let res = await ajax.post('/api/app/deviceType', params);  // await 异步调用  es6写法
+        this.formDeviceModel['0'].data = res.data;
+//        console.log(this.formDeviceModel);
 //        this.appData = res.data;
     }
 
 
     mounted() {  // Vue 的 mounted 初始化回调
-     // this.get();
-      this.formDevice = this.$refs.formDevice;
-      this.dyncForm = this.$refs.dyncForm;
+        this.get();
+        this.formDevice = this.$refs.formDevice;
+        this.dyncForm = this.$refs.dyncForm;
     }
   }
 </script>

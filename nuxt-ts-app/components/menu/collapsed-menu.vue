@@ -5,7 +5,7 @@
       <Icon style="float: right;" v-if="!hideTitle" type="ios-arrow-forward" :size="16"/>
     </a>
     <DropdownMenu slot="list">
-      <template v-for="child in children">
+      <template v-for="child in children"  v-if="child.isshow != false">
         <collapsed-menu v-if="showChildren(child)" icon-size="large" :name="getNameOrHref(child , false ,name)" :parent-item="child" :key="`drop-${child.name}`"></collapsed-menu>
         <DropdownItem v-else :key="`drop-${child.name}`" :name="getNameOrHref(child , false ,name)"><i-icon size="large" :type="child.icon"/><span class="menu-title">{{ showTitle(child) }}</span></DropdownItem>
       </template>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nestable ref="nestable" v-model="data" @remove="remove" @submit="submit" @change="change" :form-model="formModel"></nestable>
+        <nestable ref="nestable" v-model="data" @remove="remove" @submit="submit" @save-order="saveOrder" @change="change" :form-model="formModel"></nestable>
         <ajax :loading="ajaxLoading" ref="ajax"></ajax>
     </div>
 </template>
@@ -81,7 +81,7 @@
             label: "名称",
             type: "input",
             required: true,
-            rule: [{ required: true, message: "请输入名称", trigger: "blur" }],
+            rule: [{ required: true, message: "请输入名称" }],
         },
             /*  {
              field: "name",
@@ -134,7 +134,9 @@
             let res = await ajax.post('/api/menu/edit',params);  // await 异步调用  es6写法
             console.log(res);
         }
-
+        saveOrder( data , next ){
+          console.log( data )
+        }
         //删除
         remove(item, next ) {
             this.delete({is_ajax:1,id:item.id} , next);

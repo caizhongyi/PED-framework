@@ -32,7 +32,7 @@
         type: "input",
         placeholder : '请输入sn号',
         required: true,
-        rule: [{ required: true, message: "请输入sn号", trigger: "blur" }],
+        rule: [{ required: true, message: "请输入sn号"}],
       },
       {
         field: "name",

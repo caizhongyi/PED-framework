@@ -33,7 +33,11 @@ export const actions = {
 
     if( !state.menu || state.menu.length == 0 ){
       let menu:any = await app.$axios.$post("/api/menu/list" );
-      utils.setMenu( menu.data , commit );
+      let demo:any = await app.$axios.$get("./demo.json" );
+      let m = [ ...menu.data , ...demo];
+      utils.setMenu( m , commit );
+
+
       //let menu:any = await app.$axios.$get("./menu.json" );
       //utils.setMenu( menu , commit );
     }

@@ -4,7 +4,7 @@
         <i-icon :type="parentItem.icon || ''"/>
         <span>{{ showTitle(parentItem) }}</span>
       </template>
-      <template v-for="item in parentItem.children">
+      <template v-for="item in parentItem.children"  v-if="item.isshow != false">
        <!-- <template v-if="item.children && item.children.length === 1">
           <side-menu-item v-if="showChildren(item)" :name="getNameOrHref(item, true , name)" :key="`menu-${item.name}`" :parent-item="item"></side-menu-item>
           <menu-item v-else :name="getNameOrHref(item, true , name)" :key="`menu-${item.children[0].name}`"><i-icon :type="item.icon || ''"/><span>{{ showTitle(item) }}</span></menu-item>

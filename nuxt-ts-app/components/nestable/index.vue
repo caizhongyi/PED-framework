@@ -7,7 +7,6 @@
             <i-button type="primary" icon="ios-open-outline" @click="saveOrder">保存排序</i-button>
             <slot></slot>
         </menu>
-
         <div class="dd dd-small-handle" >
             <nestable-item v-model="value" :root="this" ></nestable-item>
         </div>
@@ -45,27 +44,12 @@
          isshow : '1',
        }
       } }) defaultFormData : any ;
-
-    modal: any = false ;
-    form: any;
-    formData :any = {};
-    /* 目前支持字段
-    *  :data-id="item.id"
-            :data-name="item.name"
-            :data-url="item.url"
-            :data-desc="item.desc"
-            :data-params="item.params"
-            :data-icon="item.icon"
-            :data-shown="item.shown"
-            :data-order="item.order"
-    * */
-
     @Prop({ default : ()=>{ return [ {
         field: "title",
         label: "名称",
         type: "input",
         required: true,
-        rule: [{ required: true, message: "请输入名称", trigger: "blur" }],
+        rule: [{ required: true, message: "请输入名称" }],
       },
         /*  {
          field: "name",
@@ -100,6 +84,26 @@
           label: "排序",
           type: "input",
         }];}}) formModel : any ;
+
+
+    modal: any = false ;
+    form: any;
+    formData :any = {};
+    /* 目前支持字段
+    *  :data-id="item.id"
+            :data-name="item.name"
+            :data-url="item.url"
+            :data-desc="item.desc"
+            :data-params="item.params"
+            :data-icon="item.icon"
+            :data-shown="item.shown"
+            :data-order="item.order"
+    * */
+
+    @Watch('value' ,{ immediate : true })
+    onChangeValue(){
+
+    }
 
     saveOrder(){
         this.$emit('save-order' , this.$nestable.nestable('serialize') );
@@ -142,6 +146,7 @@
       this.$emit('submit', this.form.value  , next  , restore );
       return this;
     }
+
     fail(){}
 
     editModal( item ){
@@ -198,17 +203,22 @@
       this.$nestable.nestable('collapseAll');
       return this;
     }
+
+
     mounted() {
-      this.$nestable = $( '.dd' , this.$el ).nestable({
-        group: 1,
-        dragClass : 'dd-dragel dd-small-handle'
-      })
-      .on('change', ( e , n )=>{
-       // console.log( this.$nestable.nestable('serialize'));
-       //this.$emit('input', this.$nestable.nestable('serialize') );
-        this.$emit('change' , this.$nestable.nestable('serialize') );
-      });
       this.form = this.$refs.form;
+
+      setTimeout(()=>{
+        this.$nestable = $( '.dd' , this.$el ).nestable('destory').nestable({
+          group: 1,
+          dragClass : 'dd-dragel dd-small-handle'
+        })
+          .on('change', ( e , n )=>{
+            // console.log( this.$nestable.nestable('serialize'));
+            //this.$emit('input', this.$nestable.nestable('serialize') );
+            this.$emit('change' , this.$nestable.nestable('serialize') );
+          });
+      },100)
     }
   }
 </script>

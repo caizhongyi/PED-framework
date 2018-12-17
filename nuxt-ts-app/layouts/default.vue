@@ -12,7 +12,7 @@
                                 </a>
                             </div>
                             <div class="layout-nav">
-                                <i-menu-item :name="`/${item.name == 'index' ? '' : item.name }`" v-for="(item,key) in menu" :key="key">
+                                <i-menu-item :name="`/${item.name == 'index' ? '' : item.name }`" v-for="(item,key) in menu" :key="key" v-if="item.isshow != false">
                                     <i-icon :type="item.icon"></i-icon>
                                     {{ item.title }}
                                 </i-menu-item>
@@ -51,7 +51,7 @@
 
                         <Menu ref="siderMenu" v-show="!collapsed" :active-name="menuActiveName" :open-names="openedNames"
                               :accordion="false" :theme="theme" @on-select="turnToPage">
-                            <template v-for="(item,key) in menuList" >
+                            <template v-for="(item,key) in menuList"  v-if="item.isshow != false">
                                 <side-menu-item v-if="showChildren(item)"
                                                 :key="`menu-${item.name}`"
                                                 :name="getNameOrHref(item ,false )"
@@ -67,7 +67,7 @@
                             </template>
                         </Menu>
                         <div class="menu-collapsed" v-show="collapsed" :list="menuList">
-                            <template v-for="item in menuList">
+                            <template v-for="item in menuList"  v-if="item.isshow != false">
                                 <collapsed-menu v-if="item.children && item.children.length > 1"
                                                 :name="getNameOrHref(item , false)" hide-title root-icon-size="14"
                                                 icon-size="large" :parent-item="item"
