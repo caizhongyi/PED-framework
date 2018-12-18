@@ -47,7 +47,7 @@
         data:any=[];
         value: any = 2; // 变量声明 ，any是无类型。 可以 object Array function boolean等类型
         ajaxLoading:any=true;
-        params = { current : 1 };
+        params:any = {};
         // form = {
         // user : ''
         // };
@@ -510,12 +510,9 @@
 
         async getRole(callback){   // async 异步声明
             let ajax:any = this.$refs.ajax;
-            let res = await  ajax.get('/api/role/list' , { current: 1 });  // await 异步调用  es6写法
-            let data:any=[
-                { text: "超级管理员1", value: "1" },
-                { text: "设备管理_垃圾箱2", value: "3" },
-                { text: "设备管理_签到3", value: "超级管理员" }
-            ]
+            let res = await  ajax.get('/api/role/list' , { source_type: 1 });  // await 异步调用  es6写法
+            console.log(res.paging.data)
+            let data:any=res.paging.data
             this.formModel[3]['data']= data;
             callback&&callback();
         }
@@ -573,12 +570,13 @@
             };
         }
 
+
         mounted() {  // Vue 的 mounted 初始化回调
             let _this = this;
             // jQuery('.class').netstable();
             this.table = this.$refs.table;
-
         }
+
     }
 </script>
 

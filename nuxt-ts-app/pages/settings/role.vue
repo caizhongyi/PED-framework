@@ -10,12 +10,13 @@
                     :form-model="formModel"
                     :search-model="searchModel"
                     :params="params"
+                    @remove="remove"
                     @search-submit="searchSubmit"
                     @edit-submit="editSubmit"
                     @edit-cancel="editCancel"></page-table> <!-- 自定义组件 ~/components/page-table.vue -->
 
         <Modal :width="500" :title="`【${rolename}】权限分配`" v-model="showRootData" @on-ok="submit" @on-cancel="fail">
-            <dync-form :model="formRoot" :label-width="80" :submit-button="false" ref="forms">
+            <dync-form :model="formRoot" v-model="formData" :label-width="80" :submit-button="false" ref="forms">
                 <template slot slot-scope="props"></template>
             </dync-form>
         </Modal>
@@ -32,6 +33,7 @@
     import uuid from "uuid/v1";  // 自定义组件目录
     import DyncForm from "~/components/dync-form/index";
     import TreeChecked from "~/utils/index";
+
     declare var jQuery;
     //组件声名
     @Component({
@@ -41,10 +43,12 @@
     })
     export default class Role extends Vue {    //  typescript 创建类继成 Vue
         data: any = [];
+        formData: any = {};
         searchModel: any = [
             {field: 'role', label: '', placeholder: '输入用户组名进行查找', type: 'input'},
         ];
         table: any;
+        id: any = '';
         value: any = 2; // 变量声明 ，any是无类型。 可以 object Array function boolean等类型
         params = {current: 1};
         form = {
@@ -56,59 +60,7 @@
                 label: "归属区域",
                 required: true,
                 type: "tree",
-                data: [
-                    {
-                        id: 0,
-                        title: '首页',
-                    },
-                    {
-                        id: 1,
-                        title: '地图'
-                    },
-                    {
-                        id: 2,
-                        title: '小区首页'
-                    },
-                    {
-                        id: 3,
-                        title: '居民首页'
-                    },
-                    {
-                        id: 4,
-                        title: '大屏'
-                    },
-                    {
-                        id: 5,
-                        title: "社区服务",
-                        expand: false,
-                        children: [
-                            {
-                                title: "自助缴费",
-                                id: 0,
-                            },
-                            {
-                                id: 1,
-                                title: '投诉建议'
-                            },
-                            {
-                                id: 2,
-                                title: '物业报修'
-                            },
-                            {
-                                id: 3,
-                                title: '物业公告'
-                            },
-                            {
-                                id: 4,
-                                title: '居民诉求'
-                            },
-                        ]
-                    },
-                    {
-                        id: 6,
-                        title: '设备管理'
-                    }
-                ]
+                data: []
             },
         ];
         modal1: boolean = false;
@@ -123,7 +75,8 @@
         onChangeModel(value) {   // 函数名自定义
             console.log(value)
         }
-        ajaxLoading:any=false;
+
+        ajaxLoading: any = false;
         // async submit(){
         //   let table:any = this.$refs.table;   // this.$refs.table  标签的ref table , typescript是强类型为了避免麻烦直接定义为any类型;
         //   table.change({ current : parseInt(this.form.user), ...this.form });
@@ -149,7 +102,7 @@
         ]
         formViewModel = this.formModel;
         showRootData = false;
-        rolename:any = '';
+        rolename: any = '';
 
         columns = [
             {
@@ -177,7 +130,7 @@
                             },
                         }, [h('router-link', {
                             props: {
-                                to: '../settings/user'
+                                to: { path: 'user', query: { roleid: params.row.id } }
                             },
                         }, '用户')
                         ]),
@@ -189,7 +142,7 @@
                             },
                             on: {
                                 click: (e) => {
-                                    console.log('this', this.showRootData, params.row)
+                                    // console.log('this', this.showRootData, params.row)
                                     // this.showRootData = true;
                                     this.rootAssign(params);
                                     console.log('this', this.showRootData)
@@ -218,14 +171,15 @@
             table.exportData();
         }
 
-        async get(params = {current: 1}) {   // async 异步声明
+        async refreshGet(params:any = {page: this.table.page}) {   // async 异步声明
             let ajax: any = this.$refs.ajax;
             let res = await ajax.get('/api/role/list', params);  // await 异步调用  es6写法
+            this.table.value=res.paging.data
+            this.table.pageSize=res.paging.pageSize
+            this.table.total=res.paging.total
+            this.table.page=res.paging.page;
         }
 
-        submitSearch(data) {
-            console.log(data)
-        }
 
         show(index = 0) {  //函数定义  index = 0 为默认参数值
             let table: any = this.$refs.table;
@@ -234,19 +188,23 @@
         }
 
         searchSubmit(data) {
-            console.log(data)
+            this.refreshGet({role:data.role})
         }
 
         //提交修改
-        editSubmit(data) {
-            setTimeout(() => {
-                if (!data.id) {
-                    data.id = uuid();
-                    this.table.data.push(data);
-                }
-                this.table.modal = false;
-            }, 1000)
-            console.log(data);
+        async editSubmit(data, next) {
+            let ajax: any = this.$refs.ajax;
+            let res = await ajax.post('/api/role/create', {rolename: data.rolename, description: data.description});  // await 异步调用  es6写法
+            if (res.code == '200') {
+                // data.id = res.data.id;
+                this.refreshGet();
+                // this.table.value.unshift(data);
+                this.table.modal=false;
+                this.$Modal.success({title: '提示', content: res.message, loading: false})
+            } else {
+                this.table.okLoading=false;
+                console.log(this.$Modal)
+            }
         }
 
         //取消修改
@@ -257,15 +215,42 @@
         //权限分配
         async rootAssign(data) {
             let ajax: any = this.$refs.ajax;
-            let res = await ajax.get('/api/role/privilege', {id:data.row.id});  // await 异步调用  es6写法
+            this.id = data.row.id;
+            let res = await ajax.get('/api/role/privilege', {id: data.row.id});  // await 异步调用  es6写法
             this.rolename = data.row.rolename;
-          //  console.log(TreeChecked.setTreeChecked(res.data.menu,res.data.chchecked));
-            this.formRoot[0]['data']= TreeChecked.setTreeChecked(res.data.menu,res.data.chchecked);
+            //  console.log(TreeChecked.setTreeChecked(res.data.menu,res.data.chchecked));
+            this.formRoot[0]['data'] = TreeChecked.setTreeChecked(res.data.menu, res.data.chchecked);
             this.showRootData = true;
         }
 
-        submit() {
+        async submit() {
+            let ajax: any = this.$refs.ajax;
+            console.log(this.formData)
+            let datas = TreeChecked.getTreeChecked(this.formData.root, [], ['id']);
+            console.log(datas)
+            let res = await ajax.post('/api/role/privilege', {id: this.id, role_nodes: datas, dosubmit: 1});  // await 异步调用  es6写法
+            if (res.code == '200') {
+                setTimeout(() => {
+                    this.$Modal.success({title: '提示', content: res.message, loading: false})
+                }, 500)
+            }
+        }
 
+        //删除
+        async remove(data, next) {
+            let ajax: any = this.$refs.ajax;
+            let res = await ajax.post('/api/role/delete', {id: data.id});  // await 异步调用  es6写法
+            console.log(res);
+            if (res.code == '200') {
+                this.refreshGet();
+                next();
+                setTimeout(() => {
+                    this.$Modal.success({title: '提示', content: res.message, loading: false})
+                }, 500)
+            } else {
+                this.$Modal.remove();
+
+            }
         }
 
         fail() {

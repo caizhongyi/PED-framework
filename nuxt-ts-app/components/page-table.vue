@@ -306,8 +306,8 @@
       //this.$emit("input", params);
       //this.params = params;
       this.page = page;
-      let params = { total : this.total, page ,...this.searchFormData };
-      this.getData( this.url ,params);
+      let params = { ... this.$route.query , total : this.total, page ,...this.searchFormData };
+      this.getData( this.url , params );
       this.$emit('page', params );
       return this;
     }
@@ -356,7 +356,8 @@
 
     mounted() {
       this.page = this.params.page;
-      this.url && this.getData( this.url ,this.params );
+      let params = { ...this.$route.query, ...this.params }
+      this.url && this.getData( this.url , params);
       this.table = this.$refs.table;
       this.form = this.$refs.form;
       this.searchForm = this.$refs.searchForm;

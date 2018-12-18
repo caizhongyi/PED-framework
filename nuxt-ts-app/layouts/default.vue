@@ -23,7 +23,7 @@
                         <div class="pull-right">
                             <Dropdown size="large" trigger="click" @on-click="logout">
                                 <a href="javascript:;">
-                                    <Icon type="md-person"></Icon> 用户名
+                                    <Icon type="md-person" size="16"></Icon> &nbsp; 用户名
                                     <Icon type="ios-arrow-down"></Icon>
                                 </a>
                                 <DropdownMenu slot="list">

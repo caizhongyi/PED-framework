@@ -27,6 +27,7 @@ a, a:hover {
 
 html {
   font-size: $font-size;
+  font-family: "Microsoft YaHei";
 }
 
 html, body {
@@ -244,4 +245,22 @@ body, .ivu-menu-item, .ivu-menu {
     color: #5c6b77;
     font-weight: 600;
   }
+}
+
+.ivu-input,.ivu-select-selection{
+  border: none;
+  border-bottom: 1px solid #ddd;
+  border-radius: 0;
+  &:hover,&:focus{
+    box-shadow: none;
+  }
+}
+
+.ivu-form .ivu-form-item-label{
+  color: #000;
+  font-size: 13px;
+}
+
+.ivu-select-dropdown{
+  border-radius: 0;
 }
