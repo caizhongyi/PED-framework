@@ -1,18 +1,5 @@
 <template>
     <div>
-        <no-ssr><vue-drag-tree :data='data'
-                       :allowDrag='allowDrag'
-                       :allowDrop='allowDrop'
-                       :defaultText='"New Node"'
-                       @current-clicked='curNodeClicked'
-                       @drag="dragHandler"
-                       @drag-enter="dragEnterHandler"
-                       @drag-leave="dragLeaveHandler"
-                       @drag-over="dragOverHandler"
-                       @drag-end="dragEndHandler"
-                       @drop="dropHandler">
-        </vue-drag-tree></no-ssr>
-
         <nestable ref="nestable" v-model="data" @remove="remove" @save-order="saveOrder"  @submit="submit" @change="change" :form-model="formModel"></nestable>
     </div>
 </template>
@@ -113,8 +100,11 @@
         type: "input",
       }];
 
-    saveOrder( data ){
+    saveOrder( data  , next ){
       console.log(data);
+      setTimeout(()=>{
+        next()
+      },500)
     }
 
     submit( data , next  , restore ){

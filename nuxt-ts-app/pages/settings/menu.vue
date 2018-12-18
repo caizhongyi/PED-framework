@@ -136,6 +136,9 @@
         }
         saveOrder( data , next ){
           console.log( data )
+          setTimeout(()=>{
+            next()
+          },500)
         }
         //删除
         remove(item, next ) {
