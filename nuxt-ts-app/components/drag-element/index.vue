@@ -29,7 +29,6 @@
         position: absolute;
         z-index: 9999;
     }
-
     .dragging {
         cursor: move;
     }

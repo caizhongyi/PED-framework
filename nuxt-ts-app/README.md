@@ -243,3 +243,20 @@ b，后端访问地址：http://180.106.148.81:18082/testapms/index.php?_url=api
 # 路径
 必须用 ~ 符号作为根目录
 static目录下的访问路径为 ~/img/a.png
+
+# 菜单路径
+
+```
+{
+    name : 'admin' ,
+    children：[
+        {
+            url : 'admin/xxx'  // 全路径 
+            href : 'http://www.baidu.com'
+            name : "xxx"
+        }
+    ]
+}
+```
+
+# 提示 this.$Message({  title: '提示',   content: '请求超时!',   duration: 5,    closable: true })

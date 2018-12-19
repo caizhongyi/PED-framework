@@ -91,7 +91,7 @@
         //变量定义
 
         formModel = [
-            {field: 'rolename', type: 'input', label: "角色名称", required: true},
+            {field: 'rolename', type: 'input', label: "角色名称", required: true ,  rule: [{ required: true, message: "请输入角色名称" }]},
             {
                 field: "description",
                 label: "角色描述",
@@ -174,10 +174,7 @@
         async refreshGet(params:any = {page: this.table.page}) {   // async 异步声明
             let ajax: any = this.$refs.ajax;
             let res = await ajax.get('/api/role/list', params);  // await 异步调用  es6写法
-            this.table.value=res.paging.data
-            this.table.pageSize=res.paging.pageSize
-            this.table.total=res.paging.total
-            this.table.page=res.paging.page;
+            this.table.reload();
         }
 
 
@@ -192,18 +189,17 @@
         }
 
         //提交修改
-        async editSubmit(data, next) {
+        async editSubmit(data, next , restore ) {
             let ajax: any = this.$refs.ajax;
             let res = await ajax.post('/api/role/create', {rolename: data.rolename, description: data.description});  // await 异步调用  es6写法
             if (res.code == '200') {
                 // data.id = res.data.id;
                 this.refreshGet();
                 // this.table.value.unshift(data);
-                this.table.modal=false;
-                this.$Modal.success({title: '提示', content: res.message, loading: false})
+                next();
+                this.$Message.success({title: '提示', content: res.message,  duration: 5,closable: true })
             } else {
-                this.table.okLoading=false;
-                console.log(this.$Modal)
+              restore();
             }
         }
 
@@ -231,7 +227,7 @@
             let res = await ajax.post('/api/role/privilege', {id: this.id, role_nodes: datas, dosubmit: 1});  // await 异步调用  es6写法
             if (res.code == '200') {
                 setTimeout(() => {
-                    this.$Modal.success({title: '提示', content: res.message, loading: false})
+                    this.$Message.success({title: '提示', content: res.message,  duration: 5,closable: true  })
                 }, 500)
             }
         }
@@ -245,7 +241,7 @@
                 this.refreshGet();
                 next();
                 setTimeout(() => {
-                    this.$Modal.success({title: '提示', content: res.message, loading: false})
+                    this.$Message.success({title: '提示', content: res.message,  duration: 5,closable: true })
                 }, 500)
             } else {
                 this.$Modal.remove();

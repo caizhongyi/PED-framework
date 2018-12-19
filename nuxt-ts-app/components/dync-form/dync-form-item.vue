@@ -1,32 +1,48 @@
 <template>
     <span>
-        <template v-for="(item,key) in model" >
-            <FormItem v-if=" item.type || ( item.type && item.type != 'custom')" :prop="item.field" :label="item.label" :required="item.required">
-                <DatePicker :v-if="item.visible || true " v-if="item.type == 'date'" type="date" placeholder="请选择日期" :format="item.format" :disabled="item.disabled"  v-model="value[item.field]"></DatePicker>
-                <DatePicker :v-if="item.visible || true " v-else-if="item.type == 'datetime'" type="datetime" placeholder="请选择日期时间" :format="item.format" :disabled="item.disabled" v-model="value[item.field]"></DatePicker>
-                <DatePicker :v-if="item.visible || true " v-else-if="item.type == 'datetimeRange'" type="datetimerange" placeholder="请选择日期时间区间" :format="item.format" :disabled="item.disabled"
+        <template v-for="(item,key) in model">
+            <FormItem v-if=" item.type || ( item.type && item.type != 'custom')" :prop="item.field" :label="item.label"
+                      :required="item.required">
+                <DatePicker :v-if="item.visible || true " v-if="item.type == 'date'" type="date" placeholder="请选择日期"
+                            :format="item.format" :disabled="item.disabled" v-model="value[item.field]"></DatePicker>
+                <DatePicker :v-if="item.visible || true " v-else-if="item.type == 'datetime'" type="datetime"
+                            placeholder="请选择日期时间" :format="item.format" :disabled="item.disabled"
+                            v-model="value[item.field]"></DatePicker>
+                <DatePicker :v-if="item.visible || true " v-else-if="item.type == 'datetimeRange'" type="datetimerange"
+                            placeholder="请选择日期时间区间" :format="item.format" :disabled="item.disabled"
                             :start-date="item.startDate"
                             :end-date="item.endDate" v-model="value[item.field]"></DatePicker>
-                <DatePicker :v-if="item.visible || true " v-else-if="item.type == 'dateRange'" type="daterange" placeholder="请选择日期区间" :format="item.format" :start-date="item.startDate" :disabled="item.disabled"
+                <DatePicker :v-if="item.visible || true " v-else-if="item.type == 'dateRange'" type="daterange"
+                            placeholder="请选择日期区间" :format="item.format" :start-date="item.startDate"
+                            :disabled="item.disabled"
                             :end-date="item.endDate" v-model="value[item.field]"></DatePicker>
-                 <RadioGroup :v-if="item.visible || true " v-else-if="item.type == 'radio'" v-model="value[item.field]" :disabled="item.disabled">
-                    <Radio :label="subItem.value" v-for="(subItem,key) in item.data" :key="key" :disabled="subItem.disabled"> {{ subItem.text}}
+                 <RadioGroup :v-if="item.visible || true " v-else-if="item.type == 'radio'" v-model="value[item.field]"
+                             :disabled="item.disabled">
+                    <Radio :label="subItem.value" v-for="(subItem,key) in item.data" :key="key"
+                           :disabled="subItem.disabled"> {{ subItem.text}}
                     </Radio>
                 </RadioGroup>
-                <CheckboxGroup :v-if="item.visible || true " v-else-if="item.type == 'checkbox'" v-model="value[item.field]" :disabled="item.disabled">
-                    <Checkbox :label="subItem.value" v-for="(subItem,key) in item.data" :key="key" :disabled="subItem.disabled">  {{ subItem.text }}
+                <CheckboxGroup :v-if="item.visible || true " v-else-if="item.type == 'checkbox'"
+                               v-model="value[item.field]" :disabled="item.disabled">
+                    <Checkbox :label="subItem.value" v-for="(subItem,key) in item.data" :key="key"
+                              :disabled="subItem.disabled">  {{ subItem.text }}
                     </Checkbox>
                 </CheckboxGroup>
-                <i-switch :v-if="item.visible || true " v-else-if="item.type == 'switch'" v-model="value[item.field]" size="large" :disabled="item.disabled">
+                <i-switch :v-if="item.visible || true " v-else-if="item.type == 'switch'" v-model="value[item.field]"
+                          size="large" :disabled="item.disabled">
                     <span slot="open">On</span>
                     <span slot="close">Off</span>
                 </i-switch>
-                <Slider :v-if="item.visible || true " v-else-if="item.type == 'slider'" v-model="value[item.field]" :range="item.range || false " :disabled="item.disabled"></Slider>
-                 <Input :v-if="item.visible || true " v-else-if="item.type == 'textarea'" v-model="value[item.field]" type="textarea"
+                <Slider :v-if="item.visible || true " v-else-if="item.type == 'slider'" v-model="value[item.field]"
+                        :range="item.range || false " :disabled="item.disabled"></Slider>
+                 <Input :v-if="item.visible || true " v-else-if="item.type == 'textarea'" v-model="value[item.field]"
+                        type="textarea"
                         :autosize="item.autosize || {minRows: 5,maxRows: 5}"
                         :placeholder="item.placeholder || '请输入信息'" :disabled="item.disabled"></Input>
-                <Select :v-if="item.visible || true " v-else-if="item.type == 'select'" :multiple="item.multiple"  v-model="value[item.field]" :placeholder="item.placeholder" :disabled="item.disabled">
-                    <Option :value="subItem.value" v-for="(subItem,key) in item.data" :key="key">{{ subItem.text}}</Option>
+                <Select :v-if="item.visible || true " v-else-if="item.type == 'select'" :multiple="item.multiple"
+                        v-model="value[item.field]" :placeholder="item.placeholder" :disabled="item.disabled">
+                    <Option :value="subItem.value" v-for="(subItem,key) in item.data"
+                            :key="key">{{ subItem.text}}</Option>
                 </Select>
                 <Tree :v-if="item.visible || true " ref="tree" v-else-if="item.type == 'tree'"
                       :data="item.data"
@@ -38,18 +54,18 @@
                       v-model="value[item.field]"
                 ></Tree>
                 <div :v-if="item.visible || true " v-else-if="item.type == 'upload'">
-                    <no-ssr><div class="upload-list" v-for="subItem in value[item.field]">
+                    <div class="upload-list" v-for="subItem in value[item.field]">
                         <template v-if="subItem.status === 'finished'">
                             <img :src="subItem.url" alt="subItem.name"/>
                             <div class="upload-list-cover">
                                 <Icon type="ios-eye-outline" @click.native="view(subItem.url)"></Icon>
-                                <Icon type="ios-trash-outline" @click.native="item.remove(subItem , item )"></Icon>
+                                <Icon type="ios-trash-outline" @click.native="item.removeCallback( subItem , item )"></Icon>
                             </div>
                         </template>
                         <template v-else>
                             <Progress v-if="subItem.showProgress" :percent="subItem.percentage" hide-info></Progress>
                         </template>
-                     </div></no-ssr>
+                     </div>
                      <Upload
                              ref="upload"
                              :show-upload-list="false"
@@ -70,13 +86,21 @@
                     </div>
                 </Upload>
                 </div>
-                <Input :v-if="item.visible || true " v-else-if="item.type == 'input'" type="text" v-model="value[item.field]"  :disabled="item.disabled" :placeholder="item.placeholder || '请输入信息'"></Input>
-                <Input :v-if="item.visible || true " v-else-if="item.type == 'password'" type="password" v-model="value[item.field]"  :disabled="item.disabled" :placeholder="item.placeholder || '请输入密码'"></Input>
-                <InputNumber :v-if="item.visible || true " v-else-if="item.type == 'inputNumber'" :max="item.max" :min="item.min || 0" :step="item.step || 1" :formatter="item.formatter" :parser="item.parser" v-model="value[item.field]"></InputNumber>
-                <InputNumber :v-if="item.visible || true " v-else-if="item.type == 'cascader'" :data="item.data" v-model="value[item.field]"></InputNumber>
+                <Input :v-if="item.visible || true " v-else-if="item.type == 'input'" type="text"
+                       v-model="value[item.field]" :disabled="item.disabled"
+                       :placeholder="item.placeholder || '请输入信息'"></Input>
+                <Input :v-if="item.visible || true " v-else-if="item.type == 'password'" type="password"
+                       v-model="value[item.field]" :disabled="item.disabled"
+                       :placeholder="item.placeholder || '请输入密码'"></Input>
+                <InputNumber :v-if="item.visible || true " v-else-if="item.type == 'inputNumber'" :max="item.max"
+                             :min="item.min || 0" :step="item.step || 1" :formatter="item.formatter"
+                             :parser="item.parser" v-model="value[item.field]"></InputNumber>
+                <InputNumber :v-if="item.visible || true " v-else-if="item.type == 'cascader'" :data="item.data"
+                             v-model="value[item.field]"></InputNumber>
             </FormItem>
             <i-card v-if="item.children" :style="{ 'margin-left': `${labelWidth}px`}">
-                <dync-form-item :model="item.children" v-model="value" :ruleValidate="ruleValidate" :root="root"></dync-form-item>
+                <dync-form-item :model="item.children" v-model="value" :ruleValidate="ruleValidate"
+                                :root="root"></dync-form-item>
             </i-card>
         </template>
     </span>
@@ -86,56 +110,36 @@
   import { Component, Prop, Vue, Watch, Model } from "nuxt-property-decorator";
   //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
   import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
-  import _  from "underscore"
+  import _ from "underscore";
+  import utils from "~/utils";
   //组件声名
   @Component({
-    components: {  }
+    components: {}
   })
-  export default class DyncFormItem  extends Vue {    //  typescript 创建类继成 Vue
+  export default class DyncFormItem extends Vue {    //  typescript 创建类继成 Vue
 
-    @Prop({ default : ()=>{ return  [] }}) model;
-    @Prop({ default : ()=>{ return  {} }}) value;
+    @Prop({
+      default: () => {
+        return [];
+      }
+    }) model;
+    @Prop({
+      default: () => {
+        let value = {};
+
+
+        return value;
+      }
+    }) value;
     @Prop() ruleValidate;
     @Prop() labelWidth;
     @Prop() root;
 
-    uploads:any = [];
-    trees:any = [];
+    uploads: any = [];
+    trees: any = [];
 
-    setTreeChecked( data:Array<any> = [] , checkedData:Array<any> = []  ){
-        for( let item of data ){
-          _(checkedData).map(( n )=>{
-            item.checked = n.id == item.id ;
-          })
 
-          if( item.children ){
-            this.setTreeChecked(  item.children , checkedData );
-          }
-        }
-        return data;
-    }
-
-    getTreeChecked( data : Array<any> = [] , checkedData: Array<any> = [] , prop : Array<any> = []) {
-      for (let item of data) {
-        let clone: any = {} ;
-        if( prop && prop.length ){
-          for(let o of prop ){
-            clone[o] = item[o];
-          }
-        }
-        else{
-          clone = { ...item };
-        }
-        checkedData.push(clone);
-        if (clone.children) {
-          this.getTreeChecked(clone.children , checkedData );
-          delete clone.children;
-        }
-      }
-      return checkedData;
-    }
-
-    view( name ){
+    view(name) {
       this.root.modalVisible = true;
       this.root.modalImageName = name;
       return this;
@@ -144,84 +148,96 @@
     mounted() {  // Vue 的 mounted 初始化回调
       this.uploads = this.$refs.upload;
       this.trees = this.$refs.tree;
-      let treeIndex = 0 ;
+      let treeIndex = 0;
       for (let item of this.model) {
         if (item.rule) {
-          this.ruleValidate[item.field] = item.rule;
+          //this.$set( this.ruleValidate , item.field , item.rule );
+          this.ruleValidate[ item.field ] = item.rule;
         }
-        let uploadSettings = {
-          uploader : {},
-          uploadList: [],
-          /* defaultList: [
-             {
-               "name": "a42bdcc1178e62b4694c830f028db5c0",
-               "url": "https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar"
-             },
-             {
-               "name": "bc7521e033abdd1e92222d733590f104",
-               "url": "https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar"
-             }
-           ],*/
-          formatError: (file) => {
-            this.$Message.error({
-              title: '提示',
-              content: '请上传jpg,png格式的图片',
-              duration: 5,
-              closable: true
-            });
-          },
-          maxSize(file) {
-            this.$Message.error({
-              title: '提示',
-              content: '上传的文件大小不能超过2M',
-              duration: 5,
-              closable: true
-            });
-          },
-          beforeUpload() {
-            const check = this.uploadList.length < 5;
+        if (item.type == "upload") {
+          this.value[item.field] = this.value[item.field] || [];
+          item["removeFile"] = ( value ,  file ) => {
+            let fileList = value[item.field]; //uploader.fileList;
+            fileList.splice(fileList.indexOf(file), 1);
+            fileList.push();
+          };
+
+          item['removeCallback'] = ( file , item )=>{
+            let next = ()=>{
+              item.removeFile( this.value , file );
+              this.$Message.info({
+                duration: 5,
+                closable: true,
+                content : "删除成功"
+              });
+            }
+            if( item["remove"] ){
+                item["remove"]( item, file, next);
+            }
+          }
+
+          item["successCallback"] = ( res, file ) => {
+            /*file.url = "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
+            file.name = "7eb99afb9d5f317c912f08b5212fd69a";*/
+            file = { ...file  , ...res  };
+            let next = () =>{
+              this.value[item.field].push(file);
+              this.$Message.info({
+                   duration: 5,
+                  closable: true,
+                  content : "添加成功"
+              });
+            }
+
+            if( item.success ){
+              item.success( res, file , next );
+            }
+            return this;
+          }
+
+          item['beforeUpload'] = ()=> {
+            const len = (item.length || 5);
+            const check : any =  this.value[item.field].length < len
             if (!check) {
               this.$Message.error({
-                title: '提示',
-                content: '上传的文件个数不能超过5张',
+                title: "提示",
+                content: `上传的文件个数不能超过${len}张`,
                 duration: 5,
                 closable: true
               });
             }
             return check;
           }
-        };
-        if( item.type == 'upload'){
-          this.value[item.field] = this.value[item.field] || [];
-          item['removeFile'] =  (file) => {
-            let fileList = this.value[item.field] ; //uploader.fileList;
-            fileList.splice(fileList.indexOf(file), 1);
-            fileList.push();
+
+          item.maxSize = (file)=> {
+            this.$Message.error({
+              title: "提示",
+              content: "上传的文件大小不能超过2M",
+              duration: 5,
+              closable: true
+            });
           }
 
-          if( !item['remove'] ){
-            item['remove'] =  (file) => {
-              item['removeFile'] && item['removeFile']( file , item );
-            }
+          item.formatError = (file) => {
+            this.$Message.error({
+              title: "提示",
+              content: "请上传jpg,png格式的图片",
+              duration: 5,
+              closable: true
+            });
           }
 
-          item['successCallback'] = (res, file) => {
-            /*file.url = "https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar";
-            file.name = "7eb99afb9d5f317c912f08b5212fd69a";*/
-            item.success && item.success(res, file);
-            this.value[item.field].push();
-          },
-          item = {  ...uploadSettings, ...item }
         }
-        else if( item.type == 'tree'){
-           // let tree = this.trees[treeIndex]  ;
-            item['checkChange'] = ( val )=>{
-                this.value[item.field] =  this.getTreeChecked( val , [] , [] );
-            }
-           // treeIndex ++ ;
+        else if (item.type == "tree") {
+          let tree = this.trees[treeIndex];
+          item["checkChange"] = (val) => {
+            this.value[item.field] = utils.getTreeChecked(tree.getCheckedAndIndeterminateNodes(), [], item.prop || []);
+          };
+         // console.log(tree.getCheckedAndIndeterminateNodes());
+          this.value[item.field] = utils.getTreeChecked(tree.getCheckedAndIndeterminateNodes(), [], item.prop || []);
+          treeIndex++;
         }
-        // let { field , value  } = item;
-        //this.data[field] = value;
+
       }
     }
   }

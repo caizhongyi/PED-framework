@@ -11,7 +11,7 @@
             <!--</template>-->
             <!--<template slot="footer">footer</template>-->
         </dync-form>
-        <dync-form v-show="current==1" ref="formDevice" v-model="formData2"  :model="formDeviceModel" :submit-button="false" :label-width="80" @success="save"  >
+        <dync-form v-show="current==1" ref="formDevice" v-model="formData2"  :model="formDeviceModel" :submit-button="false" @success="save"  >
             <template slot>
                 <FormItem>
                     <Button type="primary" @click="prev" >上一步</Button>

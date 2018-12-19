@@ -76,6 +76,7 @@ export default {
     for(let item of menu ){
       if( !item.name ){
         item.name = item.url;
+        item.icon = item.settings;
       }
 
       item['sourceName'] = item.name ;
