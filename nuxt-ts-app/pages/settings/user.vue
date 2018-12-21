@@ -85,9 +85,45 @@
         //变量定义
 
         formModel = [
-            { 　field : 'username' , type : 'input',  label: "用户名", required: true },
-            { 　field : 'password' , type : 'password',  label: "新密码", required: true },
-            { 　field : 'confirm-password' , type : 'password',  label: "确认密码", required: true },
+            { 　field : 'username' , type : 'input',  label: "用户名", required: true , rule : [{ type : 'string' , message : '请输入用户名' , required : true }]},
+            { 　field : 'password' , type : 'password',  label: "新密码", required: true, rule : [
+              { type : 'string' , message : '请输入密码' , required : true },
+                { validator :  (rule, value, callback) => {
+                    let table: any  = this.$refs.table;
+                    if (value === '') {
+                      callback(new Error('请输入密码'));
+                    } else if (value !== table.formData['confirmPassword']) {
+                      callback(new Error('两次输入的密码不一致!'));
+                    } else {
+                      callback();
+                    }
+                  }}
+              ] },
+            { 　field : 'confirmPassword' , type : 'password',  label: "确认密码", required: true , rule : [
+              { type : 'string' , message : '请输入确认密码' , required : true },
+              { validator :  (rule, value, callback) => {
+                    let table: any  = this.$refs.table;
+                    if (value === '') {
+                      callback(new Error('请再次输入密码'));
+                    } else if (value !== table.formData.password ) {
+                      callback(new Error('两次输入的密码不一致!'));
+                    } else {
+                      callback();
+                    }
+                   /* // 模拟异步验证效果
+                    setTimeout(() => {
+                      if (!Number.isInteger(value)) {
+                        callback(new Error('Please enter a numeric value'));
+                      } else {
+                        if (value < 18) {
+                          callback(new Error('Must be over 18 years of age'));
+                        } else {
+                          callback();
+                        }
+                      }
+                    }, 1000);*/
+                  }}
+            ]},
             {
                 field: "roleids",
                 label: "角色",

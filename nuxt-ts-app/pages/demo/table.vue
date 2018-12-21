@@ -235,7 +235,6 @@
       setTimeout(()=>{
         if( data.id == null ){
           data.id = uuid();
-          this.table.reload();
           restore();
         }
         else{

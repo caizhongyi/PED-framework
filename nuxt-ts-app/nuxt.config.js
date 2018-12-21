@@ -1,7 +1,7 @@
 const parseArgs = require("minimist");
 const webpack = require("webpack");
-const { resolve } = require("path");
-let Vue = require("vue");
+const { resolve } = require('path');
+let Vue = require('vue');
 
 
 const argv = parseArgs(process.argv.slice(2), {
@@ -12,15 +12,18 @@ const argv = parseArgs(process.argv.slice(2), {
   string: ["H"],
   unknown: parameter => false
 });
-let publicPath = "/";
-let hostname = "localhost", hostPort = 3000;
-let mode = "history";
+let publicPath = '/' ;
+let hostname = "localhost" ,  hostPort = 3000 ;
+let mode = 'history';
+let base = '';
 let proxy = {
-  target: "http://apms.com/",
-  pathRewrite: {
+  target : 'http://apms.com/',
+  pathRewrite : {
     "^/api/": "/api/"
   }
 };
+
+
 switch (process.env.__ENV) {
   //本地
   case  "development" :
@@ -28,22 +31,23 @@ switch (process.env.__ENV) {
     //proxy.target = 'http://192.168.24.92/apms/public/';
     //proxy.target = "http://180.106.148.81:18082/testapms/";//本地配置
     //process.env.BASE_URL =  'http://180.106.148.81:18082/testapms/';
-    mode = 'hash';
+   // mode = 'hash';
     break;
   //测试
   case  "release" :
-    proxy.target = "http://180.106.148.81:18082/testapms/";
+    proxy.target = 'http://180.106.148.81:18082/testapms/';
     hostname = "0.0.0.0";
     //process.env.BASE_URL =  'http://180.106.148.81:18082/testapms/';
-    publicPath = "http://180.106.148.81:18082/testapms/";
-    mode = "hash";
+    publicPath = 'http://180.106.148.81:18082/testapms/';
+    //mode = 'hash';
+    //base = '/testapms/';
     break;
   //正式
   case  "production" :
-    proxy.target = "http://180.106.148.81:18082/testapms/";
+    proxy.target = 'http://180.106.148.81:18082/testapms/';
     hostname = "0.0.0.0";
-    publicPath = "http://180.106.148.81:18082/testapms/";
-    mode = "hash";
+    publicPath = 'http://180.106.148.81:18082/testapms/';
+    //base = '/testapms/';
     break;
 }
 
@@ -59,15 +63,10 @@ const host =
   "localhost";  //域名
 
 
-let baseUrl = process.env.BASE_URL || `http://${host}:${port}/`;
+let baseUrl =  process.env.BASE_URL || `http://${host}:${port}/`;
 //baseUrl = baseUrl + '/testapms/';
-console.log(
-  `ENV[${process.env.__ENV}]`,
-  ` | baseUrl[${baseUrl}]`,
-  ` | mode[${mode}]`,
-  ` | publicPath[${publicPath}]`,
-  ` | proxy.target[${proxy.target}]`
-);
+console.log('env:' + process.env.__ENV)
+console.log('baseUrl:' + baseUrl)
 
 module.exports = {
   env: {
@@ -94,16 +93,12 @@ module.exports = {
         rel: "icon",
         type: "image/x-icon",
         href: "/favicon.ico"
-      }
-      //{ rel: 'stylesheet', types: 'text/css', href: '/bootstrap.min.css' }
+      },
+        //{ rel: 'stylesheet', types: 'text/css', href: '/bootstrap.min.css' }
     ],
     script: [
       //{ src: baseUrl + 'node_modules/jquery/dist/jquery.js' , type: 'text/javascript', charset: 'utf-8' },
-      {
-        src: "https://api.map.baidu.com/api?v=2.0&ak=9Mmf1Qqx0h9HPWbzPjxHDPw8GfKW6kxG",
-        type: "text/javascript",
-        charset: "utf-8"
-      }
+      { src: 'https://api.map.baidu.com/api?v=2.0&ak=9Mmf1Qqx0h9HPWbzPjxHDPw8GfKW6kxG' , type: 'text/javascript', charset: 'utf-8'},
       //{ innerHTML: require('./flexible.js') + ';console.log(11)' , type: 'text/javascript', charset: 'utf-8'},
       //{ src:'https://res.wx.qq.com/open/js/jweixin-1.2.0.js' },  //微信开发
       // { src: '/js/flexible-pc.js' }, // rem自适应
@@ -112,12 +107,13 @@ module.exports = {
     __dangerouslyDisableSanitizers: ["script"]
   },
   router: {
-    // base : '/testapms/',
+   //base : base,
     mode: mode,  // "hash" | "history" | "abstract" //"hash" (浏览器环境) | "abstract" (Node.js 环境
-    extendRoutes(routes, resolve) {
-      /* for(let item of routes){
-         item.path = '/testapms' + item.path ;
-       }*/
+    extendRoutes (routes, resolve) {
+     /* for(let item of routes){
+        item.path = '/testapms' + item.path ;
+        item.name = 'testapms-' + item.name ;
+      }*/
       /*routes.push({
         name: 'custom',
         path: '*',
@@ -145,10 +141,10 @@ module.exports = {
     { src: "~/plugins/filters", ssr: false },
     { src: "~/plugins/vue-seamless-scroll", ssr: false },
     { src: "~/plugins/jquery", ssr: false },
-    { src: "~/plugins/components", ssr: true }
+    { src: "~/plugins/components", ssr: true },
   ],
-  // buildDir: 'testapms',
-  // srcDir: __dirname,
+ // buildDir: 'testapms',
+ // srcDir: __dirname,
   //rootDir: 'testapms/',
   build: {
     publicPath: publicPath,
@@ -156,8 +152,8 @@ module.exports = {
       new webpack.ProvidePlugin({
         $: "jquery",
         jQuery: "jquery",
-        "window.jQuery": "jquery"
-      })
+        'window.jQuery': 'jquery',
+      }),
     ],
     vendor: [
       "axios",
@@ -221,10 +217,10 @@ module.exports = {
   },
    */
   proxy: {
-    //开启代理
+  //开启代理
     "/api/": proxy
   }
-};
+}
 
 //if(process.browser){
 // require('xxx');

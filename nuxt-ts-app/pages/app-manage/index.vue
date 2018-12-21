@@ -186,7 +186,7 @@
     async delete( params ) {   // async 异步声明
         let ajax: any = this.$refs.ajax;
         let res = await ajax.post('/api/app/delete',params);  // await 异步调用  es6写法
-        console.log(res);
+//        console.log(res);
         if ( res.code == '200' ){
             this.$Modal.success({title:'提示',content:'删除成功'})
         }
@@ -226,7 +226,7 @@
     }
     //修改保存
     detailSubmit(){
-      console.log(this.itemData);
+//      console.log(this.itemData);
       this.edit(this.itemData);
 //      this.get();
       setTimeout(() => {
@@ -239,7 +239,7 @@
     async edit(params) {   // async 异步声明
       let ajax: any = this.$refs.ajax;
       let res = await ajax.post('/api/app/edit', params);  // await 异步调用  es6写法
-      console.log(res);
+//      console.log(res);
 //      this.appData = res.data;
     }
 
@@ -253,7 +253,7 @@
     async get(params = {is_ajax: 1}) {   // async 异步声明
       let ajax: any = this.$refs.ajax;
       let res = await ajax.post('/api/app/list', params);  // await 异步调用  es6写法
-      console.log(res);
+//      console.log(res);
       this.appData = res.data;
     }
 

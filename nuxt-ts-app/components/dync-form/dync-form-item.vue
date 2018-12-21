@@ -118,30 +118,33 @@
   })
   export default class DyncFormItem extends Vue {    //  typescript 创建类继成 Vue
 
-    @Prop({
-      default: () => {
-        return [];
-      }
-    }) model;
-    @Prop({
-      default: () => {
-        let value = {};
+    // 表单模型
+    @Prop({ default: () => {return []; } }) model;
 
+    // 表单模型
+    @Prop({ default: () => {}}) value;
 
-        return value;
-      }
-    }) value;
+    // 表单模型
     @Prop() ruleValidate;
+
+    // 表单名称宽度
     @Prop() labelWidth;
+
+    // 根级目录
     @Prop() root;
 
+    // 上传组件 ref
     uploads: any = [];
+    // 树型组件 ref
     trees: any = [];
 
-
-    view(name) {
+    /**
+     *  图片弹出窗口
+     *  @url : 路径
+     * */
+    view( url ) {
       this.root.modalVisible = true;
-      this.root.modalImageName = name;
+      this.root.modalImageName = url;
       return this;
     }
 

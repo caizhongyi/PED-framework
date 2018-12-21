@@ -12,6 +12,7 @@
                                 </a>
                             </div>
                             <div class="layout-nav">
+
                                 <i-menu-item :name="`/${item.name == 'index' ? '' : item.name }`" v-for="(item,key) in menu" :key="key" v-if="item.isshow != false">
                                     <i-icon :type="item.icon"></i-icon>
                                     {{ item.title }}

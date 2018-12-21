@@ -15,7 +15,7 @@
             <template slot>
                 <FormItem>
                     <Button type="primary" @click="prev" >上一步</Button>
-                    <Button type="primary" @click="submit" >提交</Button>
+                    <Button type="primary" @click="submit">提交</Button>
                     <Button @click="reset" >重置</Button>
                 </FormItem>
             </template>
@@ -167,7 +167,6 @@
       }
     ];
 
-
     next(){
       this.current +=1;
     }
@@ -177,13 +176,12 @@
     reset(){
       this.formDevice.reset();
     }
+  //提交
     submit( data ){
         this.formDevice.submit();
-
-        //this.save({...this.dyncForm.value,...this.formDevice.value});
     }
-
-    async save(params){
+    async save(){
+          let params = {...this.dyncForm.value,...this.formDevice.value};
           let ajax: any = this.$refs.ajax;
           let res = await ajax.post('/api/app/add', params);  // await 异步调用  es6写法
           if ( res.code == '200' ){
@@ -196,8 +194,6 @@
       return this;
     }
 
-
-
     async get(params = {is_ajax: 1}) {   // async 异步声明
         let ajax: any = this.$refs.ajax;
         let res = await ajax.post('/api/app/deviceType', params);  // await 异步调用  es6写法
@@ -205,7 +201,6 @@
 //        console.log(this.formDeviceModel);
 //        this.appData = res.data;
     }
-
 
     mounted() {  // Vue 的 mounted 初始化回调
         this.get();

@@ -21,6 +21,7 @@
   import axios from "~/plugins/axios";
   import { Component, Vue } from "nuxt-property-decorator";
   import  cookie from "js-cookie";
+  import  utils from "~/utils";
 
   @Component({
     components: {
@@ -62,6 +63,7 @@
           this.$router.push(query.ref);
         }
         else{
+          utils.loadMenu( this.$store.commit );
           this.$router.push("/home");
         }
       }

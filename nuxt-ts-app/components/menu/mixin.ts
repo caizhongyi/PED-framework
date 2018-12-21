@@ -16,7 +16,6 @@ export default class Mixin extends Vue {
   * name: 名称链接  user , { name: settings , children： { name : user } }
   * */
   getNameOrHref (item, children0, name ) {
-
     return `/${item.href ? `isTurnByHref_${item.href}` : (item.url || item.name)}`
   }
 

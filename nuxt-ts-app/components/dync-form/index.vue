@@ -1,4 +1,4 @@
-﻿<template>
+﻿﻿<template>
     <div>
         <Form ref="form" :label-position="labelPosition" :model="value" :inline="inline" :label-width="labelWidth"
               :rules="ruleValidate">
@@ -36,11 +36,14 @@
   })
   export default class DyncForm extends Vue {
 
+    // 表单默认值
     @Prop({
       default: () => {
         return {};
       }
     }) value: any;
+
+    // 表单是否横向排列
     @Prop({ default: false }) inline: boolean;
     @Prop({
       default: () => {
@@ -139,8 +142,8 @@
     mounted() {
       this.form = this.$refs.form;
 
+      //初始化表单值
       for (let item of this.model) {
-
         let value;
         switch (item.type) {
           case "radio" :

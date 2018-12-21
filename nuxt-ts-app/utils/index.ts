@@ -5,6 +5,13 @@ import axios from "~/plugins/axios";
 
 export default {
 
+  async loadMenu( commit ){
+    let res : any = await axios.post('/api/menu/list');
+    let demo: any = await axios.get("./demo.json" );
+    let menu = [ ...res.data.data , ...demo.data];
+    this.setMenu( menu , commit  );
+    return menu;
+  },
   async setMenu( menu : Array<any>, commit: any ){
     menu = this.resetMenuName( menu );
     commit("setMenu", menu );
@@ -73,14 +80,19 @@ export default {
     return checkedData;
   },
   resetMenuName( menu , name? ){
+
     for(let item of menu ){
       if( !item.name ){
-        item.name = item.url;
-        item.icon = item.settings;
+        item['name'] = item['url'];
+      }
+      else{
+        item['sourceName'] = item.name ;
+        name && (item.name = item.name == 'index' ?  `${name}` :  `${ name }/${item.sourceName}`);
       }
 
-      item['sourceName'] = item.name ;
-      name && (item.name = item.name == 'index' ?  `${name}` :  `${ name }/${item.sourceName}`);
+      if( item.settings ){
+        item['icon'] = item.settings;
+      }
 
       if( item.children ){
         this.resetMenuName( item.children ,item.name);
