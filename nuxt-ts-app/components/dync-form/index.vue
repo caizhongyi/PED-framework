@@ -44,7 +44,7 @@
     }) value: any;
 
     // 表单是否横向排列
-    @Prop({ default: false }) inline: boolean;
+    @Prop({ default: false }) inline: any;
     @Prop({
       default: () => {
         return {};
@@ -56,12 +56,12 @@
       }
     }) rules: any;
     @Prop() labelWidth: any;
-    @Prop({ default: "top" }) labelPosition: string;
+    @Prop({ default: "top" }) labelPosition: any;
     @Prop({
       default: () => {
         return { text: "提交", icon: "" };
       }
-    }) submitButton: SubmitButton;
+    }) submitButton: any ;
 
     // @Prop() rules : any ;
     form: any;
@@ -105,18 +105,22 @@
       this.$emit("input", val);
     }
 
-    submit(name = "form") {
+    submit( successCallback , failCallback ) {
+      let name = "form";
       let myform: any = this.$refs[name];
       myform.validate && myform.validate((valid) => {
         if (valid) {
           this.$emit("success", this.value);
+          successCallback && successCallback( this.value )
         } else {
           this.$emit("fail", this.value);
+          failCallback && failCallback( this.value )
         }
       });
     }
 
-    reset(name = "form") {
+    reset() {
+      let name = "form";
       //this.form.resetFields();
       for (let item in this.value) {
         this.value[item] = undefined;

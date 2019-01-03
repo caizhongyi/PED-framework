@@ -133,23 +133,6 @@ body, .ivu-menu-item, .ivu-menu {
   }
 }
 
-.ivu-card-bordered {
-  margin-bottom: 24px;
-}
-
-.ivu-tag {
-  line-height: normal;
-}
-
-.ivu-btn {
-  span {
-    display: inline-block;
-    a {
-      color: #fff;
-    }
-  }
-}
-
 .list-unstyled {
   &, li {
     margin: 0;
@@ -158,10 +141,6 @@ body, .ivu-menu-item, .ivu-menu {
   }
 }
 
-.ivu-tree {
-  max-height: 300px;
-  overflow-y: auto;
-}
 
 .login {
   width: 100%;
@@ -177,6 +156,11 @@ body, .ivu-menu-item, .ivu-menu {
     top: 10%;
     transform: translateY(0);
     width: 400px;
+
+    .ivu-input{
+      border: 1px solid #ddd ;
+      background: #fff;
+    }
     .ivu-card-head p {
       font-size: 25px;
       font-weight: 300;
@@ -245,26 +229,4 @@ body, .ivu-menu-item, .ivu-menu {
     color: #5c6b77;
     font-weight: 600;
   }
-}
-
-.ivu-input,.ivu-select-selection{
-  border: none;
-  border-bottom: 1px solid #ddd;
-  border-radius: 0;
-  &:hover,&:focus{
-    box-shadow: none;
-  }
-}
-
-.ivu-form .ivu-form-item-label{
-  color: #000;
-  font-size: 13px;
-}
-
-.ivu-select-dropdown{
-  border-radius: 0;
-}
-
-.ivu-select-not-found{
-  font-size: 12px;
 }

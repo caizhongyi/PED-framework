@@ -7,7 +7,7 @@ export default {
 
   async loadMenu( commit ){
     let res : any = await axios.post('/api/menu/list');
-    let demo: any = await axios.get("./demo.json" );
+    let demo: any = await axios.get("/demo.json" );
     let menu = [ ...res.data.data , ...demo.data];
     this.setMenu( menu , commit  );
     return menu;

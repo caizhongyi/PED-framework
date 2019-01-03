@@ -11,7 +11,7 @@
   @Component({})
   export default class DragElement extends Vue {
     @Prop({ default: 'all' })
-    direction;
+    direction  : any;
     /*@Model()
     visible:boolean = false;
 

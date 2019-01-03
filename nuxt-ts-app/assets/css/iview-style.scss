@@ -174,3 +174,52 @@ html {
     margin-left: 5px;
   }
 }
+
+.ivu-input,.ivu-select-selection{
+  border: none;
+  border-bottom: 1px solid #ddd;
+  border-radius: 0;
+  &:hover,&:focus{
+    box-shadow: none;
+  }
+}
+.ivu-input{
+  background: #fff;
+}
+.ivu-form .ivu-form-item-label{
+  color: #000;
+  font-size: 13px;
+}
+
+.ivu-select-dropdown{
+  border-radius: 0;
+}
+
+.ivu-select-not-found{
+  font-size: 12px;
+}
+
+
+.ivu-card-bordered {
+  margin-bottom: 24px;
+}
+
+.ivu-tag {
+  line-height: normal;
+}
+
+.ivu-btn {
+  span {
+    display: inline-block;
+    a {
+      color: #fff;
+    }
+  }
+}
+
+.ivu-modal{
+  .ivu-tree {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+}

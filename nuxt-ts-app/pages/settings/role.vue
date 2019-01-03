@@ -65,7 +65,7 @@
         ];
         modal1: boolean = false;
         current: any = {};
-        @Prop({default: 1}) settings: object;  // 只能单项绑定（组件内不能对其值更改）
+        @Prop({default: 1}) settings: any ;  // 只能单项绑定（组件内不能对其值更改）
         @Model() model: any; // 当作为组件引用时 v-model 值， 双项绑定（组件内可改变其值）
 
         @State user: any; // 全局 store 中的变量
@@ -134,7 +134,7 @@
                             },
                         }, '用户')
                         ]),
-                        table.getViewControl(h, params),
+                        //table.getViewControl(h, params),
                         h('Button', {
                             props: {
                                 type: 'primary',
@@ -174,7 +174,11 @@
         async refreshGet(params:any = {page: this.table.page}) {   // async 异步声明
             let ajax: any = this.$refs.ajax;
             let res = await ajax.get('/api/role/list', params);  // await 异步调用  es6写法
-            this.table.reload();
+            // this.table.reload();
+            this.table.value=res.paging.data
+            this.table.pageSize=res.paging.pageSize
+            this.table.total=res.paging.total
+            this.table.page=res.paging.page;
         }
 
 

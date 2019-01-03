@@ -44,6 +44,8 @@
                     :search-label-width="80"
                     :params="params"
                     :default-form-data="defaultFormData"
+                    @edit-click="editClick"
+                    @add-click="addClick"
                     @remove="remove"
                     @remove-all="removeAll"
                     @search-submit="searchSubmit"
@@ -82,7 +84,7 @@
     }
   })
   export default class Table extends Vue {    //  typescript 创建类继成 Vue
-    @Prop({ default :　1  }) settings  : object ;  // 只能单项绑定（组件内不能对其值更改）
+    @Prop({ default :　1  }) settings  : any ;  // 只能单项绑定（组件内不能对其值更改）
     @Model() model  : any ; // 当作为组件引用时 v-model 值， 双项绑定（组件内可改变其值）
 
     @State user :any; // 全局 store 中的变量
@@ -183,6 +185,12 @@
       let res = await  ajax.get('page-data.json' , params);  // await 异步调用  es6写法
     }
 
+    editClick( data ){
+      console.log( data )
+    }
+    addClick( data ){
+      console.log( data );
+    }
 
     get name(){
       return this.firstName +  this.lastName ;  // 想当于vue computed

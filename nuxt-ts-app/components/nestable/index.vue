@@ -130,7 +130,7 @@
     }
 
     add() {
-      this.formData = this.defaultFormData;
+      this.formData = Object.assign({},this.defaultFormData);
       this.modal = true;
       return this;
     }
@@ -158,6 +158,12 @@
     }
 
     fail() {
+    }
+
+    addModal( item ) {
+      this.modal = true;
+      this.formData = Object.assign({ parentid : item.id },this.defaultFormData);
+      return this;
     }
 
     editModal(item) {

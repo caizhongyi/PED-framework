@@ -40,7 +40,6 @@
      }*/
     mounted() {
       this.ajax = this.$refs.ajax;
-
      /* this.$Modal.confirm({
         content :'aa',
         loading:true,

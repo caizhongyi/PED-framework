@@ -4,6 +4,7 @@ export  default {
   draggable: {
     inserted: (el, binding, vnode) => {
       let triggerDom:any = document.querySelector(binding.value.trigger)
+      if( !triggerDom ) return ;
       triggerDom.style.cursor = 'move'
       let bodyDom:any = document.querySelector(binding.value.body)
       let pageX = 0

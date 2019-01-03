@@ -4,7 +4,7 @@ import Qs from "qs"; // 异步调用库
 
 @Component({})
 export default class Mixin extends Vue {
-  @Prop() url: string;
+  @Prop({ default: ''}) url: any ;
   @Prop() params: any;
   @Prop({ default: true }) loading: any;
 

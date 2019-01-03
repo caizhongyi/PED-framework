@@ -15,7 +15,7 @@
 
   @Component({})
   export default class Ajax extends Mixin {
-    @Prop({ default : true }) loading : boolean;
+    @Prop({ default : true }) loading : any;
 
     mounted() {
      /* switch (config.env.NODE_ENV) {

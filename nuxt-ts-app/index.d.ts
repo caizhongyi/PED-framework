@@ -8,7 +8,7 @@ declare module '*.vue' {
 }
 declare var window: Window;
 declare var document: Document;
-
+declare var $: any;
 // 扩充
 declare module 'vue/types/vue' {
   interface Vue {
@@ -22,9 +22,4 @@ declare module 'vue/types/vue' {
 }
 
 
-/*
-declare module 'vue/types/vue' {
-  interface Vue {
-    $xxx: any,
-  }
-}*/
+

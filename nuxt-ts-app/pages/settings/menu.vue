@@ -5,12 +5,13 @@
     </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" type="text/ecmascript-6">
     import {Component, Prop, Vue, Watch, Model} from "nuxt-property-decorator";
     //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
     import {State, Getter, Action, Mutation, namespace} from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
     import Nestable from "~/components/nestable"
     import Ajax from "~/components/ajax";  // 自定义组件目录
+    import utils from "~/utils";  // 自定义组件目录
     //组件声名
     @Component({
         components: {
@@ -120,25 +121,28 @@
         submit(item) {
             console.log(item);
             this.edit(item);
-            setTimeout(() => {
-                this.nestable.modal = false;
-            this.get();
+            this.nestable.modal = false;
+            setTimeout(()=>{
+                this.get();
+            },500)
             this.nestable = this.$refs.nestable;
-        }, 1000);
-
         }
 
         async edit(params) {   // async 异步声明
-            console.log(params);
+//            console.log(params);
             let ajax: any = this.$refs.ajax;
             let res = await ajax.post('/api/menu/edit',params);  // await 异步调用  es6写法
             console.log(res);
+            utils.loadMenu( this.$store.commit );
+//            console.log(res);
         }
         saveOrder( data , next ){
-          console.log( data )
+//            console.log("11111")
+//          console.log( data )
           setTimeout(()=>{
             next()
           },500)
+          utils.loadMenu( this.$store.commit );
         }
         //删除
         remove(item, next ) {
@@ -146,22 +150,20 @@
         }
 
         async delete( params , next ) {   // async 异步声明
-            console.log(params);
             let ajax: any = this.$refs.ajax;
             let res = await ajax.post('/api/menu/delete',params);  // await 异步调用  es6写法
-            console.log(res);
             if ( res.code == '200' ){
                 next();
+                utils.loadMenu( this.$store.commit );
             } else {
                 this.$Modal.remove();
-                setTimeout(()=>{
-                    this.$Modal.error({ title : '提示', content: '有下级菜单', loading : false })
-                },500)
+                this.$Modal.error({ title : '提示', content: '有下级菜单', loading : false })
             }
         }
 
         change(data) {
-            console.log(this.data)
+//            console.log("111222");
+//            console.log(this.data)
         }
 
 
@@ -222,11 +224,11 @@
         }
 
         async get(params = {is_ajax: 1}) {   // async 异步声明
-            console.log(params);
+//            console.log(params);
             let ajax: any = this.$refs.ajax;
             let res = await ajax.post('/api/menu/list', params);  // await 异步调用  es6写法
             console.log(res);
-            this.data=res.data;
+            this.data = res.data;
         }
 
         mounted() {  // Vue 的 mounted 初始化回调

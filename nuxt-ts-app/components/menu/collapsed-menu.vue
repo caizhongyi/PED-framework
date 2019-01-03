@@ -20,8 +20,8 @@ import mixin from './mixin'
 @Component({})
 export default class CollapsedMenu  extends mixin {
  // mixins: [ mixin, itemMixin ],
-  @Prop({ default : false , type : Boolean }) hideTitle ;
-  @Prop() name:String ;
+  @Prop({ default : false , type : Boolean }) hideTitle : any  ;
+  @Prop() name: any;
   @Prop() parentItem: any;
   placement =  'right-end';
 

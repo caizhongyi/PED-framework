@@ -260,3 +260,18 @@ static目录下的访问路径为 ~/img/a.png
 ```
 
 # 提示 this.$Message({  title: '提示',   content: '请求超时!',   duration: 5,    closable: true })
+
+# 单元测试
+{
+ "chai": "^4.2.0",
+ "karma": "^3.1.1",
+ "karma-chrome-launcher": "^2.2.0",
+ "karma-jasmine": "^1.1.2",
+ "mocha": "^5.2.0",
+}
+
+
+# 打包优化 
+static/dll/vendor.dll.js
+npm run build:dll
+

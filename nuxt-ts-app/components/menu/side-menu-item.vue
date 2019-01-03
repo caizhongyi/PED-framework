@@ -22,8 +22,8 @@
 
   @Component({})
   export default class sideMenuItem extends mixin {
-    @Prop() name:String ;
-    @Prop() parentName: String;
+    @Prop() name: any;
+    @Prop() parentName: any;
     @Prop() parentItem: any;
 
     mounted() {

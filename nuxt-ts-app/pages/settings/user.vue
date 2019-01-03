@@ -9,11 +9,15 @@
                     :columns="columns"
                     :form-view-model="formViewModel"
                     :form-model="formModel"
+                    :form-default-data="formDefaultData"
                     :search-model="searchModel"
                     :params="params"
+                    @remove="remove"
+                    @remove-all="remove"
                     @search-submit="searchSubmit"
                     @edit-submit="editSubmit"
-                    @edit-cancel="editCancel">
+                    @edit-cancel="editCancel"
+                    @add-click="addSubmit">
             <template slot="modal-footer">
                 <i-button type="default" :loading="buttonLoading">账号解锁</i-button>
             </template>
@@ -56,7 +60,7 @@
         modal1: boolean = false;
         current: any = {};
         buttonLoading = false;
-        @Prop({ default :　1  }) settings  : object ;  // 只能单项绑定（组件内不能对其值更改）
+        @Prop({ default :　1  }) settings  : any ;  // 只能单项绑定（组件内不能对其值更改）
         @Model() model  : any ; // 当作为组件引用时 v-model 值， 双项绑定（组件内可改变其值）
 
         @State user :any; // 全局 store 中的变量
@@ -83,7 +87,9 @@
           }*/
 
         //变量定义
-
+      formDefaultData = {
+        status : 1
+      }
         formModel = [
             { 　field : 'username' , type : 'input',  label: "用户名", required: true , rule : [{ type : 'string' , message : '请输入用户名' , required : true }]},
             { 　field : 'password' , type : 'password',  label: "新密码", required: true, rule : [
@@ -136,258 +142,258 @@
                     { text: "设备管理_签到", value: "3" }
                 ]
             },
-            {
-                field: "address",
-                label: "归属区域",
-                required: true,
-                type: "tree",
-                data: [
-                    {
-                        id: 0,
-                        title: "中国电信学院北京校区",
-                        expand: true,
-                        children: [
-                            {
-                                title: "学生公寓",
-                                id: 0,
-                                expand: false,
-                                children: [
-                                    {
-                                        id: 0,
-                                        title: " 一号楼宿舍",
-                                        expand: false,
-                                        children: [
-                                            {
-                                                id: 0,
-                                                title: '1层'
-                                            },
-                                            {
-                                                id: 1,
-                                                title: '2层'
-                                            },
-                                            {
-                                                id: 2,
-                                                title: '3层'
-                                            },
-                                            {
-                                                id: 3,
-                                                title: '4层'
-                                            },
-                                            {
-                                                id: 4,
-                                                title: '5层'
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        id: 1,
-                                        title: "二号楼宿舍",
-                                        expand: false,
-                                        children: [
-                                            {
-                                                id: 0,
-                                                title: '1层'
-                                            },
-                                            {
-                                                id: 1,
-                                                title: '2层'
-                                            },
-                                            {
-                                                id: 2,
-                                                title: '3层'
-                                            },
-                                            {
-                                                id: 3,
-                                                title: '4层'
-                                            },
-                                            {
-                                                id: 4,
-                                                title: '5层'
-                                            }
-                                        ]
-                                    }
-                                ]
-                            },
-                            {
-                                id: 1,
-                                title: "中国电信学院上海校区",
-                                expand: false,
-                                children: [
-                                    {
-                                        id: 0,
-                                        title: "教学区",
-                                        expand: false,
-                                        children: [
-                                            {
-                                                id: 0,
-                                                title: '电信南研楼',
-                                                expand: false,
-                                                children: [
-                                                    {
-                                                        id: 0,
-                                                        title: '1层'
-                                                    },
-                                                    {
-                                                        id: 1,
-                                                        title: '2层'
-                                                    },
-                                                    {
-                                                        id: 2,
-                                                        title: '3层'
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                id: 1,
-                                                title: '上海校区停车场'
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        id: 1,
-                        title: '北京科技职业学院'
-                    }
-                ]
-            },
+            // {
+            //     field: "address",
+            //     label: "归属区域",
+            //     required: true,
+            //     type: "tree",
+            //     data: [
+            //         {
+            //             id: 0,
+            //             title: "中国电信学院北京校区",
+            //             expand: true,
+            //             children: [
+            //                 {
+            //                     title: "学生公寓",
+            //                     id: 0,
+            //                     expand: false,
+            //                     children: [
+            //                         {
+            //                             id: 0,
+            //                             title: " 一号楼宿舍",
+            //                             expand: false,
+            //                             children: [
+            //                                 {
+            //                                     id: 0,
+            //                                     title: '1层'
+            //                                 },
+            //                                 {
+            //                                     id: 1,
+            //                                     title: '2层'
+            //                                 },
+            //                                 {
+            //                                     id: 2,
+            //                                     title: '3层'
+            //                                 },
+            //                                 {
+            //                                     id: 3,
+            //                                     title: '4层'
+            //                                 },
+            //                                 {
+            //                                     id: 4,
+            //                                     title: '5层'
+            //                                 }
+            //                             ]
+            //                         },
+            //                         {
+            //                             id: 1,
+            //                             title: "二号楼宿舍",
+            //                             expand: false,
+            //                             children: [
+            //                                 {
+            //                                     id: 0,
+            //                                     title: '1层'
+            //                                 },
+            //                                 {
+            //                                     id: 1,
+            //                                     title: '2层'
+            //                                 },
+            //                                 {
+            //                                     id: 2,
+            //                                     title: '3层'
+            //                                 },
+            //                                 {
+            //                                     id: 3,
+            //                                     title: '4层'
+            //                                 },
+            //                                 {
+            //                                     id: 4,
+            //                                     title: '5层'
+            //                                 }
+            //                             ]
+            //                         }
+            //                     ]
+            //                 },
+            //                 {
+            //                     id: 1,
+            //                     title: "中国电信学院上海校区",
+            //                     expand: false,
+            //                     children: [
+            //                         {
+            //                             id: 0,
+            //                             title: "教学区",
+            //                             expand: false,
+            //                             children: [
+            //                                 {
+            //                                     id: 0,
+            //                                     title: '电信南研楼',
+            //                                     expand: false,
+            //                                     children: [
+            //                                         {
+            //                                             id: 0,
+            //                                             title: '1层'
+            //                                         },
+            //                                         {
+            //                                             id: 1,
+            //                                             title: '2层'
+            //                                         },
+            //                                         {
+            //                                             id: 2,
+            //                                             title: '3层'
+            //                                         }
+            //                                     ]
+            //                                 },
+            //                                 {
+            //                                     id: 1,
+            //                                     title: '上海校区停车场'
+            //                                 }
+            //                             ]
+            //                         }
+            //                     ]
+            //                 }
+            //             ]
+            //         },
+            //         {
+            //             id: 1,
+            //             title: '北京科技职业学院'
+            //         }
+            //     ]
+            // },
             {   field : 'mobile' , type : 'input',  label: "电话", required: true },
             {   field : 'email' , type : 'input',  label: "邮箱", required: true },
             {
                 field: "status",
                 label: "状态",
                 type: "radio",
-                data: [{ text: "启用", value: "启用" }, { text: "禁用", value: "禁用" }]
+                data: [{ text: "启用", value: "enable" }, { text: "禁用", value: "disable" }]
             },
         ]
         formViewModel = [
             { 　field : 'username' , type : 'input',  label: "用户名", required: true },
-            {
-                field: "address",
-                label: "归属区域",
-                required: true,
-                type: "tree",
-                data: [
-                    {
-                        id: 0,
-                        title: "中国电信学院北京校区",
-                        expand: true,
-                        children: [
-                            {
-                                title: "学生公寓",
-                                id: 0,
-                                expand: false,
-                                children: [
-                                    {
-                                        id: 0,
-                                        title: " 一号楼宿舍",
-                                        expand: false,
-                                        children: [
-                                            {
-                                                id: 0,
-                                                title: '1层'
-                                            },
-                                            {
-                                                id: 1,
-                                                title: '2层'
-                                            },
-                                            {
-                                                id: 2,
-                                                title: '3层'
-                                            },
-                                            {
-                                                id: 3,
-                                                title: '4层'
-                                            },
-                                            {
-                                                id: 4,
-                                                title: '5层'
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        id: 1,
-                                        title: "二号楼宿舍",
-                                        expand: false,
-                                        children: [
-                                            {
-                                                id: 0,
-                                                title: '1层'
-                                            },
-                                            {
-                                                id: 1,
-                                                title: '2层'
-                                            },
-                                            {
-                                                id: 2,
-                                                title: '3层'
-                                            },
-                                            {
-                                                id: 3,
-                                                title: '4层'
-                                            },
-                                            {
-                                                id: 4,
-                                                title: '5层'
-                                            }
-                                        ]
-                                    }
-                                ]
-                            },
-                            {
-                                id: 1,
-                                title: "中国电信学院上海校区",
-                                expand: false,
-                                children: [
-                                    {
-                                        id: 0,
-                                        title: "教学区",
-                                        expand: false,
-                                        children: [
-                                            {
-                                                id: 0,
-                                                title: '电信南研楼',
-                                                expand: false,
-                                                children: [
-                                                    {
-                                                        id: 0,
-                                                        title: '1层'
-                                                    },
-                                                    {
-                                                        id: 1,
-                                                        title: '2层'
-                                                    },
-                                                    {
-                                                        id: 2,
-                                                        title: '3层'
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                id: 1,
-                                                title: '上海校区停车场'
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        id: 1,
-                        title: '北京科技职业学院'
-                    }
-                ]
-            },
+            // {
+            //     field: "address",
+            //     label: "归属区域",
+            //     required: true,
+            //     type: "tree",
+            //     data: [
+            //         {
+            //             id: 0,
+            //             title: "中国电信学院北京校区",
+            //             expand: true,
+            //             children: [
+            //                 {
+            //                     title: "学生公寓",
+            //                     id: 0,
+            //                     expand: false,
+            //                     children: [
+            //                         {
+            //                             id: 0,
+            //                             title: " 一号楼宿舍",
+            //                             expand: false,
+            //                             children: [
+            //                                 {
+            //                                     id: 0,
+            //                                     title: '1层'
+            //                                 },
+            //                                 {
+            //                                     id: 1,
+            //                                     title: '2层'
+            //                                 },
+            //                                 {
+            //                                     id: 2,
+            //                                     title: '3层'
+            //                                 },
+            //                                 {
+            //                                     id: 3,
+            //                                     title: '4层'
+            //                                 },
+            //                                 {
+            //                                     id: 4,
+            //                                     title: '5层'
+            //                                 }
+            //                             ]
+            //                         },
+            //                         {
+            //                             id: 1,
+            //                             title: "二号楼宿舍",
+            //                             expand: false,
+            //                             children: [
+            //                                 {
+            //                                     id: 0,
+            //                                     title: '1层'
+            //                                 },
+            //                                 {
+            //                                     id: 1,
+            //                                     title: '2层'
+            //                                 },
+            //                                 {
+            //                                     id: 2,
+            //                                     title: '3层'
+            //                                 },
+            //                                 {
+            //                                     id: 3,
+            //                                     title: '4层'
+            //                                 },
+            //                                 {
+            //                                     id: 4,
+            //                                     title: '5层'
+            //                                 }
+            //                             ]
+            //                         }
+            //                     ]
+            //                 },
+            //                 {
+            //                     id: 1,
+            //                     title: "中国电信学院上海校区",
+            //                     expand: false,
+            //                     children: [
+            //                         {
+            //                             id: 0,
+            //                             title: "教学区",
+            //                             expand: false,
+            //                             children: [
+            //                                 {
+            //                                     id: 0,
+            //                                     title: '电信南研楼',
+            //                                     expand: false,
+            //                                     children: [
+            //                                         {
+            //                                             id: 0,
+            //                                             title: '1层'
+            //                                         },
+            //                                         {
+            //                                             id: 1,
+            //                                             title: '2层'
+            //                                         },
+            //                                         {
+            //                                             id: 2,
+            //                                             title: '3层'
+            //                                         }
+            //                                     ]
+            //                                 },
+            //                                 {
+            //                                     id: 1,
+            //                                     title: '上海校区停车场'
+            //                                 }
+            //                             ]
+            //                         }
+            //                     ]
+            //                 }
+            //             ]
+            //         },
+            //         {
+            //             id: 1,
+            //             title: '北京科技职业学院'
+            //         }
+            //     ]
+            // },
             {   field : 'mobile' , type : 'input',  label: "电话", required: true },
             {   field : 'email' , type : 'input',  label: "邮箱", required: true },
             {
                 field: "status",
                 label: "状态",
                 type: "radio",
-                data: [{ text: "启用", value: "启用" }, { text: "禁用", value: "禁用" }]
+                data: [{ text: "启用", value: "enable" }, { text: "禁用", value: "disable" }]
             },
             {   field : 'last-ip' , type : 'input',  label: "最后登录IP" },
             {   field : 'last-time' , type : 'input',  label: "最后登录时间" },
@@ -411,7 +417,9 @@
                     let table: any = this.$refs.table;
                     if (typeof params.row.roles === 'string') {
                         params.row.roles = params.row.roles.split(',');
+                        params.row.roleids = params.row.roleids.split(',');
                         table.value[params.index].roles= params.row.roles;
+                        table.value[params.index].roleids= params.row.roleids;
                     }
                     let arr: any = [];
                     for (var i = 0; i < params.row.roles.length; i++) {
@@ -422,6 +430,7 @@
                             props: props
                         }, params.row.roles[i]));
                     }
+
                     return h('div', arr)
                 }
             },
@@ -552,29 +561,52 @@
             this.formModel[3]['data']= data;
             callback&&callback();
         }
-        submitSearch(data){
-            console.log(data)
-        }
 
         show (index = 0 ) {  //函数定义  index = 0 为默认参数值
             let table:any = this.$refs.table;
             this.current = table.data[index];
             this.modal1 = true;
         }
-        searchSubmit( data ){
-            console.log(data)
+        searchSubmit(data) {
+            this.refreshGet({keyword:data.username})
         }
         //提交修改
-        editSubmit( data , next , restore ){
-            setTimeout(()=>{
-                if( data.id == null ){
-                    data.id = uuid();
-                    next( data.id );
+        async editSubmit( data , next , restore ){
+
+
+            if(data.id){
+                console.log(data);
+                let ajax: any = this.$refs.ajax;
+                let res = await ajax.post('/api/account/edit', data);  // await 异步调用  es6写法
+                if (res.code == '200') {
+                    this.refreshGet();
+                    next();
+                    this.$Message.success({title: '提示', content: res.message,  duration: 5,closable: true })
+                } else {
+                    restore();
                 }
-                else{
-                    next()
+            }else{
+                console.log(data);
+                let ajax: any = this.$refs.ajax;
+                let res = await ajax.post('/api/account/create', data);  // await 异步调用  es6写法
+                if (res.code == '200') {
+                    this.refreshGet();
+                    next();
+                    this.$Message.success({title: '提示', content: res.message,  duration: 5,closable: true })
+                } else {
+                    restore();
                 }
-            },1000)
+            }
+
+            // setTimeout(()=>{
+            //     if( data.id == null ){
+            //         data.id = uuid();
+            //         next( data.id );
+            //     }
+            //     else{
+            //         next()
+            //     }
+            // },1000)
            // restore() 什么都不做
         }
         //取消修改
@@ -582,11 +614,55 @@
             console.log(data);
         }
 
-        remove (index) {
-            let table:any = this.$refs.table;
-            table.data.splice(index, 1);
+        async remove (data, next) {
+            var params:any=[];
+            if(data.id){
+                console.log(1)
+                params={id:data.id};
+            }else if(data.length!=0){
+                params.id=[]
+                for (var index in  data){
+                    params.id.push(data[index].id)
+                }
+                console.log(params)
+            }else{
+                setTimeout(() => {
+                    this.$Message.error({title: '提示', content: '请选择要删除的条目!',  duration: 5,closable: true })
+                }, 500)
+                this.$Modal.remove();
+                return
+            }
+
+            let ajax: any = this.$refs.ajax;
+            let res = await ajax.post('/api/account/delete', params);  // await 异步调用  es6写法
+            console.log(data);
+            if (res.code == '200') {
+                this.refreshGet();
+                next();
+                setTimeout(() => {
+                    this.$Message.success({title: '提示', content: res.message,  duration: 5,closable: true })
+                }, 500)
+            } else {
+                this.$Modal.remove();
+            }
+
+            // let table:any = this.$refs.table;
+            // table.value.splice(index, 1);
         }
 
+        //点击新增初始化
+        addSubmit(){
+            this.getRole(()=>{});
+        }
+        //刷新
+        async refreshGet(params:any = {page: this.table.page}) {   // async 异步声明
+            let ajax: any = this.$refs.ajax;
+            let res = await ajax.get('/api/account/list', params);  // await 异步调用  es6写法
+            this.table.value=res.paging.data
+            this.table.pageSize=res.paging.pageSize
+            this.table.total=res.paging.total
+            this.table.page=res.paging.page;
+        }
         // 页面 head 中文件内容
         head() {
             return {

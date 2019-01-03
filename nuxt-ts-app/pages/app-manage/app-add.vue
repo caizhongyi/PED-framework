@@ -24,7 +24,7 @@
     </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" type="text/ecmascript-6">
   import { Component, Prop, Vue, Watch, Model } from "nuxt-property-decorator";
   //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
   import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
@@ -60,6 +60,24 @@
         type: "select",
         data: [{ text: "校园", value: "0" }, { text: "小区", value: "1" }, { text: "园区", value: "2" }]
       },
+      {
+        field: "pwd",
+        label: "管理员密码",
+        type: "password",
+        placeholder: "至少为8位的字母、数字和特殊符号的组合",
+        required: true,
+        rule: [{ required: true, message: "密码未填写" },{
+          validator: (rule, value, callback) => {
+            if (value) {
+              var regex = new RegExp('^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,30}$');
+              if ( !regex.test(value) ){
+                  return callback(new Error("至少为8位的字母、数字和特殊符号的组合"));
+              }
+            }
+            return callback();
+          }
+        }]
+      },
 //      {
 //        field: "app_id",
 //        label: "APPID",
@@ -80,19 +98,19 @@
         type: "input",
         placeholder: '访问地址',
         required: true,
-        rule: [{ required: true, message: "应用域名未填写", }],
+        rule: [{ required: true, message: "应用域名未填写", }]
       },
-        {
-            field: "desc",
-            label: "描述",
-            type: "input",
-            placeholder: "请输入",
-        },
+      {
+          field: "desc",
+          label: "描述",
+          type: "input",
+          placeholder: "请输入"
+      },
       {
         field: "api_push_url",
         label: "数据推送接口地址",
         type: "input",
-        placeholder: '请输入',
+        placeholder: '请输入'
       },
 //      {
 //        field: "database",
@@ -168,6 +186,7 @@
     ];
 
     next(){
+      console.log(this.dyncForm.value.pwd);
       this.current +=1;
     }
     prev(){

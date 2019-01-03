@@ -1,6 +1,6 @@
 <template>
     <div>
-        <dync-form ref="searchForm" v-if="searchModel.length" :model="searchModel" v-model="searchFormData"
+        <dync-form ref="searchForm" v-if="searchModel.length" label-position="right" :model="searchModel" v-model="searchFormData"
                    :label-width="searchLabelWidth" :inline="true" @success="searchSubmit"
                    :submit-button="{ icon : 'ios-search' , text : '查询' }"></dync-form>
         <!-- data 值必须包含id -->
@@ -102,8 +102,8 @@
     }) columns: any; // 单文列头
     @Prop({ default: false }) expButton: any; // 导出按钮
     @Prop({ default: true }) addButton: any; // 增加按钮
-    @Prop({ default: "post" }) method: string; // Ajax 提交方式
-    @Prop() url: string; // Ajax 提交地址
+    @Prop({ default: "post" }) method: any; // Ajax 提交方式
+    @Prop() url: any; // Ajax 提交地址
     @Prop({
       default: () => {
         return { page: 1, total: 0 };
@@ -205,7 +205,7 @@
      * 显示修改表单
      * */
     edit( index: number ) {
-      this.add();
+      this.modal.visible = true;
       this.formData = Object.assign({}, this.table.data[index]);
       return this;
     }
@@ -310,9 +310,11 @@
     //新增表单
     add() {
       this.modal.visible = true;
-      this.formData = this.defaultFormData;
+      this.formData = Object.assign({},this.defaultFormData);
+      this.$emit('add-click', this.formData );
       return this;
     }
+
 
     //删除表单
     remove( index: number ) {

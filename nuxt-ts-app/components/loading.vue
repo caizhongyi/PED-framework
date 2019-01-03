@@ -11,7 +11,7 @@
 
     // v-model 默认值
     @Prop({ default : false })
-    value: boolean ;
+    value: any ;
 
     @Watch("value",{ immediate : false })
     onChangeValue(val) {
