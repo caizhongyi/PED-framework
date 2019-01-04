@@ -1,12 +1,12 @@
 <template>
     <div >  <!-- 必须有根结点 -->
-        <!--<dync-form :model="formData"  :inline="true" @success="submitSearch" :submit-button="{ icon : 'ios-search' , text : '查询' }">
+        <!--<auto-form :model="formData"  :inline="true" @success="submitSearch" :submit-button="{ icon : 'ios-search' , text : '查询' }">
             <template slot="footer">
                 <FormItem>
                     <Button type="primary"  @click="exportData()" icon="ios-download-outline">Export source data</Button>
                 </FormItem>
             </template>
-        </dync-form>-->
+        </auto-form>-->
         <!--<Form  class="class"  inline>
             <FormItem>
                 <Button icon="md-add" @click="add">新建</Button>
@@ -32,7 +32,7 @@
             </i-col> &lt;!&ndash; ivew Button 与 icon &ndash;&gt;
 
         </i-row>-->
-        <page-table ref="table"
+        <auto-table ref="table"
                     v-model="data"
                     url="/page-data.json"
                     :exp="{ filename : 'filename '}"
@@ -54,7 +54,7 @@
             <template slot="modal-footer">
                 <i-button type="default" :loading="buttonLoading">解锁</i-button>
             </template>
-        </page-table> <!-- 自定义组件 ~/components/page-table.vue -->
+        </auto-table> <!-- 自定义组件 ~/components/auto-table.vue -->
         <ajax ref="ajax"></ajax><!-- 自定义组件 ~/components/ajax -->
         <Modal
                 v-model="modal1"
@@ -71,16 +71,16 @@
   import { Component, Prop, Vue, Watch, Model} from "nuxt-property-decorator"
   //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
   import { State, Getter, Action, Mutation, namespace } from "vuex-class"  // Vue store 全局定义，例如用户信息等全局都需要用的
-  import PageTable from "~/components/page-table";  // 自定义组件目录
+  import AutoTable from "~/components/auto-table";  // 自定义组件目录
   import Ajax from "~/components/ajax";  // 自定义组件目录
   import uuid from "uuid/v1";  // 自定义组件目录
-  import DyncForm from "~/components/dync-form/index";
+  import AutoForm from "~/components/auto-form/index";
 
   declare var jQuery;
   //组件声名
   @Component({
     components: {
-      PageTable, Ajax,DyncForm  //自定义组件
+      AutoTable, Ajax,AutoForm  //自定义组件
     }
   })
   export default class Table extends Vue {    //  typescript 创建类继成 Vue

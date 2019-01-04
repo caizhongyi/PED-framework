@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <page-table ref="table"
+        <auto-table ref="table"
                     v-model="data"
                     url="/api/account/list"
                     :exp="{ filename : 'filename '}"
@@ -21,7 +21,7 @@
             <template slot="modal-footer">
                 <i-button type="default" :loading="buttonLoading">账号解锁</i-button>
             </template>
-        </page-table> <!-- 自定义组件 ~/components/page-table.vue -->
+        </auto-table> <!-- 自定义组件 ~/components/auto-table.vue -->
         <ajax :loading="ajaxLoading" ref="ajax"></ajax>
     </div>
 </template>
@@ -30,17 +30,17 @@
     import {Component, Prop, Vue, Watch, Model} from "nuxt-property-decorator"
     //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
     import {State, Getter, Action, Mutation, namespace} from "vuex-class"  // Vue store 全局定义，例如用户信息等全局都需要用的
-    import PageTable from "~/components/page-table";  // 自定义组件目录
+    import AutoTable from "~/components/auto-table";  // 自定义组件目录
     import Ajax from "~/components/ajax";  // 自定义组件目录
     import uuid from "uuid/v1";  // 自定义组件目录
-    import DyncForm from "~/components/dync-form/index";
+    import AutoForm from "~/components/auto-form/index";
     import filters from "~/filters/index";
 
     declare var jQuery;
     //组件声名
     @Component({
         components: {
-            PageTable, Ajax, DyncForm //自定义组件
+            AutoTable, Ajax, AutoForm //自定义组件
         }
     })
     export default class User extends Vue {    //  typescript 创建类继成 Vue

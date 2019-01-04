@@ -1,6 +1,6 @@
 <template>
     <div>
-        <dync-form :model="model" :label-width="80" @success="submit" @fail="fail">
+        <auto-form :model="model" :label-width="80" @success="submit" @fail="fail">
             <template slot slot-scope="props">
                 <FormItem prop="custom" label="最新心跳包" >
                     心跳时间：2018-11-01 12：34：56
@@ -11,7 +11,7 @@
                     <i-input type="textarea" v-model="props.data['custom1']" :autosize="{minRows: 5,maxRows: 5}"></i-input>
                 </FormItem>
             </template>
-        </dync-form>
+        </auto-form>
     </div>
 </template>
 

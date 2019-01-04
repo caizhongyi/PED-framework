@@ -5,13 +5,13 @@
             <Step title="设备信息" content="添加设备应用设备信息"></Step>
         </Steps>
         <br>
-        <dync-form v-show="current==0" v-model="formData" ref="dyncForm"  :model="form" :submit-button="{ text: '下一步' }" @success="next" >
+        <auto-form v-show="current==0" v-model="formData" ref="AutoForm"  :model="form" :submit-button="{ text: '下一步' }" @success="next" >
             <!--<template slot="header">header</template>-->
             <!--<template slot slot-scope="props">-->
             <!--</template>-->
             <!--<template slot="footer">footer</template>-->
-        </dync-form>
-        <dync-form v-show="current==1" ref="formDevice" v-model="formData2"  :model="formDeviceModel" :submit-button="false" @success="save"  >
+        </auto-form>
+        <auto-form v-show="current==1" ref="formDevice" v-model="formData2"  :model="formDeviceModel" :submit-button="false" @success="save"  >
             <template slot>
                 <FormItem>
                     <Button type="primary" @click="prev" >上一步</Button>
@@ -19,7 +19,7 @@
                     <Button @click="reset" >重置</Button>
                 </FormItem>
             </template>
-        </dync-form>
+        </auto-form>
         <ajax ref="ajax"></ajax>
     </div>
 </template>
@@ -29,15 +29,15 @@
   //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
   import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
 
-  import DyncForm from "~/components/dync-form";
+  import AutoForm from "~/components/auto-form";
   //组件声名
   @Component({
-    components: { DyncForm }
+    components: { AutoForm }
   })
   export default class  extends Vue {    //  typescript 创建类继成 Vue
     current = 0 ;
     formDevice:any;
-    dyncForm : any;
+    AutoForm : any;
     formData: any = {
       upload  : []
     };
@@ -186,7 +186,7 @@
     ];
 
     next(){
-      console.log(this.dyncForm.value.pwd);
+      console.log(this.AutoForm.value.pwd);
       this.current +=1;
     }
     prev(){
@@ -200,7 +200,7 @@
         this.formDevice.submit();
     }
     async save(){
-          let params = {...this.dyncForm.value,...this.formDevice.value};
+          let params = {...this.AutoForm.value,...this.formDevice.value};
           let ajax: any = this.$refs.ajax;
           let res = await ajax.post('/api/app/add', params);  // await 异步调用  es6写法
           if ( res.code == '200' ){
@@ -224,7 +224,7 @@
     mounted() {  // Vue 的 mounted 初始化回调
         this.get();
         this.formDevice = this.$refs.formDevice;
-        this.dyncForm = this.$refs.dyncForm;
+        this.AutoForm = this.$refs.AutoForm;
     }
   }
 </script>

@@ -41,10 +41,10 @@
   import { Component, Model, Prop, Vue, Watch } from "nuxt-property-decorator";
   import $ from "jquery"
   import _ from "underscore"
-  import DyncForm from "../dync-form"
+  import AutoForm from "../auto-form"
 
   @Component({
-    components : { DyncForm }
+    components : { AutoForm }
   })
   export default class NestableItem extends Vue {
     @Prop() value :any ;

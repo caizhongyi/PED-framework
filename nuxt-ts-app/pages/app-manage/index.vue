@@ -21,15 +21,15 @@
             </Col>
         </Row>
         <Modal :width="500" title="新增应用" v-model="showAppData"  @on-ok="submit" @on-cancel="fail">
-            <dync-form :model="form" :label-width="80" :submit-button="false" ref="forms">
+            <auto-form :model="form" :label-width="80" :submit-button="false" ref="forms">
                 <template slot slot-scope="props"> </template>
-            </dync-form>
+            </auto-form>
         </Modal>
         <Modal :width="500" title="应用详情" v-model="showAppDetailData" :loading="formDetailLoading" @on-ok="detailSubmit"  @on-cancel="detailFail">
-            <dync-form :model="formDetail" v-model="itemData"  :submit-button="false" ref="formDetails"
+            <auto-form :model="formDetail" v-model="itemData"  :submit-button="false" ref="formDetails"
                        :label-width="100" label-position="right" @success="formDetailsSuccess"  @fail="()=>{ this.formDetailLoading = false }">
                 <template slot slot-scope="props"> </template>
-            </dync-form>
+            </auto-form>
         </Modal>
       <ajax  ref="ajax"></ajax>
     </div>
@@ -48,7 +48,7 @@
 
     formDetails:any;
     formDetailLoading = true ;
-    dyncForm:any;
+    AutoForm:any;
     appData:any = [
     ];
 
@@ -256,7 +256,7 @@
 
     }
     reset(){
-      this.dyncForm.reset();
+      this.AutoForm.reset();
     }
 
     //访问跳转
@@ -279,7 +279,7 @@
 
     mounted() {  // Vue 的 mounted 初始化回调
       this.get();
-      this.dyncForm = this.$refs.forms;
+      this.AutoForm = this.$refs.forms;
       this.formDetails = this.$refs.formDetails;
     }
   }

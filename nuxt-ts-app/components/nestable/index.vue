@@ -17,8 +17,8 @@
                 :loading="true"
                 @on-ok="ok"
                 @on-cancel="cancel">
-            <dync-form ref="form" v-model="formData" :model="formModel" @success="submit"
-                       :submit-button="false"></dync-form>
+            <auto-form ref="form" v-model="formData" :model="formModel" @success="submit"
+                       :submit-button="false"></auto-form>
         </Modal>
     </div>
 </template>

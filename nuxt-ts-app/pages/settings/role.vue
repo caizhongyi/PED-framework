@@ -1,6 +1,6 @@
 <template>
     <div>
-        <page-table ref="table"
+        <auto-table ref="table"
                     url="/api/role/list"
                     v-model="data"
                     :exp="{ filename : 'filename '}"
@@ -13,12 +13,12 @@
                     @remove="remove"
                     @search-submit="searchSubmit"
                     @edit-submit="editSubmit"
-                    @edit-cancel="editCancel"></page-table> <!-- 自定义组件 ~/components/page-table.vue -->
+                    @edit-cancel="editCancel"></auto-table> <!-- 自定义组件 ~/components/auto-table.vue -->
 
         <Modal :width="500" :title="`【${rolename}】权限分配`" v-model="showRootData" @on-ok="submit" @on-cancel="fail">
-            <dync-form :model="formRoot" v-model="formData" :label-width="80" :submit-button="false" ref="forms">
+            <auto-form :model="formRoot" v-model="formData" :label-width="80" :submit-button="false" ref="forms">
                 <template slot slot-scope="props"></template>
-            </dync-form>
+            </auto-form>
         </Modal>
         <ajax :loading="ajaxLoading" ref="ajax"></ajax>
     </div>
@@ -28,17 +28,17 @@
     import {Component, Prop, Vue, Watch, Model} from "nuxt-property-decorator"
     //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
     import {State, Getter, Action, Mutation, namespace} from "vuex-class"  // Vue store 全局定义，例如用户信息等全局都需要用的
-    import PageTable from "~/components/page-table";  // 自定义组件目录
+    import AutoTable from "~/components/auto-table";  // 自定义组件目录
     import Ajax from "~/components/ajax";  // 自定义组件目录
     import uuid from "uuid/v1";  // 自定义组件目录
-    import DyncForm from "~/components/dync-form/index";
+    import AutoForm from "~/components/auto-form/index";
     import TreeChecked from "~/utils/index";
 
     declare var jQuery;
     //组件声名
     @Component({
         components: {
-            PageTable, Ajax, DyncForm  //自定义组件
+            AutoTable, Ajax, AutoForm  //自定义组件
         }
     })
     export default class Role extends Vue {    //  typescript 创建类继成 Vue

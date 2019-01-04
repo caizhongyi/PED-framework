@@ -1,6 +1,6 @@
 <template>
     <div>
-        <page-table ref="table"
+        <auto-table ref="table"
                     url="/devices.json"
                     method="get"
                     :columns="columns"
@@ -10,7 +10,7 @@
                     :params="params"
                     :addButton = "false"
                     @search-submit="searchSubmit"
-                    ></page-table> <!-- 自定义组件 ~/components/page-table.vue -->
+                    ></auto-table> <!-- 自定义组件 ~/components/auto-table.vue -->
     </div>
 </template>
 
