@@ -4,7 +4,7 @@ const path = require("path");
 const HappyPack = require("happypack");
 let os = require("os");
 let happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
+const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 //const mainfest = require("./static/dll/vendor-mainfest.json");
 //const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 //const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -20,7 +20,6 @@ const argv = parseArgs(process.argv.slice(2), {
   unknown: parameter => false
 });
 let publicPath = "/";
-let hostname = "localhost", hostPort = 3000;
 let mode = "history";
 let base = "";
 let proxy = {
@@ -29,7 +28,8 @@ let proxy = {
     "^/api/": "/api/"
   }
 };
-
+let hostname = "localhost";
+let hostPort = "3000";
 
 switch (process.env.__ENV) {
   //本地
@@ -42,14 +42,16 @@ switch (process.env.__ENV) {
     break;
   //测试
   case  "release" :
-    proxy.target = "http://www.saasmanager.com:28083/";// 线上 ajax 访问地址
-    //publicPath = "http://www.saasmanager.com:28081/";// 线上 ajax 访问地址
+    // proxy.target = "http://180.106.148.81:28083/";// 线上 ajax 访问地址
+    proxy.target = "http://180.106.148.81:28083/";// 线上 ajax 访问地址
+    //publicPath = "http://180.106.148.81:18082/testapms/";// 线上 ajax 访问地址
+    //publicPath = "http://www.saasmanager.com:28083/";// 线上 ajax 访问地址
     hostname = "0.0.0.0";
     hostPort = "28083";
     break;
   //正式
   case  "production" :
-    proxy.target = "http://www.saasmanager.com:28083/";// 线上 ajax 访问地址
+    proxy.target = "http://180.106.148.81:28083/";// 线上 ajax 访问地址
     hostname = "0.0.0.0";
     hostPort = "28083";
     break;
@@ -57,11 +59,13 @@ switch (process.env.__ENV) {
 
 const port =
   argv.port ||
-  process.env.PORT || hostPort ||
+  hostPort ||
+  process.env.PORT ||
   process.env.npm_package_config_nuxt_port ||
   "3000"; // 端口
 const host =
-  argv.hostname || hostname ||
+  argv.hostname ||
+  hostname ||
   process.env.HOST ||
   process.env.npm_package_config_nuxt_host ||
   "localhost";  //域名
@@ -106,7 +110,7 @@ module.exports = {
         src: "https://api.map.baidu.com/api?v=2.0&ak=9Mmf1Qqx0h9HPWbzPjxHDPw8GfKW6kxG",
         type: "text/javascript",
         charset: "utf-8"
-      },
+      }
       //{ src: "/js/vendor.dll.js" }
       //{ innerHTML: require('./flexible.js') + ';console.log(11)' , type: 'text/javascript', charset: 'utf-8'},
       //{ src:'https://res.wx.qq.com/open/js/jweixin-1.2.0.js' },  //微信开发
@@ -116,13 +120,16 @@ module.exports = {
     __dangerouslyDisableSanitizers: ["script"]
   },
   router: {
-    //base : base,
+    // base : base,
+    scrollBehavior: function(to, from, savedPosition) {
+      return { x: 0, y: 0 };
+    },
     mode: mode,  // "hash" | "history" | "abstract" //"hash" (浏览器环境) | "abstract" (Node.js 环境
     extendRoutes(routes, resolve) {
-      /* for(let item of routes){
-         item.path = '/testapms' + item.path ;
-         item.name = 'testapms-' + item.name ;
-       }*/
+      /*  for(let item of routes){
+          item.path = '/testapms' + item.path ;
+          item.name = 'testapms-' + item.name ;
+        }*/
       /*routes.push({
         name: 'custom',
         path: '*',
@@ -141,16 +148,16 @@ module.exports = {
   css: [
     "font-awesome/css/font-awesome.css",
     "iview/dist/styles/iview.css",
-    "~/assets/css/main.scss"
+    { src: "~assets/css/main.scss", lang: "scss" }
   ],
   plugins: [
+    { src: "~/plugins/components", ssr: true },
     { src: "~/plugins/iview", ssr: true },
     { src: "~/plugins/directives", ssr: false },  //指令
     { src: "~/plugins/v-charts", ssr: false },
     { src: "~/plugins/filters", ssr: false },
     { src: "~/plugins/jquery", ssr: false },
     { src: "~/plugins/vue-seamless-scroll", ssr: false },
-    { src: "~/plugins/components", ssr: true }
   ],
   // buildDir: 'testapms',
   // srcDir: __dirname,
@@ -168,25 +175,26 @@ module.exports = {
         jQuery: "jquery",
         "window.jQuery": "jquery"
       }),
-      new HardSourceWebpackPlugin(),
-      /*new webpack.DllReferencePlugin({
-        context: path.resolve(__dirname, ".."),
-        manifest: require("./vendor-manifest.json")
-      }),*/
+      (process.env.__ENV == "development" ? new HardSourceWebpackPlugin() : () => {
+      }),
+      /* new webpack.DllReferencePlugin({
+         context: path.resolve(__dirname, ".."),
+         manifest: require("./vendor-manifest.json")
+       }),*/
       new HappyPack({
         id: "js",
         threadPool: happyThreadPool,
-        loaders: [ "babel-loader","ts-loader" ]
+        loaders: ["babel-loader", "ts-loader"]
       }),
       new HappyPack({
         id: "vue",
         threadPool: happyThreadPool,
         loaders: [
           {
-            loader:'vue-loader'
+            loader: "vue-loader"
           },
           {
-            loader:'iview-loader',
+            loader: "iview-loader",
             options: { prefix: true }
           }
         ]
@@ -198,7 +206,7 @@ module.exports = {
           //'style-loader',
           "sass-loader",
           "css-loader",
-          "postcss-loader",
+          "postcss-loader"
         ]
       })
     ],
@@ -231,15 +239,15 @@ module.exports = {
           delete  o.options;
           //o.loader = "HappyPack/loader?id=vue";
         }
-         else if (o.loader == "sass-loader"){
+        else if (o.loader == "sass-loader") {
           o.loader = "HappyPack/loader?id=css";
         }
-         else if (o.loader == "babel-loader"){
-           o.loader = "HappyPack/loader?id=js";
-         }
-        else if (o.loader == "ts-loader"){
-           o.loader = "HappyPack/loader?id=js";
-         }
+        else if (o.loader == "babel-loader") {
+          o.loader = "HappyPack/loader?id=js";
+        }
+        else if (o.loader == "ts-loader") {
+          o.loader = "HappyPack/loader?id=js";
+        }
         /* if (o.loader == "sass-loader") {
            o.use = [
              "css-loader",
@@ -287,6 +295,3 @@ module.exports = {
   }
 };
 
-//if(process.browser){
-// require('xxx');
-//}

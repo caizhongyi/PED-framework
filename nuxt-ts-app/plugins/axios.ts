@@ -8,7 +8,7 @@ axios.defaults.withCredentials = true;
 
 if(  process.env.__ENV != 'development' ){
   //axios.defaults.baseURL = 'http://180.106.148.81:18082/testapms/';
-  axios.defaults.baseURL = 'http://www.saasmanager.com:28083/';
+  axios.defaults.baseURL = 'http://180.106.148.81:28083/"';
 }
 
 

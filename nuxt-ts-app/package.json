@@ -1,6 +1,6 @@
 {
   "name": "apms",
-  "version": "1.1.2",
+  "version": "1.2.2",
   "private": true,
   "description": "nodejs v8.11.3",
   "dependencies": {
@@ -18,7 +18,7 @@
     "moment": "^2.22.2",
     "neo-async": "^2.6.0",
     "nestable": "^0.2.0",
-    "nuxt": "^2.2.0",
+    "nuxt": "^2.0.0",
     "nuxt-property-decorator": "^1.2.0",
     "qs": "^6.5.2",
     "underscore": "^1.9.1",
@@ -30,17 +30,17 @@
     "vuex-class": "^0.3.1"
   },
   "scripts": {
-    "dev": "cross-env __ENV=development nuxt",
+    "dev": "cross-env __ENV=development HOST=localhost PORT=3000 nuxt",
     "dev:test": "cross-env __ENV=release  nuxt",
-    "build": "cross-env __ENV=development nuxt build",
-    "build:test": "cross-env __ENV=release nuxt build",
-    "build:prod": "cross-env __ENV=production nuxt build",
-    "start": "cross-env __ENV=development nuxt start",
-    "start:test": "cross-env __ENV=release  nuxt start",
-    "start:prod": "cross-env __ENV=production  nuxt start",
-    "generate": "cross-env __ENV=development nuxt generate",
-    "generate:test": "cross-env __ENV=release nuxt generate",
-    "generate:prod": "cross-env __ENV=production nuxt generate",
+    "build": "cross-env __ENV=development HOST=localhost PORT=3000 nuxt build",
+    "build:test": "cross-env __ENV=release  HOST=180.106.148.81 PORT=28083 nuxt build",
+    "build:prod": "cross-env __ENV=production  HOST=180.106.148.81 PORT=28083 nuxt build",
+    "start": "cross-env __ENV=development  HOST=localhost PORT=3000 nuxt start",
+    "start:test": "cross-env __ENV=release  HOST=0.0.0.0 PORT=28083 nuxt start",
+    "start:prod": "cross-env __ENV=production HOST=180.106.148.81 PORT=28083 nuxt start",
+    "generate": "cross-env __ENV=development HOST=localhost PORT=3000 nuxt generate",
+    "generate:test": "cross-env __ENV=release  HOST=180.106.148.81 PORT=28083 nuxt generate",
+    "generate:prod": "cross-env __ENV=production HOST=180.106.148.81 PORT=28083 nuxt generate",
     "build:dll": "webpack -p --progress --config webpack.dll.conf.js"
   },
   "devDependencies": {
@@ -61,7 +61,7 @@
     "sass-loader": "^7.1.0",
     "scss": "^0.2.4",
     "scss-loader": "0.0.1",
-    "ts-loader": "^5.3.2",
+    "ts-loader": "^4.5.0",
     "typescript": "^3.2.2",
     "vue-class-component": "^6.2.0",
     "vue-server-renderer": "^2.5.21"

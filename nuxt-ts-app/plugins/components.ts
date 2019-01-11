@@ -1,16 +1,14 @@
 import Vue from "vue"
 //import capitalize from "capitalize-first-letter"
-import Ajax from "~/components/ajax/index"
-import AutoTable from "~/components/auto-table"
-import AutoForm from "~/components/auto-form/index"
-import Nestable from "~/components/nestable/index"
-import AjaxButton from "~/components/ajax/ajax-button"
+import Ajax from "~/components/ajax/install"
+import AutoTable from "~/components/auto-table/install"
+import AutoForm from "~/components/auto-form/install"
+import Nestable from "~/components/nestable/install"
 
 //全局加载 components
-Vue.component("Ajax" , Ajax );
-Vue.component("AjaxButton" , AjaxButton );
-Vue.component("AutoTable" , AutoTable );
-Vue.component("AutoForm" , AutoForm );
-Vue.component("Nestable" , Nestable );
+Vue.use(Ajax);
+Vue.use(AutoTable);
+Vue.use(AutoForm);
+Vue.use(Nestable);
 
 

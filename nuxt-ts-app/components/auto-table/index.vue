@@ -71,7 +71,7 @@
   import AutoForm from "~/components/auto-form";
   import _ from "underscore";
   import uuid from "uuid/v1";
-  import Ajax from "./ajax";
+  import Ajax from "../ajax/index";
 
   @Component({
     components: { Ajax, AutoForm }
