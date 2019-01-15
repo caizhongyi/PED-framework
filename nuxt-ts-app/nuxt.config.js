@@ -1,9 +1,11 @@
 const parseArgs = require("minimist");
 const webpack = require("webpack");
 const path = require("path");
+
 const HappyPack = require("happypack");
 let os = require("os");
 let happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
+
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
 //const mainfest = require("./static/dll/vendor-mainfest.json");
 //const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
@@ -28,8 +30,6 @@ let proxy = {
     "^/api/": "/api/"
   }
 };
-let hostname = "localhost";
-let hostPort = "3000";
 
 switch (process.env.__ENV) {
   //本地
@@ -46,26 +46,20 @@ switch (process.env.__ENV) {
     proxy.target = "http://180.106.148.81:28083/";// 线上 ajax 访问地址
     //publicPath = "http://180.106.148.81:18082/testapms/";// 线上 ajax 访问地址
     //publicPath = "http://www.saasmanager.com:28083/";// 线上 ajax 访问地址
-    hostname = "0.0.0.0";
-    hostPort = "28083";
     break;
   //正式
   case  "production" :
     proxy.target = "http://180.106.148.81:28083/";// 线上 ajax 访问地址
-    hostname = "0.0.0.0";
-    hostPort = "28083";
     break;
 }
 
 const port =
   argv.port ||
-  hostPort ||
   process.env.PORT ||
   process.env.npm_package_config_nuxt_port ||
   "3000"; // 端口
 const host =
   argv.hostname ||
-  hostname ||
   process.env.HOST ||
   process.env.npm_package_config_nuxt_host ||
   "localhost";  //域名
@@ -151,13 +145,14 @@ module.exports = {
     { src: "~assets/css/main.scss", lang: "scss" }
   ],
   plugins: [
-    { src: "~/plugins/components", ssr: true },
     { src: "~/plugins/iview", ssr: true },
+    // { src: "~/plugins/components", ssr: true },
     { src: "~/plugins/directives", ssr: false },  //指令
     { src: "~/plugins/v-charts", ssr: false },
     { src: "~/plugins/filters", ssr: false },
     { src: "~/plugins/jquery", ssr: false },
-    { src: "~/plugins/vue-seamless-scroll", ssr: false },
+    { src: "~/plugins/$axios", ssr: false },
+    { src: "~/plugins/vue-seamless-scroll", ssr: false }
   ],
   // buildDir: 'testapms',
   // srcDir: __dirname,
@@ -280,15 +275,14 @@ module.exports = {
     "@nuxtjs/proxy",
     "~/modules/typescript.js"
   ],
-  /* axios: {
-      retry: { retries: 3 },
-      //开发模式下开启debug
-      debug: process.env.__ENV == "production" ? false : true,
-      //设置不同环境的请求地址
-      baseURL: "http://www.apms.com/index.php?",
-      withCredentials: true,
+  axios: {
+    retry: { retries: 3 },
+    //开发模式下开启debug
+    debug: process.env.__ENV == "production" ? false : false,
+    //设置不同环境的请求地址
+    baseURL: proxy.target,
+    withCredentials: true
   },
-   */
   proxy: {
     //开启代理
     "/api/": proxy

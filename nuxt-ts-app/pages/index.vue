@@ -16,10 +16,11 @@
   import { State, Mutation, Action, Getter } from "vuex-class";
   import Loading from "~/components/loading.vue";
   import $ from "jquery";
-
+  import Ajax from "~/components/ajax";
   @Component({
     components: {
-      Loading
+      Loading,
+      Ajax
     }
   })
   export default class Index extends Vue {

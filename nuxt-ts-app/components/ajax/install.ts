@@ -1,4 +1,4 @@
-import ajax from './index'
+/*import ajax from './index'
 import button from './ajax-button'
 const component = {
   install:function(Vue){
@@ -8,4 +8,4 @@ const component = {
 }
 
 // 导出该组件
-export default component
+export default component*/

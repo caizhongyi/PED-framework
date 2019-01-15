@@ -17,15 +17,16 @@
 
 <script lang="ts">
   import LoginForm from "~/components/login-form";
+  import Ajax from "~/components/ajax";
   import { State, Mutation, Action, Getter } from "vuex-class";
-  import axios from "~/plugins/axios";
   import { Component, Vue } from "nuxt-property-decorator";
   import  cookie from "js-cookie";
   import  utils from "~/utils";
 
   @Component({
     components: {
-      LoginForm
+      LoginForm,
+      Ajax,
     }
   })
   export default class Login extends Vue {
@@ -63,7 +64,7 @@
           this.$router.push(query.ref);
         }
         else{
-          utils.loadMenu( this.$store.commit );
+          utils.loadMenu( this,this.$store.commit );
           this.$router.push("/home");
         }
       }

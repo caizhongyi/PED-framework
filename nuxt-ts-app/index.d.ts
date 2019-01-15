@@ -14,6 +14,7 @@ declare module 'vue/types/vue' {
   interface Vue {
     $router: VueRouter,
     $route: Route,
+    $axios: any,
     $Message: any,
     $Notice: any,
     $Modal: any,

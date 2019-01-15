@@ -15,7 +15,6 @@
   })
   export default class Index extends Vue {    //  typescript 创建类继成 Vue
     mounted() {  // Vue 的 mounted 初始化回调
-        console.log('home')
     }
   }
 </script>

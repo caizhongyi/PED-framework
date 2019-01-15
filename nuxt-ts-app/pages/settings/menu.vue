@@ -133,7 +133,7 @@
             let ajax: any = this.$refs.ajax;
             let res = await ajax.post('/api/menu/edit',params);  // await 异步调用  es6写法
             console.log(res);
-            utils.loadMenu( this.$store.commit );
+            utils.loadMenu( this , this.$store.commit );
 //            console.log(res);
         }
         saveOrder( data , next ){
@@ -142,7 +142,7 @@
           setTimeout(()=>{
             next()
           },500)
-          utils.loadMenu( this.$store.commit );
+          utils.loadMenu( this,this.$store.commit );
         }
         //删除
         remove(item, next ) {
@@ -154,7 +154,7 @@
             let res = await ajax.post('/api/menu/delete',params);  // await 异步调用  es6写法
             if ( res.code == '200' ){
                 next();
-                utils.loadMenu( this.$store.commit );
+                utils.loadMenu( this,this.$store.commit );
             } else {
                 this.$Modal.remove();
                 this.$Modal.error({ title : '提示', content: '有下级菜单', loading : false })

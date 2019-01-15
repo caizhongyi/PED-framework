@@ -102,7 +102,6 @@ __ENV = development 开发环境
 __ENV = release 测试环境
 __ENV = production 线上环境
 
-~/plugins/axios.ts 配置 Ajax 访问地址
 nuxt.config.js  配置应用程序访问地址
 
 Windows配置
@@ -165,7 +164,6 @@ export default $;
 ``` 
 2.ajax.vue // 异步调用
 
-主要调用axios插件， ~/plugins/axios.ts 为更改配置后的插件。
 
 ``` 
 示例
@@ -213,7 +211,7 @@ b，更新到测试环境。登录服务器192.168.21.47（参看附件）后，
 c，确认更新情况，访问b链接查看接口文档。如果问题则访问上述a链接，查看具体报错信息。
 
 # 管理平台测试环境的使用
-a，前端访问地址：http://180.106.148.81:18082/testapms
+a，前端访问地址：http://180.106.148.81:18082/testapms http://180.106.148.81:28083/
 
 b，后端访问地址：http://180.106.148.81:18082/testapms/index.php?_url=api/{controller}/{action}&{params}
 （注：后台接口全部放在app/api/controller下）   
@@ -272,6 +270,6 @@ static目录下的访问路径为 ~/img/a.png
 
 
 # 打包优化 
-static/dll/vendor.dll.js
-npm run build:dll
-
+// static/dll/vendor.dll.js
+// npm run build:dll
+build 和 generate HOST PORT 配置线上的 host 和 port

@@ -225,9 +225,7 @@
 
         async submit() {
             let ajax: any = this.$refs.ajax;
-            console.log(this.formData)
             let datas = TreeChecked.getTreeChecked(this.formData.root, [], ['id']);
-            console.log(datas)
             let res = await ajax.post('/api/role/privilege', {id: this.id, role_nodes: datas, dosubmit: 1});  // await 异步调用  es6写法
             if (res.code == '200') {
                 setTimeout(() => {
@@ -240,7 +238,6 @@
         async remove(data, next) {
             let ajax: any = this.$refs.ajax;
             let res = await ajax.post('/api/role/delete', {id: data.id});  // await 异步调用  es6写法
-            console.log(res);
             if (res.code == '200') {
                 this.refreshGet();
                 next();

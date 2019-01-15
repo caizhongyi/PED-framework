@@ -1,3 +1,4 @@
+/*
 import autoForm from './index'
 
 const component = {
@@ -8,3 +9,4 @@ const component = {
 
 // 导出该组件
 export default component
+*/

@@ -556,7 +556,6 @@
         async getRole(callback){   // async 异步声明
             let ajax:any = this.$refs.ajax;
             let res = await  ajax.get('/api/role/list' , { source_type: 1 });  // await 异步调用  es6写法
-            console.log(res.paging.data)
             let data:any=res.paging.data
             this.formModel[3]['data']= data;
             callback&&callback();
@@ -575,7 +574,6 @@
 
 
             if(data.id){
-                console.log(data);
                 let ajax: any = this.$refs.ajax;
                 let res = await ajax.post('/api/account/edit', data);  // await 异步调用  es6写法
                 if (res.code == '200') {
