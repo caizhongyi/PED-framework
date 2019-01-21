@@ -275,14 +275,6 @@ module.exports = {
     "@nuxtjs/proxy",
     "~/modules/typescript.js"
   ],
-  axios: {
-    retry: { retries: 3 },
-    //开发模式下开启debug
-    debug: process.env.__ENV == "production" ? false : false,
-    //设置不同环境的请求地址
-    baseURL: proxy.target,
-    withCredentials: true
-  },
   proxy: {
     //开启代理
     "/api/": proxy

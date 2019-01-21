@@ -7,11 +7,10 @@ export default class Mixin extends Vue {
   @Prop({ default: ''}) url: any ;
   @Prop() params: any;
   @Prop({ default: true }) loading: any;
-  $axios = axios;
   visible = false;
 
   all( fns : any  = []  , callback  ){
-    this.$axios.$all( fns ).then(this.$axios.spread(function (acct, perms) {
+    this.$axios.all( fns ).then(this.$axios.spread(function (acct, perms) {
       // Both requests are now complete
       callback && callback(acct, perms);
     }));
@@ -38,7 +37,7 @@ export default class Mixin extends Vue {
     })
     let res: any = await promise;
     this.visible = false;
-    let dataInfo: any = res.data;
+    let dataInfo: any = res;
     if (dataInfo.code === 200) {
       return dataInfo;
     }

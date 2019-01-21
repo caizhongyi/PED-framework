@@ -28,9 +28,10 @@
   import NestableItem from "./nestable-item";
   import $ from "jquery";
   import _ from "underscore";
+  import AutoForm from "~/components/auto-form/index";
 
   @Component({
-    components: { NestableItem }
+    components: { NestableItem , AutoForm}
   })
   export default class Nestable extends Vue {
     $nestable: any;

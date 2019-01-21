@@ -4,11 +4,13 @@ import uuid from "uuid/v1";
 import axios from "~/plugins/axios";
 
 export default {
+  async loadMenu( app, commit ){
+    let res : any = await app.$axios.post('/api/menu/list');
+    console.log(res)
+    // app.$axios.defaults.baseURL = '/';
+    let demo: any = await app.$axios.get("/demo.json" );
 
-  async loadMenu( commit ){
-    let res : any = await axios.post('/api/menu/list');
-    let demo: any = await axios.get("/demo.json" );
-    let menu = [ ...res.data.data , ...demo.data];
+    let menu = [ ...res.data , ...demo];
     this.setMenu( menu , commit  );
     return menu;
   },
