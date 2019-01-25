@@ -14,7 +14,7 @@
 <script lang="ts">
   import { Component, Vue, Watch } from "nuxt-property-decorator";
   //import vueSeamless from "vue-seamless-scroll";
-  import filters from "~/filters";
+  import filters from "~/filters/index";
 
   @Component({
     components: {

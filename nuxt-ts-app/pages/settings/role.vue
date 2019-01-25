@@ -13,7 +13,7 @@
                     @remove="remove"
                     @search-submit="searchSubmit"
                     @edit-submit="editSubmit"
-                    @edit-cancel="editCancel"></auto-table> <!-- 自定义组件 ~/components/auto-table.vue -->
+                    @edit-cancel="editCancel"></auto-table> <!-- 自定义组件 ~/components/auto-table/index.vue -->
 
         <Modal :width="500" :title="`【${rolename}】权限分配`" v-model="showRootData" @on-ok="submit" @on-cancel="fail">
             <auto-form :model="formRoot" v-model="formData" :label-width="80" :submit-button="false" ref="forms">
@@ -27,14 +27,13 @@
 <script lang="ts">
     import {Component, Prop, Vue, Watch, Model} from "nuxt-property-decorator"
     //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
-    import {State, Getter, Action, Mutation, namespace} from "vuex-class"  // Vue store 全局定义，例如用户信息等全局都需要用的
-    import AutoTable from "~/components/auto-table";  // 自定义组件目录
-    import Ajax from "~/components/ajax";  // 自定义组件目录
-    import uuid from "uuid/v1";  // 自定义组件目录
-    import AutoForm from "~/components/auto-form/index";
+    import {State, Mutation} from "vuex-class"  // Vue store 全局定义，例如用户信息等全局都需要用的
+    import AutoTable from "~/components/auto-table/index.vue";  // 自定义组件目录
+    import Ajax from "~/components/ajax/index.vue";  // 自定义组件目录
+    //import uuid from "uuid/v1";  // 自定义组件目录
+    import AutoForm from "~/components/auto-form/index.vue";
     import TreeChecked from "~/utils/index";
 
-    declare var jQuery;
     //组件声名
     @Component({
         components: {
@@ -141,7 +140,7 @@
                                 size: 'small'
                             },
                             on: {
-                                click: (e) => {
+                                click: () => {
                                     // console.log('this', this.showRootData, params.row)
                                     // this.showRootData = true;
                                     this.rootAssign(params);
@@ -274,7 +273,7 @@
         }
 
         mounted() {  // Vue 的 mounted 初始化回调
-            let _this = this;
+            //let _this = this;
             // jQuery('.class').netstable();
             this.table = this.$refs.table;
 

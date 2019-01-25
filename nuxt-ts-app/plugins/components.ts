@@ -7,8 +7,8 @@ import AutoForm from "~/components/auto-form/install"
 import Nestable from "~/components/nestable/install"*!/
 
 import Ajax from "~/components/ajax"
-import AutoTable from "~/components/auto-table"
-import AutoForm from "~/components/auto-form"
+import AutoTable from "~/components/auto-table/index.vue"
+import AutoForm from "~/components/auto-form/index.vue"
 import Nestable from "~/components/nestable"
 
 //全局加载 components

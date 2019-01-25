@@ -1,10 +1,10 @@
 <template>
     <div class="layout">
-        <i-layout class="layout">
-            <i-header>
-                <i-row>
-                    <i-col span="20">
-                        <i-menu mode="horizontal" class="clearfix" :active-name="headMenuActiveName" @on-select="turnToPage">
+        <Layout class="layout">
+            <Header>
+                <Row>
+                    <Col span="20">
+                        <Menu mode="horizontal" class="clearfix" :active-name="headMenuActiveName" @on-select="turnToPage">
                             <div class="layout-logo inline-group">
                                 <span>智慧校园SAAS管理平台</span>
                                 <a href="javascript:void(0)" @click="collapsedChange">
@@ -13,14 +13,14 @@
                             </div>
                             <div class="layout-nav">
 
-                                <i-menu-item :name="`/${item.name == 'index' ? '' : item.name }`" v-for="(item,key) in menu" :key="key" v-if="item.isshow != false">
-                                    <i-icon :type="item.icon"></i-icon>
+                                <MenuItem :name="`/${item.name == 'index' ? '' : item.name }`" v-for="(item,key) in menu" :key="key" v-if="item.isshow != false">
+                                    <Icon :type="item.icon"></Icon>
                                     {{ item.title }}
-                                </i-menu-item>
+                                </MenuItem>
                             </div>
-                        </i-menu>
-                    </i-col>
-                    <i-col span="4">
+                        </Menu>
+                    </Col>
+                    <Col span="4">
                         <div class="pull-right">
                             <Dropdown size="large" trigger="click" @on-click="logout">
                                 <a href="javascript:;">
@@ -43,11 +43,11 @@
                                 </DropdownMenu>
                             </Dropdown>
                         </div>
-                    </i-col>
-                </i-row>
-            </i-header>
-                <i-layout class="ivu-layout-has-sider nt-main">
-                    <i-sider v-if="siderVisible" hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed"
+                    </Col>
+                </Row>
+            </Header>
+                <Layout class="ivu-layout-has-sider nt-main">
+                    <Sider v-if="siderVisible" hide-trigger collapsible :width="256" :collapsed-width="64" v-model="collapsed"
                              class="nt-sider layout">
 
                         <Menu ref="siderMenu" v-show="!collapsed" :active-name="menuActiveName" :open-names="openedNames"
@@ -62,7 +62,7 @@
                                            :name="getNameOrHref(item , false )"
                                            :key="`menu-${item.name}`"
                                 >
-                                    <i-icon :type="item.icon || ''"/>
+                                    <Icon :type="item.icon || ''"/>
                                     <span>{{ showTitle(item) }}</span>
                                 </menu-item>
                             </template>
@@ -78,38 +78,36 @@
                                          placement="right" :key="`drop-menu-${item.name}`">
                                     <a @click="turnToPage(getNameOrHref(item, false))" class="drop-menu-a"
                                        :style="{textAlign: 'center'}">
-                                        <i-icon size="large" :type="item.icon || (item.children && item.children[0].icon)"/>
+                                        <Icon size="large" :type="item.icon || (item.children && item.children[0].icon)"/>
                                     </a>
                                 </Tooltip>
                             </template>
                         </div>
-                    </i-sider>
+                    </Sider>
 
-                    <i-layout class="nt-wrapper layout">
-                        <i-breadcrumb class="nt-breadcrumb" v-if="breadcrumbVisible">
-                            <i-breadcrumb-item v-for="(item,key) in breadCrumbList" :key="key"> {{ item.title }} </i-breadcrumb-item>
-                        </i-breadcrumb>
-                        <i-content class="nt-content">
+                    <Layout class="nt-wrapper layout">
+                        <Breadcrumb class="nt-breadcrumb" v-if="breadcrumbVisible">
+                            <BreadcrumbItem v-for="(item,key) in breadCrumbList" :key="key"> {{ item.title }} </BreadcrumbItem>
+                        </Breadcrumb>
+                        <Content class="nt-content">
                             <nuxt/>
-                        </i-content>
-                    </i-layout>
-                </i-layout>
-        </i-layout>
+                        </Content>
+                    </Layout>
+                </Layout>
+        </Layout>
         <ajax ref="ajax"></ajax>
     </div>
 </template>
 
 <script lang="ts">
 
-  import { Component, Prop, Vue, Watch, Model } from "nuxt-property-decorator";
-  import { State, Mutation, Action, Getter } from "vuex-class";
+  import { Component, Prop, Watch } from "nuxt-property-decorator";
+  import { State, Mutation } from "vuex-class";
   import _ from "underscore";
   import mixin from "~/components/menu/mixin";
-  import cookie from "js-cookie";
-  import sideMenuItem from "~/components/menu/side-menu-item";
-  import CollapsedMenu from "~/components/menu/collapsed-menu";
-  import Ajax from "~/components/ajax";
-  import util from "~/utils";
+  import sideMenuItem from "~/components/menu/side-menu-item.vue";
+  import CollapsedMenu from "~/components/menu/collapsed-menu.vue";
+  import Ajax from "~/components/ajax/index.vue";
   //import locale from '~/node_modules/iview/dist/locale/zh-CN';
 
   @Component({

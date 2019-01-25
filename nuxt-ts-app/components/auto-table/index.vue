@@ -9,8 +9,8 @@
             <!--<div slot="footer"> </div>-->
         </Table>
         <br>
-        <i-row>
-            <i-col span="12">
+        <Row>
+            <Col span="12">
                 <i-button type="primary" icon="md-add" v-if="addButton" @click="add">新增</i-button>
                 <Button type="primary" @click="exportData" v-if="expButton" icon="ios-download-outline">导出数据</Button>
                 <Button v-if="columns && columns[0] && columns[0].type == 'selection'" icon="md-trash"
@@ -18,12 +18,12 @@
                 </Button>
                 <slot></slot>
                 &nbsp;
-            </i-col>
-            <i-col span="12" class="text-right">
+            </Col>
+            <Col span="12" class="text-right">
                 <Page :total="total" :current="page" :page-size="pageSize" show-elevator show-total
                       @on-change="change"/>
-            </i-col>
-        </i-row>
+            </Col>
+        </Row>
 
         <Modal :title="modal.title" :loading="true" v-model="modal.visible" @on-ok="modalSubmit"
                @on-cancel="modalCancel">
@@ -37,7 +37,7 @@
         </Modal>
 
         <Modal title="浏览" :loading="false" v-model="viewModalVisible">
-            <i-form :label-width="formLabelWidth">
+            <Form :label-width="formLabelWidth">
                 <table class="table table-bordered">
                     <tr v-for="(item,key) in formViewModel" :key="key" :v-if="item.visible || true ">
                         <th>{{item.label}}</th>
@@ -56,7 +56,7 @@
                         </td>
                     </tr>
                 </table>
-            </i-form>
+            </Form>
         </Modal>
 
         <Modal title="浏览" v-model="imageModalVisible">
@@ -67,11 +67,11 @@
     </div>
 </template>
 <script lang="ts">
-  import { Component, Model, Prop, Vue, Watch } from "nuxt-property-decorator";
-  import AutoForm from "~/components/auto-form";
+  import { Component, Prop, Vue, Watch } from "nuxt-property-decorator";
+  import AutoForm from "~/components/auto-form/index.vue";
   import _ from "underscore";
   import uuid from "uuid/v1";
-  import Ajax from "../ajax/index";
+  import Ajax from "../ajax/index.vue";
 
   @Component({
     components: { Ajax, AutoForm }

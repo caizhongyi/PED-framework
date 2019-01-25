@@ -39,7 +39,7 @@ export default class Design {
     localStorageName: 'gDesignerData',
     dragAreaClass: 'drag-area-box',
     dragElementContainerClass: 'g-designer-container',
-    dbclick : (e)=>{}
+    dbclick : ()=>{}
   }
   constructor( selector = ".g-designer" , options? ) {
     let that = this;
@@ -133,7 +133,7 @@ export default class Design {
 
     function getInElement() {
       // let layers = [];
-      that.$container.find("." + that.options.elementClass ).each((i, n) => {
+      that.$container.find("." + that.options.elementClass ).each(({}, n) => {
         let el = {
           left: parseFloat($(n).css("left")),
           top: parseFloat($(n).css("top")),
@@ -184,7 +184,7 @@ export default class Design {
       else {
 
       }
-    }).on("mouseup", (e) => {
+    }).on("mouseup", ({}) => {
       $areaBox.data("mouseon", false);
       $areaBox.remove();
     }).on("mousemove", (e) => {
@@ -311,7 +311,7 @@ export default class Design {
           });
         }
       },
-      dragEnd(x, y, e) {
+      dragEnd({}, y, e) {
         if ($(e.target).hasClass("active")) {
           that.clearAllActive();
         }

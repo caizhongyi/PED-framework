@@ -2,7 +2,7 @@ import $ from 'jquery';
 
 export  default {
   draggable: {
-    inserted: (el, binding, vnode) => {
+    inserted: (el, binding, {}) => {
       let triggerDom:any = document.querySelector(binding.value.trigger)
       if( !triggerDom ) return ;
       triggerDom.style.cursor = 'move'
@@ -36,7 +36,7 @@ export  default {
       $(document).on('mousemove', handleMousemove)
       $(document).on('mouseup', handleMouseup)
     },
-    update: (el, binding, vnode) => {
+    update: (el, binding, {}) => {
       if (!binding.value.recover) return
       let bodyDom:any = document.querySelector(binding.value.body)
       bodyDom.style.transform = ''

@@ -17,7 +17,7 @@
             <template slot="modal-footer">
                 <i-button type="default" :loading="buttonLoading">账号解锁</i-button>
             </template>
-        </auto-table> <!-- 自定义组件 ~/components/auto-table.vue -->
+        </auto-table> <!-- 自定义组件 ~/components/auto-table/index.vue -->
         <ajax :loading="ajaxLoading" ref="ajax"></ajax>
     </div>
 </template>
@@ -25,14 +25,13 @@
 <script lang="ts">
   import { Component, Prop, Vue, Watch, Model } from "nuxt-property-decorator";
   //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
-  import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
-  import AutoTable from "~/components/auto-table";  // 自定义组件目录
-  import Ajax from "~/components/ajax";  // 自定义组件目录
+  import { State,  Mutation } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
+  import AutoTable from "~/components/auto-table/index.vue";  // 自定义组件目录
+  import Ajax from "~/components/ajax/index.vue";  // 自定义组件目录
   import uuid from "uuid/v1";  // 自定义组件目录
-  import AutoForm from "~/components/auto-form/index";
+  import AutoForm from "~/components/auto-form/index.vue";
   import filters from "~/filters/index";
 
-  declare var jQuery;
   //组件声名
   @Component({
     components: {
@@ -99,7 +98,7 @@
         field: "password", type: "password", label: "新密码", required: true, rule: [
           { type: "string", message: "请输入密码", required: true },
           {
-            validator: (rule, value, callback) => {
+            validator: ({}, value, callback) => {
               let table: any = this.$refs.table;
               table.form.validateField("password");
               if (value === "") {
@@ -117,7 +116,7 @@
         field: "confirmPassword", type: "password", label: "确认密码", required: true, rule: [
           { type: "string", message: "请输入确认密码", required: true },
           {
-            validator: (rule, value, callback) => {
+            validator: ({}, value, callback) => {
               let table: any = this.$refs.table;
               table.form.validateField("confirmPassword");
               if (value === "") {
@@ -448,7 +447,7 @@
       {
         title: "注册时间",
         key: "create_time",
-        render: (h, params) => {
+        render: (h) => {
           var time = filters.formatDate(new Date());
           return h("div", time);
         }
@@ -598,7 +597,9 @@
           next();
         }
       }, 1000);
-      // restore() 什么都不做
+      if( false ){
+        restore() // 什么都不做
+      }
     }
 
     //取消修改
@@ -632,7 +633,7 @@
 
 
     mounted() {  // Vue 的 mounted 初始化回调
-      let _this = this;
+      // let _this = this;
       // jQuery('.class').netstable();
       this.table = this.$refs.table;
     }

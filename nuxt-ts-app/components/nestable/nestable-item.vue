@@ -19,7 +19,7 @@
             </div>
             <div class="dd-content clearfix">
                 <div class="pull-left">
-                    <i-icon :type="item.settings" size="16"></i-icon>
+                    <Icon :type="item.settings" size="16"></Icon>
                     <Icon :type="item.isshow == true ? 'md-eye' : 'md-eye-off'" size="16"/>
                     {{ item.title }}
                     [ <router-link :to="item.url ? '/' + item.url : '/'"> {{  item.url  }}</router-link> ]
@@ -38,10 +38,10 @@
 </template>
 
 <script lang="ts">
-  import { Component, Model, Prop, Vue, Watch } from "nuxt-property-decorator";
-  import $ from "jquery"
-  import _ from "underscore"
-  import AutoForm from "../auto-form"
+  import { Component, Prop, Vue } from "nuxt-property-decorator";
+  //import $ from "jquery"
+  //import _ from "underscore"
+  import AutoForm from "../auto-form/index.vue"
 
   @Component({
     components : { AutoForm }

@@ -12,23 +12,23 @@
 
 <script lang="ts">
   import { Component, Vue, Watch } from "nuxt-property-decorator";
-  import { watch } from "fs";
-  import Ajax from "~/components/ajax";  // 自定义组件目录
-  import AjaxButton from "~/components/ajax";
+ // import { watch } from "fs";
+  import Ajax from "~/components/ajax/index.vue";  // 自定义组件目录
+  import AjaxButton from "~/components/ajax/index.vue";
   @Component({
     components: {
       Ajax,
       AjaxButton
     }
   })
-  export default class  extends Vue {
+  export default class AjaxIndex extends Vue {
     model = new Vue();
     res = "请点击请求";
     ajaxButton: any ;
     ajax: any ;
     loading : boolean = true;
 
-    click( e  , data ){
+    click( {} , data ){
       console.log(data);
       this.$Message.error({ content : JSON.stringify(data) })
     }

@@ -3,9 +3,9 @@ import $ from "jquery";
 export  default  class Draggable {
   direction = 'all';
   options = {
-    dragStart(x?, y? , e? ){},
-    dragEnd(x?, y? , e? ){},
-    dragMove(x?, y? , e? ){},
+    dragStart({}, {} , {} ){},
+    dragEnd({}, {} , {} ){},
+    dragMove({}, {} , {} ){},
   }
   constructor( $el , options? ) {
     let _this = this;

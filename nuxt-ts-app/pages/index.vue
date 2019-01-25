@@ -15,8 +15,7 @@
   import { Component, Vue } from "nuxt-property-decorator";
   import { State, Mutation, Action, Getter } from "vuex-class";
   import Loading from "~/components/loading.vue";
-  import $ from "jquery";
-  import Ajax from "~/components/ajax";
+  import Ajax from "~/components/ajax/index.vue";
   @Component({
     components: {
       Loading,
@@ -41,6 +40,7 @@
      }*/
     mounted() {
       this.ajax = this.$refs.ajax;
+      console.log('home')
      /* this.$Modal.confirm({
         content :'aa',
         loading:true,
@@ -61,9 +61,9 @@
       })*/
     }
 
-    changed(index) {
+   /* changed(index) {
       // console.log(index)
-    }
+    }*/
 
     goto() {
       this.$router.push({

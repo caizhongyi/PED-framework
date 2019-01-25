@@ -24,11 +24,10 @@
 </template>
 
 <script lang="ts">
-  import { Component, Model, Prop, Vue, Watch } from "nuxt-property-decorator";
-  import NestableItem from "./nestable-item";
+  import { Component, Prop, Vue, Watch } from "nuxt-property-decorator";
+  import NestableItem from "./nestable-item.vue";
   import $ from "jquery";
-  import _ from "underscore";
-  import AutoForm from "~/components/auto-form/index";
+  import AutoForm from "~/components/auto-form/index.vue";
 
   @Component({
     components: { NestableItem , AutoForm}
@@ -109,9 +108,7 @@
     * */
 
     @Watch("value", { immediate: true })
-    onChangeValue() {
-
-    }
+    onChangeValue() {}
 
     saveOrder() {
       this.saveOrderLoading = true;

@@ -1,7 +1,6 @@
 import qs from "qs";
-import Cookie from "js-cookie";
 
-export default function({ $axios, redirect , app }) {
+export default function({ $axios }) {
   $axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
   $axios.defaults.withCredentials = true;
 

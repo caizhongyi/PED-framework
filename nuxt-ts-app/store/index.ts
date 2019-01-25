@@ -1,6 +1,5 @@
-import axios from "~/plugins/axios";
 import cookie from "js-cookie";
-import utils from "~/utils";
+import utils from "~/utils/index";
 
 export const state = () => ({
   people: [],
@@ -29,17 +28,21 @@ export const getters = {};
 
 export const actions = {
   async nuxtServerInit( storeParams , appParams ) {
-    let { commit, state } = storeParams ;
-    let { app, route, req, res, redirect } = appParams ;
+    let { commit } = storeParams ;
+    let { app, redirect } = appParams ;
 
-    let menu: any = await app.$axios.$post("/api/menu/list");
-    if (menu.code == 403) {
+    let menu: any = await app.$axios.post("/api/menu/list");
+    if (menu.data.code == 403) {
       // 没有登录的用户跳转到登录页
       redirect( "/login");
     }
-    else if (menu.code == 200) {
-      let demo: any = await app.$axios.$get("/demo.json");
-      let m = [...menu.data, ...demo];
+    else if (menu.data.code == 200) {
+      app.$axios.defaults.baseURL = '/';
+      //console.log(app.$axios.defaults)
+      /*let demo: any = await app.$axios.get("/demo.json");
+      console.log(demo)*/
+      let m = [...menu.data.data];
+
       utils.setMenu(m, commit);
     }
     // let menu:any = await app.$axios.$get("./menu.json" );

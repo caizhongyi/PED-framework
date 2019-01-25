@@ -4,7 +4,7 @@
     </div>
 </template>
 <script lang="ts">
-  import { Component, Model, Prop, Vue, Watch } from "nuxt-property-decorator";
+  import { Component,  Prop, Vue, Watch } from "nuxt-property-decorator";
 
   @Component({})
   export default class Loading  extends Vue {

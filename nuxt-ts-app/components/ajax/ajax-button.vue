@@ -10,9 +10,7 @@
     </Button>
 </template>
 <script lang="ts">
-  import { Component, Model, Prop, Vue, Watch } from "nuxt-property-decorator";
-  import axios from "~/plugins/axios"; // 异步调用库
-  import Qs from "qs"; // 异步调用库
+  import { Component, Prop } from "nuxt-property-decorator";
   import Mixin from "./mixin";
 
   @Component({})

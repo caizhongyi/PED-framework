@@ -8,9 +8,7 @@
     </div>
 </template>
 <script lang="ts">
-  import { Component, Model, Prop, Vue, Watch } from "nuxt-property-decorator";
-  import axios from "~/plugins/axios"; // 异步调用库
-  import Qs from "qs"; // 异步调用库
+  import { Component, Prop } from "nuxt-property-decorator";
   import Mixin from "./mixin";
 
   @Component({})
@@ -18,11 +16,6 @@
     @Prop({ default : true }) loading : any;
 
     mounted() {
-     /* switch (config.env.NODE_ENV) {
-        case  'dev' : this.domain = 'http://www.dev.cn/';  break;
-        case  'uat' : this.domain = 'http://www.uat.cn/';  break;
-        case  'prod' :  this.domain = 'http://www.prod.cn/';break;
-      }*/
     }
   }
 </script>

@@ -7,13 +7,13 @@
 </template>
 
 <script lang="ts" type="text/ecmascript-6">
-  import { Component, Prop, Vue, Watch, Model } from "nuxt-property-decorator";
+  import { Component,Vue } from "nuxt-property-decorator";
   //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
-  import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
-  import Nestable from "~/components/nestable";
-  import Ajax from "~/components/ajax";  // 自定义组件目录
-  import utils from "~/utils";  // 自定义组件目录
-  import AutoForm from "~/components/auto-form/index";
+  //import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
+  import Nestable from "~/components/nestable/index.vue";
+  import Ajax from "~/components/ajax/index.vue";  // 自定义组件目录
+  import utils from "~/utils/index";  // 自定义组件目录
+  import AutoForm from "~/components/auto-form/index.vue";
   //组件声名
   @Component({
     components: {
@@ -135,14 +135,12 @@
 //            console.log(params);
       let ajax: any = this.$refs.ajax;
       let res = await ajax.post("/api/menu/edit", params);  // await 异步调用  es6写法
-      console.log(res);
       utils.loadMenu(this, this.$store.commit);
 //            console.log(res);
     }
 
     saveOrder(data, next) {
-//            console.log("11111")
-//          console.log( data )
+      console.log( data )
       setTimeout(() => {
         next();
       }, 500);
@@ -166,12 +164,12 @@
       }
     }
 
-    change(data) {
+    change() {
 //            console.log("111222");
 //            console.log(this.data)
     }
 
-
+/*
     onEdit() {
     }
 
@@ -180,9 +178,9 @@
 
     onTreeDataChange() {
 
-    }
+    }*/
 
-    allowDrag(model, component) {
+    allowDrag(model) {
       if (model.name === "Node 0-1") {
         // can't be dragged
         return false;
@@ -191,7 +189,7 @@
       return true;
     }
 
-    allowDrop(model, component) {
+    allowDrop(model) {
       if (model.name === "Node 2-2") {
         // can't be placed
         return false;
@@ -200,7 +198,7 @@
       return true;
     }
 
-    curNodeClicked(model, component) {
+  /*  curNodeClicked(model, component) {
       // console.log('curNodeClicked', model, component);
     }
 
@@ -227,7 +225,7 @@
     dropHandler(model, component, e) {
       // console.log('dropHandler: ', model, component, e);
     }
-
+*/
     async get(params = { is_ajax: 1 }) {   // async 异步声明
 //            console.log(params);
       let ajax: any = this.$refs.ajax;

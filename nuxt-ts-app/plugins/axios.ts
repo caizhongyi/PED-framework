@@ -6,24 +6,28 @@ import qs from "qs";
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 axios.defaults.withCredentials = true;
 
+/*
 if(  process.env.__ENV != 'development' ){
   //axios.defaults.baseURL = 'http://180.106.148.81:18082/testapms/';
   axios.defaults.baseURL = 'http://180.106.148.81:28083/"';
 }
-axios.onRequest(config => {
-  config.data = qs.stringify(config.data, {
-    allowDots: true //Option allowDots can be used to enable dot notation
-  });
-  return config;
-});
+*/
 
-axios.onResponse(response => {
-  return Promise.resolve(response.data);
-});
-
-axios.onError(error => {
-  return Promise.reject(error);
-});
+// POST传参序列化
+axios.interceptors.request.use((config) => {
+  if (config.method === 'post') {
+    config.data = qs.stringify(config.data)
+  }
+  return config
+}, (error) => {
+  return Promise.reject(error)
+})
+// 返回状态判断
+axios.interceptors.response.use((res) => {
+  return res.data;
+}, (error) => {
+  return Promise.reject(error)
+})
 
 export default axios;
 

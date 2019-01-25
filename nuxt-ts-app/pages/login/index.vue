@@ -16,12 +16,12 @@
 </template>
 
 <script lang="ts">
-  import LoginForm from "~/components/login-form";
-  import Ajax from "~/components/ajax";
-  import { State, Mutation, Action, Getter } from "vuex-class";
+  import LoginForm from "~/components/login-form/index.vue";
+  import Ajax from "~/components/ajax/index.vue";
+  import { State, Mutation } from "vuex-class";
   import { Component, Vue } from "nuxt-property-decorator";
-  import  cookie from "js-cookie";
-  import  utils from "~/utils";
+  //import  cookie from "js-cookie";
+  import  utils from "~/utils/index";
 
   @Component({
     components: {
@@ -46,7 +46,7 @@
       this.loading = false;
     }
 
-    async handleSubmit(e) {
+    async handleSubmit() {
       this.ajax  = this.$refs.ajax;
       this.loading = true;
       let query : any = this.$route.query ;

@@ -1,29 +1,18 @@
 const parseArgs = require("minimist");
 const webpack = require("webpack");
-const path = require("path");
-
-const HappyPack = require("happypack");
-let os = require("os");
-let happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
-
+//import pkg  from'./package'
+const PostcssNested  = require("postcss-nested");
 const HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
-//const mainfest = require("./static/dll/vendor-mainfest.json");
-//const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
-//const HtmlWebpackPlugin = require('html-webpack-plugin');
-//const bundleConfig = require("./bundle-config.json");
-
 
 const argv = parseArgs(process.argv.slice(2), {
   alias: {
     H: "hostname",
     p: "port"
   },
-  string: ["H"],
-  unknown: parameter => false
+  string: ["H"]
 });
-let publicPath = "/";
+
 let mode = "history";
-let base = "";
 let proxy = {
   target: "http://apms.com/",
   pathRewrite: {
@@ -44,8 +33,6 @@ switch (process.env.__ENV) {
   case  "release" :
     // proxy.target = "http://180.106.148.81:28083/";// 线上 ajax 访问地址
     proxy.target = "http://180.106.148.81:28083/";// 线上 ajax 访问地址
-    //publicPath = "http://180.106.148.81:18082/testapms/";// 线上 ajax 访问地址
-    //publicPath = "http://www.saasmanager.com:28083/";// 线上 ajax 访问地址
     break;
   //正式
   case  "production" :
@@ -115,21 +102,16 @@ module.exports = {
   },
   router: {
     // base : base,
-    scrollBehavior: function(to, from, savedPosition) {
+    scrollBehavior: function() {
       return { x: 0, y: 0 };
     },
     mode: mode,  // "hash" | "history" | "abstract" //"hash" (浏览器环境) | "abstract" (Node.js 环境
-    extendRoutes(routes, resolve) {
-      /*  for(let item of routes){
+    /*extendRoutes(routes, resolve) {
+        for(let item of routes){
           item.path = '/testapms' + item.path ;
           item.name = 'testapms-' + item.name ;
-        }*/
-      /*routes.push({
-        name: 'custom',
-        path: '*',
-        component: resolve(__dirname, 'pages/404.vue')
-      })*/
-    },
+        }
+    },*/
     middleware: "auth"
   },
   /*
@@ -158,110 +140,37 @@ module.exports = {
   // srcDir: __dirname,
   //rootDir: 'testapms/',
   build: {
-    /*optimization : {
-      runtimeChunk : true ,
-      minimize : true,
-    } ,*/
     // 单独提取 css
-    publicPath: publicPath,
+    analyza: {
+      analyzeMode: 'static'
+    },
     plugins: [
-      new webpack.ProvidePlugin({
+      new webpack['ProvidePlugin']({
         $: "jquery",
         jQuery: "jquery",
         "window.jQuery": "jquery"
       }),
-      (process.env.__ENV == "development" ? new HardSourceWebpackPlugin() : () => {
-      }),
-      /* new webpack.DllReferencePlugin({
-         context: path.resolve(__dirname, ".."),
-         manifest: require("./vendor-manifest.json")
-       }),*/
-      new HappyPack({
-        id: "js",
-        threadPool: happyThreadPool,
-        loaders: ["babel-loader", "ts-loader"]
-      }),
-      new HappyPack({
-        id: "vue",
-        threadPool: happyThreadPool,
-        loaders: [
-          {
-            loader: "vue-loader"
-          },
-          {
-            loader: "iview-loader",
-            options: { prefix: true }
-          }
-        ]
-      }),
-      new HappyPack({
-        id: "css",
-        threads: 4,
-        loaders: [
-          //'style-loader',
-          "sass-loader",
-          "css-loader",
-          "postcss-loader"
-        ]
-      })
+      /*(process.env.__ENV == "development" ? new HardSourceWebpackPlugin({
+        environmentHash: {
+          root: process.cwd(),
+          directories: [],
+          files: ['package.json'],
+        },
+      }) : () => {
+      }),*/
     ],
     postcss: [
       //px转换rem自适应
       // require('postcss-px2rem')({remUnit: 12.8 }),   // 12.8  flexible-pc.js pc端1280的设计图// 75    flexible.js  移动端750的设计图
-      require("postcss-nested")()
+      PostcssNested()
       // require('postcss-responsive-type')(),
       // require('postcss-hexrgba')(),
     ],
+    extractCSS: true,
     extend(config, ctx) {
-
-      for (let o of config.module.rules) {
-        if (o.loader == "vue-loader") {
-          delete o.loader;
-          o.use = [
-            {
-              //loader: "HappyPack/loader?id=vue",
-              loader: "vue-loader",
-              options: o.options
-            },
-            {
-              //loader: "HappyPack/loader?id=vue",
-              loader: "iview-loader",
-              options: {
-                prefix: true
-              }
-            }
-          ];
-          delete  o.options;
-          //o.loader = "HappyPack/loader?id=vue";
-        }
-        else if (o.loader == "sass-loader") {
-          o.loader = "HappyPack/loader?id=css";
-        }
-        else if (o.loader == "babel-loader") {
-          o.loader = "HappyPack/loader?id=js";
-        }
-        else if (o.loader == "ts-loader") {
-          o.loader = "HappyPack/loader?id=js";
-        }
-        /* if (o.loader == "sass-loader") {
-           o.use = [
-             "css-loader",
-             {
-               loader: "fast-sass-loader",
-               options: {
-                 transformers: [
-                   {
-                     extensions: [".json"],
-                     transform: function(rawFile) {
-                       return jsonToSass(rawFile);
-                     }
-                   }
-                 ]
-               }
-             }
-           ];
-         }*/
-      }
+      /*if (ctx.isDev) {
+        config.plugins.push( new HardSourceWebpackPlugin() )
+      }*/
       if (ctx.isClient) {
         /* config.entry['polyfill'] = ['babel-polyfill']
          Object.assign(config.resolve.alias, {
@@ -273,11 +182,11 @@ module.exports = {
   modules: [
     "@nuxtjs/axios",
     "@nuxtjs/proxy",
-    "~/modules/typescript.js"
+    //"~/modules/typescript.js"
   ],
   proxy: {
     //开启代理
-    "/api/": proxy
+     "/api/": proxy
   }
 };
 

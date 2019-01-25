@@ -22,9 +22,9 @@
     </div>
 </template>
 <script lang="ts">
-  import { Component, Model, Prop, Vue, Watch } from "nuxt-property-decorator";
-  import Ajax from "../ajax";
-  import AutoFormItem from "./auto-form-item";
+  import { Component,  Prop, Vue, Watch } from "nuxt-property-decorator";
+  import Ajax from "../ajax/index.vue";
+  import AutoFormItem from "./auto-form-item.vue";
 
   interface SubmitButton {
     text: any;

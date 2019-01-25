@@ -28,11 +28,11 @@
                               :disabled="subItem.disabled">  {{ subItem.text }}
                     </Checkbox>
                 </CheckboxGroup>
-                <i-switch :v-if="item.visible || true " v-else-if="item.type == 'switch'" v-model="value[item.field]"
+                <Switch :v-if="item.visible || true " v-else-if="item.type == 'switch'" v-model="value[item.field]"
                           size="large" :disabled="item.disabled">
                     <span slot="open">On</span>
                     <span slot="close">Off</span>
-                </i-switch>
+                </Switch>
                 <Slider :v-if="item.visible || true " v-else-if="item.type == 'slider'" v-model="value[item.field]"
                         :range="item.range || false " :disabled="item.disabled"></Slider>
                  <Input :v-if="item.visible || true " v-else-if="item.type == 'textarea'" v-model="value[item.field]"
@@ -98,21 +98,21 @@
                 <InputNumber :v-if="item.visible || true " v-else-if="item.type == 'cascader'" :data="item.data"
                              v-model="value[item.field]"></InputNumber>
             </FormItem>
-            <i-card v-if="item.children" :style="{ 'margin-left': `${labelWidth}px`}">
+            <Card v-if="item.children" :style="{ 'margin-left': `${labelWidth}px`}">
                 <auto-form-item :model="item.children" v-model="value" :ruleValidate="ruleValidate"
                                 :root="root"></auto-form-item>
-            </i-card>
+            </Card>
         </template>
     </span>
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue, Watch, Model } from "nuxt-property-decorator";
+  import { Component, Prop, Vue } from "nuxt-property-decorator";
   //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
-  import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
+  //import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
   import _ from "underscore";
-  import AutoForm from "~/components/auto-form/index";
-  import utils from "~/utils";
+  import AutoForm from "./index.vue";
+  import utils from "~/utils/index";
   //组件声名
   @Component({
     components: {AutoForm}
@@ -213,7 +213,7 @@
             return check;
           }
 
-          item.maxSize = (file)=> {
+          item.maxSize = ()=> {
             this.$Message.error({
               title: "提示",
               content: "上传的文件大小不能超过2M",
@@ -222,7 +222,7 @@
             });
           }
 
-          item.formatError = (file) => {
+          item.formatError = () => {
             this.$Message.error({
               title: "提示",
               content: "请上传jpg,png格式的图片",
@@ -234,7 +234,7 @@
         }
         else if (item.type == "tree") {
           let tree = this.trees[treeIndex];
-          item["checkChange"] = (val) => {
+          item["checkChange"] = () => {
             this.value[item.field] = utils.getTreeChecked(tree.getCheckedAndIndeterminateNodes(), [], item.prop || []);
           };
          // console.log(tree.getCheckedAndIndeterminateNodes());

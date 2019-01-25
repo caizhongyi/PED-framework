@@ -25,16 +25,16 @@
 </template>
 
 <script lang="ts" type="text/ecmascript-6">
-  import { Component, Prop, Vue, Watch, Model } from "nuxt-property-decorator";
+  import { Component,Vue } from "nuxt-property-decorator";
   //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
-  import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
-  import Ajax from "~/components/ajax";
-  import AutoForm from "~/components/auto-form";
+  ///import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
+  import Ajax from "~/components/ajax/index.vue";
+  import AutoForm from "~/components/auto-form/index.vue";
   //组件声名
   @Component({
     components: { AutoForm ,Ajax}
   })
-  export default class  extends Vue {    //  typescript 创建类继成 Vue
+  export default class AppAdd extends Vue {    //  typescript 创建类继成 Vue
     current = 0 ;
     formDevice:any;
     AutoForm : any;
@@ -67,7 +67,7 @@
         placeholder: "至少为8位的字母、数字和特殊符号的组合",
         required: true,
         rule: [{ required: true, message: "密码未填写" },{
-          validator: (rule, value, callback) => {
+          validator: ({}, value, callback) => {
             if (value) {
               var regex = new RegExp('^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).{8,30}$');
               if ( !regex.test(value) ){
@@ -160,11 +160,11 @@
           rule: [{ required: true, message: "表前缀未填写",}]
       },
       {
-        field: "upload", label: "封面", length:1, type: "upload", action: "", remove: (item, file, next) => {
+        field: "upload", label: "封面", length:1, type: "upload", action: "", remove: ({}, {}, next) => {
           setTimeout(() => {
             next( );
           }, 1000);
-        }, success: (item, file, next) => {
+        }, success: ({},{}, next) => {
           setTimeout(() => {
             next( );
           }, 1000);
@@ -196,7 +196,7 @@
       this.formDevice.reset();
     }
   //提交
-    submit( data ){
+    submit( {} ){
         this.formDevice.submit();
     }
     async save(){
@@ -209,7 +209,7 @@
               return this.$router.push('/app-manage/app-add');
           }
     }
-    fail( data ){
+    fail( {} ){
       return this;
     }
 

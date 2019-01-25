@@ -1,6 +1,4 @@
-import { Component, Model, Prop, Vue, Watch } from "nuxt-property-decorator";
-import axios from "~/plugins/axios"; // 异步调用库
-import Qs from "qs"; // 异步调用库
+import { Component,  Prop, Vue } from "nuxt-property-decorator";
 
 @Component({})
 export default class Mixin extends Vue {

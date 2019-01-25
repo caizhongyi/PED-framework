@@ -5,10 +5,10 @@
 </template>
 
 <script lang="ts">
-  import { Component, Prop, Vue, Watch, Model } from "nuxt-property-decorator";
+  import { Component,  Vue } from "nuxt-property-decorator";
   //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
-  import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
-  import Nestable from "~/components/nestable"
+  //import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
+  import Nestable from "~/components/nestable/index.vue"
   import uuid from "uuid/v1"
   //组件声名
   @Component({
@@ -16,7 +16,7 @@
       Nestable
     }
   })
-  export default class  extends Vue {    //  typescript 创建类继成 Vue
+  export default class NestableIndex extends Vue {    //  typescript 创建类继成 Vue
     data = [
       {
         title : 'Node 0-0',
@@ -126,7 +126,9 @@
     }
     remove( data , next  , restore ){
       console.log( data)
-     // restore();
+      if(false){
+        restore();
+      }
       setTimeout(()=>{
         next();
       },2000)
@@ -136,12 +138,7 @@
     change( data ){
       console.log( data )
     }
-    onEdit(){}
-    onDetail(){}
-    onTreeDataChange(){
-
-    }
-    allowDrag(model, component) {
+    allowDrag(model) {
       if (model.name === 'Node 0-1') {
         // can't be dragged
         return false;
@@ -149,7 +146,7 @@
       // can be dragged
       return true;
     }
-    allowDrop(model, component) {
+    allowDrop(model) {
       if (model.name === 'Node 2-2') {
         // can't be placed
         return false;
@@ -157,27 +154,7 @@
       // can be placed
       return true;
     }
-    curNodeClicked(model, component) {
-      // console.log('curNodeClicked', model, component);
-    }
-    dragHandler(model, component, e) {
-      // console.log('dragHandler: ', model, component, e);
-    }
-    dragEnterHandler(model, component, e) {
-      // console.log('dragEnterHandler: ', model, component, e);
-    }
-    dragLeaveHandler(model, component, e) {
-      // console.log('dragLeaveHandler: ', model, component, e);
-    }
-    dragOverHandler(model, component, e) {
-      // console.log('dragOverHandler: ', model, component, e);
-    }
-    dragEndHandler(model, component, e) {
-      // console.log('dragEndHandler: ', model, component, e);
-    }
-    dropHandler(model, component, e) {
-      // console.log('dropHandler: ', model, component, e);
-    }
+
 
     mounted() {  // Vue 的 mounted 初始化回调
         this.nestable = this.$refs.nestable;

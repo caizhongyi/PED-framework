@@ -20,7 +20,7 @@
 
 <script lang="ts">
 
-  import {  Component, Prop, Vue, Watch, Model } from "nuxt-property-decorator";
+  import {  Component, Prop, Vue } from "nuxt-property-decorator";
   //import locale from '~/node_modules/iview/dist/locale/zh-CN';
 
   @Component({

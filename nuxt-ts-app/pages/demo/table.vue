@@ -15,7 +15,7 @@
                 <Input icon="ios-search"></Input>
             </FormItem>
         </Form>-->
-     <!--   <i-row>
+     <!--   <Row>
             <i-col span="10">
                 <Form ref="formInline" class="class" :model="form"  inline>
                     <FormItem prop="user">
@@ -31,7 +31,7 @@
                 </Form>
             </i-col> &lt;!&ndash; ivew Button 与 icon &ndash;&gt;
 
-        </i-row>-->
+        </Row>-->
         <auto-table ref="table"
                     v-model="data"
                     url="/page-data.json"
@@ -54,7 +54,7 @@
             <template slot="modal-footer">
                 <i-button type="default" :loading="buttonLoading">解锁</i-button>
             </template>
-        </auto-table> <!-- 自定义组件 ~/components/auto-table.vue -->
+        </auto-table> <!-- 自定义组件 ~/components/auto-table/index.vue -->
         <ajax ref="ajax"></ajax><!-- 自定义组件 ~/components/ajax -->
         <Modal
                 v-model="modal1"
@@ -70,13 +70,12 @@
 <script lang="ts">
   import { Component, Prop, Vue, Watch, Model} from "nuxt-property-decorator"
   //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
-  import { State, Getter, Action, Mutation, namespace } from "vuex-class"  // Vue store 全局定义，例如用户信息等全局都需要用的
-  import AutoTable from "~/components/auto-table";  // 自定义组件目录
-  import Ajax from "~/components/ajax";  // 自定义组件目录
+  import { State, Mutation } from "vuex-class"  // Vue store 全局定义，例如用户信息等全局都需要用的
+  import AutoTable from "~/components/auto-table/index.vue";  // 自定义组件目录
+  import Ajax from "~/components/ajax/index.vue";  // 自定义组件目录
   import uuid from "uuid/v1";  // 自定义组件目录
-  import AutoForm from "~/components/auto-form/index";
+  import AutoForm from "~/components/auto-form/index.vue";
 
-  declare var jQuery;
   //组件声名
   @Component({
     components: {
@@ -257,18 +256,24 @@
     }
 
     remove ( data , next , restore ) {
+      console.log(data)
       setTimeout(()=>{
         next();
       },1000)
 
-      //restore()
+      if(false){
+        restore();
+      }
     }
 
     removeAll ( data , next  ,restore) {
+      console.log(data)
       setTimeout(()=>{
         next();
       },1000)
-      //restore()
+      if(false){
+        restore();
+      }
     }
     // 页面 head 中文件内容
     head() {
@@ -290,7 +295,7 @@
     }
 
     mounted() {  // Vue 的 mounted 初始化回调
-      let _this = this;
+     // let _this = this;
       // jQuery('.class').netstable();
       this.table = this.$refs.table;
 

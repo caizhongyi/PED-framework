@@ -1,7 +1,7 @@
 <template>
     <div class="g-designer">
         <i-card class="clearfix">
-            <i-row>
+            <Row>
                 <i-col span="8" class="g-designer-elements">
                     <span class="g-designer-element" @click="add()">
                         <div class="g-designer-element-name"></div>
@@ -27,7 +27,7 @@
                     <i-button type="default" class="btn-clear" @click="clear()">清除</i-button>
                     <i-button type="primary" class="btn-save" @click="save()">保存</i-button>
                 </i-col>
-            </i-row>
+            </Row>
         </i-card>
         <br>
         <div style="position: relative"  @contextmenu.prevent=""  @mousedown="(e)=>{  selectElementMouseDown(e ) ;}" @mouseup="(e)=>{  selectElementMouseUp(e  ) ;}" @mousemove="(e)=>{  selectElementMouseMove(e ) ;}">
@@ -66,7 +66,7 @@
   import $ from "jquery";
   import _ from "underscore";
   import uuid from "uuid/v1";
-  import Design from "./lib/design.ts";
+ // import Design from "./lib/design";
 
   @Component({
     components: {}
@@ -126,7 +126,7 @@
       return this;
     }
 
-    elementContextmenu( e , item ){
+    elementContextmenu( {} , item ){
       item.rotate = item.rotate + 90;
       this.value.push();
     }
@@ -188,11 +188,11 @@
         }
         return this;
     }
-    selectElementMouseUp( e  ){
+    selectElementMouseUp( ){
 
       return this;
     }
-    selectElementMouseMove( e  ){
+    selectElementMouseMove( ){
 
       return this;
     }
@@ -295,7 +295,7 @@
       }
 
       $(document).off(`mouseup.gResizing mousemove.gResizing`)
-        .on("mouseup.gResizing", (e)=> {
+        .on("mouseup.gResizing", ({})=> {
         this.currentElement = {};
         this.areaElement.active = false;
         this.areaElement.width = 0;

@@ -1,19 +1,19 @@
 <template>
     <div>
-        <i-row>
+        <Row>
             <i-col span="4">
                 <i-tree :data="data1" @on-select-change="change"></i-tree>
             </i-col>
             <i-col span="20">
                 <designer ref="design" v-model="designData"></designer>
             </i-col>
-        </i-row>
+        </Row>
     </div>
 </template>
 
 <script lang="ts">
   import { Component, Vue, Watch } from "nuxt-property-decorator";
-  import Designer from "~/components/g-designer/index";
+  import Designer from "~/components/g-designer/index.vue";
 
   @Component({
     components: {
@@ -106,7 +106,7 @@
       };
     }
 
-    change(e) {
+    change() {
      /* let p : any =  this.$refs.design;
       p.design.empty().createR(   e[0].nodeKey  ,10 )*/
     }
