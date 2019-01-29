@@ -126,9 +126,9 @@
     }
     remove( data , next  , restore ){
       console.log( data)
-      if(false){
+      /*if(false){
         restore();
-      }
+      }*/
       setTimeout(()=>{
         next();
       },2000)

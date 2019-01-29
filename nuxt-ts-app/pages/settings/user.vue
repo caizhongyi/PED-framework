@@ -59,7 +59,6 @@
         modal1: boolean = false;
         current: any = {};
         buttonLoading = false;
-        @Prop({ default :　1  }) settings  : any ;  // 只能单项绑定（组件内不能对其值更改）
         @Model() model  : any ; // 当作为组件引用时 v-model 值， 双项绑定（组件内可改变其值）
 
         @State user :any; // 全局 store 中的变量
@@ -398,7 +397,7 @@
             {   field : 'last-time' , type : 'input',  label: "最后登录时间" },
         ]
 
-        columns = [
+        columns : Array<any> = [
             {
                 type: 'selection',
                 width: 60,

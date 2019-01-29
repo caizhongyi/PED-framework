@@ -37,12 +37,8 @@ export const actions = {
       redirect( "/login");
     }
     else if (menu.data.code == 200) {
-      app.$axios.defaults.baseURL = '/';
-      //console.log(app.$axios.defaults)
-      /*let demo: any = await app.$axios.get("/demo.json");
-      console.log(demo)*/
-      let m = [...menu.data.data];
-
+      let demo: any = await app.$axios.get("/demo.json");
+      let m = [...menu.data.data , ...demo.data ];
       utils.setMenu(m, commit);
     }
     // let menu:any = await app.$axios.$get("./menu.json" );

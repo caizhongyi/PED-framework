@@ -31,7 +31,6 @@ switch (process.env.__ENV) {
     break;
   //测试
   case  "release" :
-    // proxy.target = "http://180.106.148.81:28083/";// 线上 ajax 访问地址
     proxy.target = "http://180.106.148.81:28083/";// 线上 ajax 访问地址
     break;
   //正式
@@ -128,7 +127,7 @@ module.exports = {
   ],
   plugins: [
     { src: "~/plugins/iview", ssr: true },
-    // { src: "~/plugins/components", ssr: true },
+    { src: "~/plugins/components", ssr: true },
     { src: "~/plugins/directives", ssr: false },  //指令
     { src: "~/plugins/v-charts", ssr: false },
     { src: "~/plugins/filters", ssr: false },
@@ -136,9 +135,6 @@ module.exports = {
     { src: "~/plugins/$axios", ssr: false },
     { src: "~/plugins/vue-seamless-scroll", ssr: false }
   ],
-  // buildDir: 'testapms',
-  // srcDir: __dirname,
-  //rootDir: 'testapms/',
   build: {
     // 单独提取 css
     analyza: {
@@ -149,15 +145,7 @@ module.exports = {
         $: "jquery",
         jQuery: "jquery",
         "window.jQuery": "jquery"
-      }),
-      /*(process.env.__ENV == "development" ? new HardSourceWebpackPlugin({
-        environmentHash: {
-          root: process.cwd(),
-          directories: [],
-          files: ['package.json'],
-        },
-      }) : () => {
-      }),*/
+      })
     ],
     postcss: [
       //px转换rem自适应
@@ -182,7 +170,6 @@ module.exports = {
   modules: [
     "@nuxtjs/axios",
     "@nuxtjs/proxy",
-    //"~/modules/typescript.js"
   ],
   proxy: {
     //开启代理

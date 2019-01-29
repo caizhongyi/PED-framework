@@ -21,12 +21,12 @@
             </Col>
         </Row>
         <Modal :width="500" title="新增应用" v-model="showAppData"  @on-ok="submit" @on-cancel="fail">
-            <auto-form :model="form" :label-width="80" :submit-button="false" ref="forms">
+            <auto-form :model="form" :label-width="80" :submit-button="null" ref="forms">
                 <template slot slot-scope="props"> </template>
             </auto-form>
         </Modal>
         <Modal :width="500" title="应用详情" v-model="showAppDetailData" :loading="formDetailLoading" @on-ok="detailSubmit"  @on-cancel="detailFail">
-            <auto-form :model="formDetail" v-model="itemData"  :submit-button="false" ref="formDetails"
+            <auto-form :model="formDetail" v-model="itemData"  :submit-button="null" ref="formDetails"
                        :label-width="100" label-position="right" @success="formDetailsSuccess"  @fail="()=>{ this.formDetailLoading = false }">
                 <template slot slot-scope="props"> </template>
             </auto-form>

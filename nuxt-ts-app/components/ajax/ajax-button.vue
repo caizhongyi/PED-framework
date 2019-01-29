@@ -17,11 +17,11 @@
   export default class AjaxButton extends Mixin {
 
     @Prop() type  : any;
-    @Prop() icon  : any;
+    @Prop() icon  : string ;
     @Prop() size  : any;
     @Prop() long  : any;
-    @Prop() url : any ;
-    @Prop({ default : ()=>{ return 'post'}}) method : any ;
+    @Prop({ default : ()=>{ return ''}} ) url : string ;
+    @Prop({ default : ()=>{ return 'post'}}) method : string ;
     @Prop() params  : any ;
 
 

@@ -11,7 +11,7 @@
             <!--</template>-->
             <!--<template slot="footer">footer</template>-->
         </auto-form>
-        <auto-form v-show="current==1" ref="formDevice" v-model="formData2"  :model="formDeviceModel" :submit-button="false" @success="save"  >
+        <auto-form v-show="current==1" ref="formDevice" v-model="formData2"  :model="formDeviceModel" :submit-button="null" @success="save"  >
             <template slot>
                 <FormItem>
                     <Button type="primary" @click="prev" >上一步</Button>

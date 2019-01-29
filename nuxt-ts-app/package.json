@@ -42,7 +42,12 @@
     "build:dll": "webpack -p --progress --config webpack.dll.conf.js"
   },
   "devDependencies": {
+    "@types/jquery": "^3.3.29",
+    "@types/js-cookie": "^2.2.0",
     "@types/node": "^9.4.6",
+    "@types/qs": "^6.5.1",
+    "@types/underscore": "^1.8.9",
+    "@types/uuid": "^3.4.4",
     "cross-env": "^5.2.0",
     "hard-source-webpack-plugin": "^0.13.1",
     "node-sass": "^4.11.0",

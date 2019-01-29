@@ -1,12 +1,9 @@
 import Cookie from "js-cookie";
 import _ from "underscore";
 
-
-
 export default {
   async loadMenu( app, commit ){
     let res : any = await app.$axios.post('/api/menu/list');
-    // app.$axios.defaults.baseURL = '/';
     let demo: any = await app.$axios.get("/demo.json" );
 
     let menu = [ ...res.data , ...demo];

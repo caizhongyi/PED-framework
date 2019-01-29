@@ -2,9 +2,9 @@ import { Component,  Prop, Vue } from "nuxt-property-decorator";
 
 @Component({})
 export default class Mixin extends Vue {
-  @Prop({ default: ''}) url: any ;
+  @Prop({ default: ''}) url:  string ;
   @Prop() params: any;
-  @Prop({ default: true }) loading: any;
+  @Prop({ default: true }) loading: boolean;
   visible = false;
 
   all( fns : any  = []  , callback  ){

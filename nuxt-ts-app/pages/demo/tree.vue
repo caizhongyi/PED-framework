@@ -16,7 +16,7 @@
   import { Component,  Vue } from "nuxt-property-decorator";
   //@Component  @Prop @Watch @Model 装饰器，对变量或方法进行装饰成Vue特定功能变量或方法
   //import { State, Getter, Action, Mutation, namespace } from "vuex-class";  // Vue store 全局定义，例如用户信息等全局都需要用的
-  import util from "~/utils/index";
+  import utils from "../../utils/index";
   //组件声名
   @Component({
     components: {}
@@ -27,13 +27,13 @@
     data = [];
 
     checkChange( nodes ){
-      console.log( util.getTreeChecked(  nodes , [] , ['id','title'] ))
+      console.log( utils.getTreeChecked(  nodes , [] , ['id','title'] ))
     }
 
     click(){
      // let choicesAll = this.tree.getCheckedNodes();
       let choicesAll = this.tree.getCheckedAndIndeterminateNodes();
-      console.log( util.getTreeChecked(  choicesAll , [] , ['id','title'] ))
+      console.log( utils.getTreeChecked(  choicesAll , [] , ['id','title'] ))
     }
     mounted() {  // Vue 的 mounted 初始化回调
       this.tree = this.$refs.tree;
@@ -78,7 +78,7 @@
           ]
         }
       ];
-      util.setTreeChecked( treeData , [{
+      utils.setTreeChecked( treeData , [{
         checked : true ,
         expand:true,
         id : 1,

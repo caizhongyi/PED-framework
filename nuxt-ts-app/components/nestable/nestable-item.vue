@@ -47,8 +47,8 @@
     components : { AutoForm }
   })
   export default class NestableItem extends Vue {
-    @Prop() value :any ;
-    @Prop() root :any ;
+    @Prop({ default : ()=>{ return [] ;}}) value : Array<any> ;
+    @Prop({ default : ()=>{ return {} ;}}) root :any ;
 
     edit( item , index ){
       this.root.editModal( item , index );

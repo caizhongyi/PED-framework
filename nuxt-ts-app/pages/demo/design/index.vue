@@ -1,12 +1,12 @@
 <template>
     <div>
         <Row>
-            <i-col span="4">
-                <i-tree :data="data1" @on-select-change="change"></i-tree>
-            </i-col>
-            <i-col span="20">
+            <Col span="4">
+                <Tree :data="data1" @on-select-change="change"></Tree>
+            </Col>
+            <Col span="20">
                 <designer ref="design" v-model="designData"></designer>
-            </i-col>
+            </Col>
         </Row>
     </div>
 </template>

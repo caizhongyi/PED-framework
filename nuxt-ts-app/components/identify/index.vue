@@ -255,7 +255,8 @@
       let canvas:any = {} ;
       let $canvas = $(selector , this.$el);
       canvas.$element = $canvas;
-      canvas.context = $canvas[0].getContext("2d");;
+      let c: any = $canvas[0];
+      canvas.context = c.getContext("2d");
       canvas.width = $canvas.width();
       canvas.height = $canvas.height();
       $canvas.attr('width' , canvas.width  )

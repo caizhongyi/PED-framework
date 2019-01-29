@@ -16,7 +16,7 @@
                     @edit-cancel="editCancel"></auto-table> <!-- 自定义组件 ~/components/auto-table/index.vue -->
 
         <Modal :width="500" :title="`【${rolename}】权限分配`" v-model="showRootData" @on-ok="submit" @on-cancel="fail">
-            <auto-form :model="formRoot" v-model="formData" :label-width="80" :submit-button="false" ref="forms">
+            <auto-form :model="formRoot" v-model="formData" :label-width="80" :submit-button="null" ref="forms">
                 <template slot slot-scope="props"></template>
             </auto-form>
         </Modal>
@@ -41,19 +41,19 @@
         }
     })
     export default class Role extends Vue {    //  typescript 创建类继成 Vue
-        data: any = [];
+        data:  Array<any> = [];
         formData: any = {};
-        searchModel: any = [
+        searchModel:  Array<any> = [
             {field: 'role', label: '', placeholder: '输入用户组名进行查找', type: 'input'},
         ];
         table: any;
         id: any = '';
-        value: any = 2; // 变量声明 ，any是无类型。 可以 object Array function boolean等类型
+        value: number = 2; // 变量声明 ，any是无类型。 可以 object Array function boolean等类型
         params = {current: 1};
         form = {
             user: ''
         };
-        formRoot: any = [
+        formRoot:  Array<any> = [
             {
                 field: "root",
                 label: "归属区域",
@@ -64,7 +64,6 @@
         ];
         modal1: boolean = false;
         current: any = {};
-        @Prop({default: 1}) settings: any ;  // 只能单项绑定（组件内不能对其值更改）
         @Model() model: any; // 当作为组件引用时 v-model 值， 双项绑定（组件内可改变其值）
 
         @State user: any; // 全局 store 中的变量
@@ -103,7 +102,7 @@
         showRootData = false;
         rolename: any = '';
 
-        columns = [
+        columns : Array<any>  = [
             {
                 title: 'id',
                 key: 'id',

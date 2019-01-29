@@ -83,7 +83,7 @@
     }
   })
   export default class Table extends Vue {    //  typescript 创建类继成 Vue
-    @Prop({ default :　1  }) settings  : any ;  // 只能单项绑定（组件内不能对其值更改）
+    @Prop({ default :　1  }) settings  : number ;  // 只能单项绑定（组件内不能对其值更改）
     @Model() model  : any ; // 当作为组件引用时 v-model 值， 双项绑定（组件内可改变其值）
 
     @State user :any; // 全局 store 中的变量
@@ -93,12 +93,12 @@
 
     };
 
-    formData:any = [
+    formData: Array<any> = [
       { field : 'name' , placeholder:'名称', type : 'input' },
       { field : 'dateRange' , placeholder:'dateRange' , type : 'dateRange' },
       { field : 'City' , placeholder:'城市', type : 'select' ,data : [{ text: 'New York' , value : 'beijing'},{ text: 'London' , value : 'shanghai'}]},
     ]
-    searchModel : any = [
+    searchModel :  Array<any> = [
       { field : 'Name' , label:'Name' ,placeholder:'名称',  type : 'input' },
       { field : 'Age' , label:'Age' , placeholder:'dateRange' , type : 'input' },
     ];
@@ -127,7 +127,7 @@
       {   field : 'Age' , type : 'input',  label: "值" },
     ]
     formViewModel = this.formModel;
-    columns = [
+    columns:Array<any>  = [
       {
         type: 'selection',
         width: 60,
@@ -261,9 +261,9 @@
         next();
       },1000)
 
-      if(false){
+     /* if(false){
         restore();
-      }
+      }*/
     }
 
     removeAll ( data , next  ,restore) {
@@ -271,9 +271,9 @@
       setTimeout(()=>{
         next();
       },1000)
-      if(false){
+     /* if(false){
         restore();
-      }
+      }*/
     }
     // 页面 head 中文件内容
     head() {

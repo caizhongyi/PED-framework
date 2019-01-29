@@ -39,13 +39,13 @@
     }
   })
   export default class User extends Vue {    //  typescript 创建类继成 Vue
-    searchModel: any = [
+    searchModel: Array<any> = [
       { field: "username", label: "", placeholder: "输入名称进行查找", type: "input" }
     ];
     table: any;
-    data: any = [];
+    data:  Array<any> = [];
     value: any = 2; // 变量声明 ，any是无类型。 可以 object Array function boolean等类型
-    ajaxLoading: any = true;
+    ajaxLoading: boolean = true;
     params: any = {};
     // form = {
     // user : ''
@@ -55,7 +55,6 @@
     modal1: boolean = false;
     current: any = {};
     buttonLoading = false;
-    @Prop({ default: 1 }) settings: any;  // 只能单项绑定（组件内不能对其值更改）
     @Model() model: any; // 当作为组件引用时 v-model 值， 双项绑定（组件内可改变其值）
 
     @State user: any; // 全局 store 中的变量
@@ -412,7 +411,7 @@
       { field: "last-time", type: "input", label: "最后登录时间" }
     ];
 
-    columns = [
+    columns : Array<any> = [
       {
         type: "selection",
         width: 60,
@@ -597,9 +596,9 @@
           next();
         }
       }, 1000);
-      if( false ){
+     /* if( false ){
         restore() // 什么都不做
-      }
+      }*/
     }
 
     //取消修改

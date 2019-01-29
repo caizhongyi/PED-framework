@@ -8,7 +8,7 @@
                     :form-model="formModel"
                     :form-view-model="formViewModel"
                     :params="params"
-                    :addButton = "false"
+                    :add-button = "null"
                     @search-submit="searchSubmit"
         ></auto-table> <!-- 自定义组件 ~/components/auto-table/index.vue -->
     </div>
@@ -29,7 +29,7 @@
       { field : 'dateRange' , placeholder:'dateRange' , type : 'dateRange' },
       { field : 'City' , placeholder:'城市', type : 'select' ,data : [{ text: 'New York' , value : 'beijing'},{ text: 'London' , value : 'shanghai'}]},
     ]*/
-    searchModel : any = [
+    searchModel :  Array<any> = [
       { field : 'name' , label:'' ,placeholder:'设备名',  type : 'input' },
       { field : 'sn' , label:'' , placeholder:'设备SN' , type : 'input' },
       { field : 'plane' , label:'' , placeholder:'平台' , type : 'select' , data : [{ text : "平台" , value : "1"}] },
@@ -38,7 +38,7 @@
       { field : 'factory' , label:'' , placeholder:'厂家' , type : 'select' , data : [] },
       { field : 'date' , label:'' , placeholder:'时间' , type : 'date' , data : [] },
     ];
-    formModel : any = [
+    formModel :  Array<any> = [
       { field : 'name' , label:'设备名：' ,placeholder:'设备名',  type : 'input' },
       { field : 'sn' , label:'设备SN：' , placeholder:'设备SN' , type : 'input' },
       { field : 'plane' , label:'平台：' , placeholder:'平台' , type : 'select' , data : [{ text : "平台" , value : "1"}] },

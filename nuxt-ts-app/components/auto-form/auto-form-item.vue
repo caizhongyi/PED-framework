@@ -120,24 +120,24 @@
   export default class AutoFormItem extends Vue {    //  typescript 创建类继成 Vue
 
     // 表单模型
-    @Prop({ default: () => {return []; } }) model;
+    @Prop({ default: () => {return []; } }) model: Array<any>;
 
     // 表单模型
-    @Prop({ default: () => {}}) value;
+    @Prop({ default: () => {}}) value : any;
 
     // 表单模型
-    @Prop() ruleValidate;
+    @Prop() ruleValidate  : any;
 
     // 表单名称宽度
-    @Prop() labelWidth;
+    @Prop() labelWidth : number;
 
     // 根级目录
-    @Prop() root;
+    @Prop() root : any;
 
     // 上传组件 ref
-    uploads: any = [];
+    uploads: any | Array<any> = [];
     // 树型组件 ref
-    trees: any = [];
+    trees: any | Array<any> = [];
 
     /**
      *  图片弹出窗口

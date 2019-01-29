@@ -18,7 +18,7 @@
                 @on-ok="ok"
                 @on-cancel="cancel">
             <auto-form ref="form" v-model="formData" :model="formModel" @success="submit"
-                       :submit-button="false"></auto-form>
+                       :submit-button="null"></auto-form>
         </Modal>
     </div>
 </template>
@@ -34,8 +34,8 @@
   })
   export default class Nestable extends Vue {
     $nestable: any;
-    @Prop() value: any;
-    @Prop({ default: true }) optionButton: any;
+    @Prop({ default : ()=>{ return [];}}) value: Array<any>;
+    @Prop({ default: ()=>{ return {} ;} }) optionButton: any;
     @Prop({
       default: () => {
         return {
@@ -89,7 +89,7 @@
             type: "input"
           }];
       }
-    }) formModel: any;
+    }) formModel: Array<any>;
 
     saveOrderLoading = false;
     modal: any = false;
@@ -225,7 +225,7 @@
       this.form = this.$refs.form;
 
       setTimeout(() => {
-        this.$nestable = $(".dd", this.$el).nestable("destory").nestable({
+        this.$nestable = $(".dd", this.$el)['nestable']("destory").nestable({
           group: 1,
           dragClass: "dd-dragel dd-small-handle"
         })

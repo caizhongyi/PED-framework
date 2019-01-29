@@ -1,37 +1,37 @@
 <template>
     <div class="g-designer">
-        <i-card class="clearfix">
+        <Card class="clearfix">
             <Row>
-                <i-col span="8" class="g-designer-elements">
+                <Col span="8" class="g-designer-elements">
                     <span class="g-designer-element" @click="add()">
                         <div class="g-designer-element-name"></div>
                     </span>
-                </i-col>
-                <i-col span="11">
-                    <i-form inline="">
-                        <i-form-item prop="行">
+                </Col>
+                <Col span="11">
+                    <Form inline="">
+                        <FormItem prop="行">
                             <i-input type="text" id="row" v-model="row" value="1" placeholder="行"></i-input>
-                        </i-form-item>
-                        <i-form-item prop="列">
+                        </FormItem>
+                        <FormItem prop="列">
                             <i-input v-model="col" type="text" id="col" value="1" placeholder="列"></i-input>
-                        </i-form-item>
-                        <i-form-item>
+                        </FormItem>
+                        <FormItem>
                             <i-button type="primary" class="btn-batch" @click="batch()">批量创建</i-button>
-                        </i-form-item>
+                        </FormItem>
                         <!--   <i-form-item prop="">
                                <i-input type="radio" v-model="type" name="type" value="1" checked> 方形 </i-input>
                            </i-form-item>-->
-                    </i-form>
-                </i-col>
-                <i-col span="5" class="text-right">
+                    </Form>
+                </Col>
+                <Col span="5" class="text-right">
                     <i-button type="default" class="btn-clear" @click="clear()">清除</i-button>
                     <i-button type="primary" class="btn-save" @click="save()">保存</i-button>
-                </i-col>
+                </Col>
             </Row>
-        </i-card>
+        </Card>
         <br>
         <div style="position: relative"  @contextmenu.prevent=""  @mousedown="(e)=>{  selectElementMouseDown(e ) ;}" @mouseup="(e)=>{  selectElementMouseUp(e  ) ;}" @mousemove="(e)=>{  selectElementMouseMove(e ) ;}">
-            <i-card class="g-designer-container" >
+            <Card class="g-designer-container" >
                 <div class="g-designer-element"
                      @contextmenu="(e)=>{ elementContextmenu ( e , item ) ;}"
                      :class="{ on : item.id == currentElement.id , active : item.active }"
@@ -55,7 +55,7 @@
                        </div>
                     </div>
                 </div>
-            </i-card>
+            </Card>
             <div class="area-box" v-show="areaElement.active" :style="{ left: `${areaElement.x}px` , top: `${areaElement.y}px` , width: `${areaElement.width}px` , height: `${areaElement.height}px`}"></div>
         </div>
     </div>
@@ -72,12 +72,12 @@
     components: {}
   })
   export default class GDesigner extends Vue {
-    @Prop({ default: "all" }) direction;
+    @Prop({ default: "all" }) direction: string ;
     @Prop({
       default: () => {
         return [];
       }
-    }) value;
+    }) value: Array<any>;
 
     $design : any ;
     $areabox : any ;

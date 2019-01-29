@@ -11,7 +11,7 @@
       "es2015"
     ],
     "strict": false,
-    "allowUnreachableCode":true,
+    "allowUnreachableCode":false,
     "allowUnusedLabels":true,
     "alwaysStrict":false,
     "skipLibCheck":true,

@@ -14,11 +14,9 @@
   import { Component, Vue, Watch } from "nuxt-property-decorator";
  // import { watch } from "fs";
   import Ajax from "~/components/ajax/index.vue";  // 自定义组件目录
-  import AjaxButton from "~/components/ajax/index.vue";
   @Component({
     components: {
-      Ajax,
-      AjaxButton
+      Ajax
     }
   })
   export default class AjaxIndex extends Vue {

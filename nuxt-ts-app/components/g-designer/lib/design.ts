@@ -445,8 +445,8 @@ class DesignElement {
       $dragLayer.addClass("resizing").data("resizePosition", {
         x: e.pageX,
         y: e.pageY,
-        width: parseFloat($dragLayer.width()),
-        height: parseFloat($dragLayer.height())
+        width: $dragLayer.width(),
+        height: $dragLayer.height()
       });
     });
 

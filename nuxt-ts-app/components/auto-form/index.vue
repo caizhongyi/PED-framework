@@ -44,24 +44,24 @@
     }) value: any;
 
     // 表单是否横向排列
-    @Prop({ default: false }) inline: any;
+    @Prop({ default: false }) inline: boolean;
     @Prop({
       default: () => {
-        return {};
+        return [];
       }
-    }) model: any;
+    }) model: Array<any>;
     @Prop({
       default: () => {
         return {};
       }
     }) rules: any;
-    @Prop() labelWidth: any;
-    @Prop({ default: "top" }) labelPosition: any;
+    @Prop() labelWidth: number;
+    @Prop({ default: "top" }) labelPosition: string;
     @Prop({
       default: () => {
         return { text: "提交", icon: "" };
       }
-    }) submitButton: any ;
+    }) submitButton : any ;
 
     // @Prop() rules : any ;
     form: any;

@@ -28,7 +28,7 @@
         <Modal :title="modal.title" :loading="true" v-model="modal.visible" @on-ok="modalSubmit"
                @on-cancel="modalCancel">
             <auto-form ref="form" :model="formModel" :label-width="formLabelWidth" :inline="false" v-model="formData"
-                       :submit-button="false"></auto-form>
+                       :submit-button="null"></auto-form>
             <div slot="footer" v-if="modalFooter">
                 <i-button type="text" @click="modalCancel">取消</i-button>
                 <slot name="modal-footer"></slot>
@@ -82,28 +82,28 @@
       default: () => {
         return [];
       }
-    }) formModel: any;   // 表单模型
+    }) formModel: Array<any> ;   // 表单模型
     @Prop({
       default: () => {
         return [];
       }
-    }) formViewModel: any; // 表单查看模型
-    @Prop({ default: null }) formLabelWidth: any; // 文字宽度
+    }) formViewModel: Array<any> ; // 表单查看模型
+    @Prop({ default: null }) formLabelWidth: number; // 文字宽度
     @Prop({
       default: () => {
         return [];
       }
-    }) searchModel: any; // 查询表单模型
-    @Prop({ default: 0 }) searchLabelWidth: any;  // 查询表单文字宽度
+    }) searchModel:  Array<any>; // 查询表单模型
+    @Prop({ default: 0 }) searchLabelWidth: number;  // 查询表单文字宽度
     @Prop({
       default: () => {
         return [];
       }
-    }) columns: any; // 单文列头
-    @Prop({ default: false }) expButton: any; // 导出按钮
-    @Prop({ default: true }) addButton: any; // 增加按钮
-    @Prop({ default: "post" }) method: any; // Ajax 提交方式
-    @Prop() url: any; // Ajax 提交地址
+    }) columns: Array<any>; // 单文列头
+    @Prop({ default: () => {} }) expButton: any  ; // 导出按钮
+    @Prop({ default: () => {} }) addButton: any ; // 增加按钮
+    @Prop({ default: "post" }) method: string; // Ajax 提交方式
+    @Prop() url: string; // Ajax 提交地址
     @Prop({
       default: () => {
         return { page: 1, total: 0 };
@@ -118,7 +118,7 @@
       default: () => {
         return [];
       }
-    }) value: any; // 列表数据（v-model值）
+    }) value: Array<any>; // 列表数据（v-model值）
     @Prop({
       default: () => {
         return {};
